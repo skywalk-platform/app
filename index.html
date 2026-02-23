@@ -358,7 +358,35 @@
             </div>
         </div>
 
-        <div id="DEPARTURE_FLASHCARD"></div>
+        <div class="divider-general-section" style="background: #f5f5f5;"></div>
+
+        <!-- DEPARTURE Summary -->
+        <div class="flight-card">
+            <span class="tile-label" style="text-align: left; font-size: 14px; font-weight: bold;">DEPARTURE <span style="font-size: 8px;">OVERVIEW</span></span>
+            <div class="summary-grid">
+                <div id="DEPARTURE_FLASHCARD_WINDENV"></div>
+                <div id="DEPARTURE_FLASHCARD_HEADWIND"></div>
+                <div id="DEPARTURE_FLASHCARD_CROSSWIND"></div>
+                <div id="DEPARTURE_FLASHCARD_FLIGHTRULES"></div>
+                <div id="DEPARTURE_FLASHCARD_WEIGHT"></div>
+                <div id="DEPARTURE_FLASHCARD_FUEL"></div>
+                <div id="DEPARTURE_FLASHCARD_RUNWAY"></div>
+            </div>
+        </div>
+
+        <!-- ARRIVAL Summary -->
+        <div class="flight-card">
+            <span class="tile-label" style="text-align: left; font-size: 14px; font-weight: bold;">ARRIVAL <span style="font-size: 8px;">OVERVIEW</span></span>
+            <div class="summary-grid">
+                <div id="ARRIVAL_FLASHCARD_WINDENV"></div>
+                <div id="ARRIVAL_FLASHCARD_HEADWIND"></div>
+                <div id="ARRIVAL_FLASHCARD_CROSSWIND"></div>
+                <div id="ARRIVAL_FLASHCARD_FLIGHTRULES"></div>
+                <div id="ARRIVAL_FLASHCARD_WEIGHT"></div>
+                <div id="ARRIVAL_FLASHCARD_FUEL"></div>
+                <div id="ARRIVAL_FLASHCARD_RUNWAY"></div>
+            </div>
+        </div>
 
         <!-- Bottom Buttons Container -->
         <div id="bottom-container">
@@ -433,17 +461,18 @@
                 <img id="DEPARTURE_FLAG_1" src="" alt="" style="width:30px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="DEPARTURE_CATAGORY_ICON" src="" alt="" style="width:35px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="DEPARTURE_VFR_ICON" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
-                <button id="DEPARTURE_LOAD_ICAO" title="Reset values to the default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔎</button>
-                <button id="DEPARTURE_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⛅</button>
+                <img id="DEPARTURE_METAR_WARNING" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
+                <button id="DEPARTURE_LOAD_ICAO" title="Reset to default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🏬</button>
+                <!--<button id="DEPARTURE_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⛅</button>-->
                 <!--<input type="text" id="DEPARTURE_ICAO" class="tile-value UPPERCASE_input sync-departure" onchange="window.load_aerodrome_from_json('DEPARTURE')" placeholder="ICAO" disabled>-->
             </div>
 
         </div>
 
 
-        <div class="collapsible" data-title="METAR">
-        <div class="collapsible-header" id="DEPARTURE_SELECT_AERODROME_BORDER_2"></div>
-        <div class="collapsible-content" id="DEPARTURE_SELECT_AERODROME_BORDER_3">
+        <div class="collapsible" data-title="⚠️ METAR">
+        <div class="collapsible-header" id="DEPARTURE_METARMENU_TOP"></div>
+        <div class="collapsible-content" id="DEPARTURE_METARMENU_BACKGROUND">
 
             <div class="wind-grid">
                  <div class="tile">
@@ -502,16 +531,23 @@
                            color: #333333; outline: none;">
             </div>
 
+            <!--<button id="DEPARTURE_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⛅</button>-->
+            <div class="button-row">
+                <button id="DEPARTURE_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
+                    Retrieve New METAR Information
+                </button>
+            </div>
+
+
         </div>
         </div>
 
 
         <div class="collapsible" data-title="AERODROME">
-        <div class="collapsible-header" id='DEPARTURE_AERODROME_MENU'></div>
-        <div class="collapsible-content">
+        <div class="collapsible-header" id='DEPARTURE_AERODROME_MENU_TOP'></div>
+        <div class="collapsible-content" id='DEPARTURE_AERODROME_MENU_BACKGROUND'>
 
             <div class="wind-grid">
-
                 <div class="tile">
                     <input id="DEPARTURE_NAME" type="text" class="tile-value" title="Name of the aerodrome how it is known on the radio">
                     <span class="tile-label">Aerodrome name</span>
@@ -552,10 +588,9 @@
         </div>
 
 
-     	  <!--<label_h1>Contact</label_h1>-->
          <div class="collapsible" data-title="CONTACT">
          <div class="collapsible-header" id="DEPARTURE_CONTACT_MENU"></div>
-         <div class="collapsible-content">
+         <div class="collapsible-content" id="DEPARTURE_CONTACT_MENU_BACKGROUND">
 
              <div class="wind-grid">
                  <div class="tile">
@@ -626,8 +661,10 @@
 
             <div class="wind-grid">
                 <div id="DEPARTURE_WEIGHTBALANCE_MESSAGE"></div>
-                <div id="DEPARTURE_envelopeMessage" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 14px; text-align: center; display: none;"></div>
-                <div id="DEPARTURE_fuelMessage" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 14px; text-align: center; display: none;"></div>
+            </div>
+            <div class="wind-grid">
+                <div id="DEPARTURE_envelopeMessage" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 14px; text-align: center;"></div>
+                <div id="DEPARTURE_fuelMessage" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 14px; text-align: center;"></div>
             </div>
 
             <!-- Totals Section -->
@@ -932,17 +969,18 @@
                 <img id="ARRIVAL_FLAG_1" src="" alt="" style="width:30px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="ARRIVAL_CATAGORY_ICON" src="" alt="" style="width:35px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="ARRIVAL_VFR_ICON" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
-                <button id="ARRIVAL_LOAD_ICAO" title="Load ICAO information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔎</button>
-                <button id="ARRIVAL_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🌦</button>
+                <img id="ARRIVAL_METAR_WARNING" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
+                <button id="ARRIVAL_LOAD_ICAO" title="Reset to default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🏬</button>
+                <!--<button id="ARRIVAL_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🌦</button>-->
                 <!--<input type="text" id="ARRIVAL_ICAO" class="tile-value UPPERCASE_input sync-arrival" onchange="window.load_aerodrome_from_json('ARRIVAL')" placeholder="ICAO" disabled>-->
                 <!--<button onclick="window.save_aerodrome_to_json('ARRIVAL')" title="Save custom aerodrome information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">💾</button>-->
             </div>
         </div>
 
         <!-- =========== METAR =========== -->
-        <div class="collapsible" data-title="METAR">
-        <div class="collapsible-header" id="ARRIVAL_SELECT_AERODROME_BORDER_2"></div>
-        <div class="collapsible-content" id="ARRIVAL_SELECT_AERODROME_BORDER_3">
+        <div class="collapsible" data-title="⚠️ METAR">
+        <div class="collapsible-header" id="ARRIVAL_METARMENU_TOP"></div>
+        <div class="collapsible-content" id="ARRIVAL_METARMENU_BACKGROUND">
 
             <div class="wind-grid">
 
@@ -1001,13 +1039,21 @@
                         border: none; background-color: transparent;
                         color: #333333; outline: none;">
             </div>
+
+            <div class="button-row">
+                <button id="ARRIVAL_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
+                    Retrieve New METAR Information
+                </button>
+            </div>
+
         </div>
         </div>
 
 
         <div class="collapsible" data-title="AERODROME">
-        <div class="collapsible-header" id='ARRIVAL_AERODROME_MENU'></div>
-        <div class="collapsible-content">
+        <div class="collapsible-header" id='ARRIVAL_AERODROME_MENU_TOP'></div>
+        <div class="collapsible-content" id='ARRIVAL_AERODROME_MENU_BACKGROUND'>
+        <!--<div class="collapsible-content">-->
 
             <div class="wind-grid">
 
@@ -1054,7 +1100,7 @@
         <!--CONTACT-->
         <div class="collapsible" data-title="CONTACT">
         <div class="collapsible-header" id="ARRIVAL_CONTACT_MENU"></div>
-        <div class="collapsible-content">
+        <div class="collapsible-content" id="ARRIVAL_CONTACT_MENU_BACKGROUND">
 
             <div class="wind-grid">
                 <div class="tile">
@@ -1104,18 +1150,6 @@
                <div id="ARRIVAL_WIND_CROSSWIND"></div>
            </div>
 
-           <!--<div class="wind-grid">
-               <div class="tile">
-                   <input id="ARRIVAL_WIND_HEADWIND" readonly type="text" class="tile-value" title="Headwind is calculated based on the wind speed and direction relative to the runway. This value can not be changed." style="background-color: transparent;">
-                   <span class="tile-label">Headwind (kt)</span>
-               </div>
-
-               <div class="tile">
-                   <input id="ARRIVAL_WIND_CROSSWIND" readonly type="text" class="tile-value" title="Crosswind is calculated based on the wind speed and direction relative to the runway. This value can not be changed." style="background-color: transparent;">
-                   <span class="tile-label">Crosswind (kt)</span>
-               </div>
-           </div>-->
-
            <div class="button-row" style="margin-bottom: 15px;">
                <div id="ARRIVAL_WIND_ENVELOPE_PLOT" style="width: 100%; box-sizing: border-box;"></div>
            </div>
@@ -1137,6 +1171,8 @@
 
            <div class="wind-grid">
                <div id="ARRIVAL_WEIGHTBALANCE_MESSAGE"></div>
+           </div>
+           <div class="wind-grid">
                <div id="ARRIVAL_envelopeMessage" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 14px; text-align: center; display: none;"></div>
                <div id="ARRIVAL_fuelMessage" style="margin-top: 12px; padding: 10px; border-radius: 8px; font-size: 14px; text-align: center; display: none;"></div>
            </div>
@@ -1847,10 +1883,10 @@
             </div>
 
             <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
-                <!-- Clean Button -->
-                <button id="aircraft_clear_btn" onclick="aircraft_clean()" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Create New Aircraft">🧹</button>
                 <!-- Delete Button -->
                 <button id="aircraft_delete_btn" onclick="window.delete_item_from_spinner('aircraft_spinner', 'AIRCRAFT', 'aircraft_field')" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Delete Aircraft">🗑️</button>
+                <!-- Clean Button -->
+                <button id="aircraft_clear_btn" onclick="aircraft_clean()" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Create New Aircraft">🧹</button>
                 <!-- Spinner, loaded from load_spinner_selection() -->
                 <select id="aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
                     <option value="">Select and Load</option>
@@ -2995,9 +3031,17 @@
                 js.window.flight_plan_data['AIRCRAFT'] = data_dict
                 js.document.getElementById('aircraft_field').value = user_selection
                 js.window.aircraft_populate_js();
+                js.window.update_aerodrome_weights_js("DEPARTURE");
+                js.window.update_aerodrome_weights_js("ARRIVAL");
+                # Compute Fuel per leg
                 js.window.WeightBalanceMain('SETTINGS');
-                js.window.displayRunwayMain('DEPARTURE')
-                js.window.displayRunwayMain('ARRIVAL')
+                js.window.WeightBalanceMain('DEPARTURE');
+                js.window.WeightBalanceMain('ARRIVAL');
+                # Compute Runway stats
+                js.window.displayRunwayMain('DEPARTURE');
+                js.window.displayRunwayMain('ARRIVAL');
+                # Highlight any missing fields
+                js.window.highlightMissingFields();
 
             print(f"   >✅ [elementId] '{user_selection}' loaded successfully")
         except Exception as e:
@@ -3141,6 +3185,8 @@
         js.window.WeightBalanceMain('SETTINGS')
         js.window.cleanRunwayFields('DEPARTURE', 'empty')
         js.window.cleanRunwayFields('ARRIVAL', 'empty')
+        js.window.flashcardClean('DEPARTURE')
+        js.window.flashcardClean('ARRIVAL')
 
         if verbose=='info':
             js.window.alert(f"ℹ️ Default aircraft specifications are loaded.")
@@ -3168,7 +3214,19 @@
 
             # Directly populate to all fields. This is required because some fields needs to be updated in General tab too.
             js.window.aircraft_populate_js();
+            js.window.update_aerodrome_weights_js("DEPARTURE");
+            js.window.update_aerodrome_weights_js("ARRIVAL");
+            # Compute Fuel per leg
             js.window.WeightBalanceMain('SETTINGS');
+            js.window.WeightBalanceMain('DEPARTURE');
+            js.window.WeightBalanceMain('ARRIVAL');
+            # Compute Runway stats
+            js.window.displayRunwayMain("DEPARTURE");
+            js.window.displayRunwayMain("ARRIVAL");
+            # Highlight any missing fields
+            js.window.highlightMissingFields();
+            js.window.highlightDropdownMenus("DEPARTURE");
+            js.window.highlightDropdownMenus("ARRIVAL");
         except Exception as e:
             js.window.alert(f"⚠️ Ooops. An unexpected error. Please load and save and try again.")
             print(f"Error saving aircraft for key '{key}': {e}")
@@ -3939,11 +3997,6 @@
         js.window.flight_plan_data[f"{fname}_RUNWAYS"] = rwy_list
         js.window.flight_plan_data[f"{fname}_RUNWAY_PROPERTIES"] = row_dict['runways']
         js.window.flight_plan_data[f"{fname}_RUNWAY_NR"] = clean_string(rwy_ids)
-        # js.window.flight_plan_data[f"{fname}_RUNWAY_LENGTH"] = ''
-        # js.window.flight_plan_data[f"{fname}_RUNWAY_SLOPE"] = ''
-        # js.window.flight_plan_data[f"{fname}_RUNWAY_SURFACE"] = ''
-        # js.window.flight_plan_data[f"{fname}_RUNWAY_CONDITION"] = ''
-        # js.window.flight_plan_data[f"{fname}_RUNWAY_SLIPPERY"] = ''
         js.window.flight_plan_data[f"{fname}_ELEVATION"] = str(row_dict['elevation_aerodrome']).split('.')[0]
         js.window.flight_plan_data[f"{fname}_NAME"] = row_dict['name']
         js.window.flight_plan_data[f"{fname}_METAR"] = ''
@@ -3987,37 +4040,45 @@
               js.window.flight_plan_data[key] = freq_clean
               print(f"  {key}: {js.window.flight_plan_data[key]}")
 
+        # Remove METAR widget
+        remove_metar_widget(fname)
+        # Cleanly initialize runway plot
+        js.window.cleanRunwayFields(fname, 'empty')
+        # remove wind envelope plot
+        js.window.cleanWindEnvelopeFields(fname, 'empty')
+        # Clean Weigth&Balance
+        js.window.cleanWeightBalanceFields(fname, 'empty');
+
         # Update GUI fields for aerodrome but not the aircraft fields
         update_aerodrome_gui_fields(fname, updateAircraftFields=False)
 
-        # Update departime time and clock
+        # Update time and clock for departure only
         time_dep = js.document.getElementById('DEPARTURE_clockField').value
         js.window.UpdateFlightInfoFields(time_dep, True, True)
 
         # Update images for aerodrome
         await update_aerodrome_image(fname)
-
-        # Remove METAR widget
-        remove_metar_widget(fname)
-
-        # remove wind envelope plot
-        js.window.cleanWindEnvelopeFields(fname, 'empty')
-
-        # Set runway surface
-        js.window.setRunwaySurface(fname)
-
-        # Cleanly initialize runway plot
-        js.window.cleanRunwayFields(fname, 'empty')
-
         # Retrieve METAR
         await js.window.retrieve_metar(fname)
 
+        # Update weight and balance
+        js.window.aircraft_populate_js();
+        js.window.update_aerodrome_weights_js(fname);
+        # Compute Fuel per leg
+        js.window.computeArrivalFuelPerLeg();
+        # Compute Weight and Balance
+        js.window.WeightBalanceMain(fname)
+        js.window.syncWeightCheckboxesAndFields(f'{fname}_WEIGHT_CHECKBOX')
+
+        # Set runway surface
+        js.window.setRunwaySurface(fname)
+        # Compute Runway stats
+        js.window.displayRunwayMain(fname)
         # Update missing fields
-        js.window.highlightMissingFields();
-        js.window.highlightDropdownMenus(fname);
+        js.window.highlightMissingFields()
+        js.window.highlightDropdownMenus(fname)
 
         #js.window.alert('here after making selectionbox choice for icao')
-        #js.window.flashcardCreate(fname)
 
 
     # ================================================
@@ -4086,6 +4147,10 @@
         js.document.getElementById('flying-minutes').textContent = '0'
         js.document.getElementById('departure-time').textContent = ''
         js.document.getElementById('arrival-time').textContent = ''
+
+        # Clear flashcards
+        js.window.flashcardClean('DEPARTURE')
+        js.window.flashcardClean('ARRIVAL')
 
         # Clear checklist
         js.window.flight_plan_data['CHECKLIST'] = get_default_checklist()
@@ -4229,6 +4294,7 @@
         # Update weight and balance
         if updateAircraftFields:
             js.window.WeightBalanceMain(fname)
+            js.window.syncWeightCheckboxesAndFields(f'{fname}_WEIGHT_CHECKBOX')
 
         print(f"   >✅ Updated {updated_count} GUI fields")
 
@@ -4315,13 +4381,16 @@
 
         # Clear aerdrome image
         js.document.getElementById(f'{fname}_image_cache').src = js.window.IMG_DEFAULT_AIRFIELD
+        js.document.getElementById(fname + "_SELECT_AERODROME_BORDER_1").style.backgroundColor = js.window.EMPTYCOLOR
+
         # Reset colors of METAR
-        js.document.getElementById(fname + "_SELECT_AERODROME_BORDER_1").style.backgroundColor = '#E9E9E9'
-        js.document.getElementById(fname + "_SELECT_AERODROME_BORDER_2").style.backgroundColor = '#f5f5f5'
-        js.document.getElementById(fname + "_SELECT_AERODROME_BORDER_3").style.backgroundColor = '#f5f5f5'
+        js.document.getElementById(fname + "_METARMENU_BACKGROUND").style.backgroundColor = js.window.DEFAULTCOLOR
+        js.document.getElementById(fname + '_METARMENU_TOP').textContent = "⚠️ METAR"
+        # js.document.getElementById(fname + "_METARMENU_TOP").style.backgroundColor = js.window.EMPTYCOLOR
+
         # Clear head/crosswind
-        js.window.createWindTextbox(f'{fname.upper()}_WIND_HEADWIND', '-', 'DISABLED');
-        js.window.createWindTextbox(f'{fname.upper()}_WIND_CROSSWIND', '-', 'DISABLED');
+        js.window.createWindTextbox(f'{fname.upper()}_WIND_HEADWIND', '-', 'DISABLED')
+        js.window.createWindTextbox(f'{fname.upper()}_WIND_CROSSWIND', '-', 'DISABLED')
 
         # Clear all GUI fields with overlapping names
         for field_id in field_ids:
@@ -4380,24 +4449,29 @@
             else:
                 js.window.flight_plan_data[key] = ''
 
+        # Clear flashcard
+        js.window.flashcardClean(fname)
         # Remove METAR widget
         remove_metar_widget(fname)
         # Remove wind envelope
         js.window.cleanWindEnvelopeFields(fname, 'empty')
+        # Clean Weigth&Balance
+        js.window.cleanWeightBalanceFields(fname, 'empty');
         # Remove runway image
         js.window.cleanRunwayFields(fname, 'empty')
         # Remove flag
         js.window.updateFlag(fname, 'remove')
         # Remove VFR icon
         js.window.updateFlightCatagoryIcon(fname, remove=True)
-        # Update missing fields colors
-        js.window.highlightMissingFields()
-        js.window.highlightDropdownMenus()
         # Stop animations
         js.window.animations(fname, "stop")
         # Update weight and balance
         if clearAircraftFields:
             js.window.WeightBalanceMain(fname)
+            js.window.syncWeightCheckboxesAndFields(f'{fname}_WEIGHT_CHECKBOX')
+        # Update missing fields colors
+        js.window.highlightMissingFields()
+        js.window.highlightDropdownMenus()
 
         # Clear selectionbox (WARNING: CAN NOT BE CLEARED HERE BECAUSE THE ICOA SELECTIONS WILL BE RESET AFTER SELECTION)
         # select = js.document.getElementById(f'{fname}_ICAO_CITY')
@@ -4754,12 +4828,16 @@
         js.document.getElementById("CALLSIGN_LABEL").textContent = 'REGISTRATION'
         js.document.getElementById('DEPARTURE_clockField').value = '00:00'
         js.document.getElementById('ARRIVAL_clockField').value = '00:00'   # Default is '00:00'
-        js.document.getElementById('DEPARTURE_FLIGHT_DISTANCE_INFO').textContent = '- km, - min.'
+        js.document.getElementById('DEPARTURE_FLIGHT_DISTANCE_INFO').textContent = 'Departure'
         js.document.getElementById('ARRIVAL_FLIGHT_DISTANCE_INFO').textContent = '- km, - min.'
         js.document.getElementById('distance-km').textContent = '0'
         js.document.getElementById('flying-minutes').textContent = '0'
         js.document.getElementById('departure-time').textContent = ''
         js.document.getElementById('arrival-time').textContent = ''
+
+        # Clean flashcards
+        js.window.flashcardClean('DEPARTURE')
+        js.window.flashcardClean('ARRIVAL')
 
         # A new flightplan gets a new date
         js.window.flight_plan_data['DATETIME_CREATION'] = 'FLIGHT PLAN'
@@ -4803,6 +4881,10 @@
 
         # Set defaults aircraft and reset GUI fields
         js.window.aircraft_clean(verbose='silent')
+
+        # Clean flashcards
+        js.window.flashcardClean('DEPARTURE')
+        js.window.flashcardClean('ARRIVAL')
 
         # Clean flag
         # updateFlag('DEPARTURE', 'remove')
@@ -4937,6 +5019,10 @@
             print("⚠️ No flightplan selected")
             return
 
+        # Remove flashcards
+        js.window.flashcardClean('DEPARTURE')
+        js.window.flashcardClean('ARRIVAL')
+
         # Remove METAR widget
         remove_metar_widget('DEPARTURE')
         remove_metar_widget('ARRIVAL')
@@ -4944,6 +5030,9 @@
         # remove wind envelope plot
         js.window.cleanWindEnvelopeFields('DEPARTURE', 'empty')
         js.window.cleanWindEnvelopeFields('ARRIVAL', 'empty')
+        # Clean Weigth&Balance
+        js.window.cleanWeightBalanceFields('DEPARTURE', 'empty');
+        js.window.cleanWeightBalanceFields('ARRIVAL', 'empty');
 
         # Set default values for dropdown elements
         select = js.document.getElementById('DEPARTURE_ICAO_CITY')
@@ -4984,7 +5073,7 @@
             await update_aerodrome_image('DEPARTURE')
             await update_aerodrome_image('ARRIVAL')
 
-            # Update Flag
+            # Clear Flag
             js.window.updateFlag('DEPARTURE', 'remove')
             js.window.updateFlag('ARRIVAL', 'remove')
 
@@ -5013,12 +5102,16 @@
             checklist_populate()
             # Populate aircraft settings
             js.window.aircraft_populate_js(False)
-            js.window.WeightBalanceMain('SETTINGS')
-
             # Update METAR
             js.window.retrieve_metar('DEPARTURE', verbose='silent')
             js.window.retrieve_metar('ARRIVAL', verbose='silent')
-
+            # Update weight and balance
+            js.window.WeightBalanceMain('SETTINGS')
+            js.window.WeightBalanceMain('DEPARTURE')
+            js.window.WeightBalanceMain('ARRIVAL')
+            # Compute Runway stats
+            js.window.displayRunwayMain("DEPARTURE");
+            js.window.displayRunwayMain("ARRIVAL");
             # Update flightinfo
             js.window.waypoints = to_js(window.flight_plan_data["WAYPOINTS"])
             js.window.leginfo = to_js(window.flight_plan_data["LEGINFO"])
@@ -5175,7 +5268,7 @@
             # if verbose == 'info': js.window.alert(message)
             return False
         else:
-            # Aerodrome does not exits. Return without clearning all fields.
+            # Aerodrome ICAO is unknown. Return without clearning all fields.
             message = f"ℹ️ Please select and save the {icaoName} aerodrome in the {fname.lower()} tab or add your custom aerodrome information and save it."
             print(message)
             # if verbose == 'info': js.window.alert(message)
@@ -5236,6 +5329,8 @@
         remove_metar_widget(fname)
         # Remove wind envelope
         js.window.cleanWindEnvelopeFields(fname, 'empty')
+        # Clean Weigth&Balance
+        js.window.cleanWeightBalanceFields(fname, 'empty');
         # Remove runway plot (initialize newly)
         js.window.cleanRunwayFields(fname, 'empty')
 
@@ -5260,8 +5355,10 @@
             js.window.UpdateFlightInfoFields(time_dep.value, True, True)
 
         #js.window.alert('Here after loading or selecting icao from cache')
-        #js.window.flashcardCreate(fname)
-
+        # Update weight and balance
+        js.window.WeightBalanceMain(fname)
+        # Compute Runway stats
+        js.window.displayRunwayMain(fname);
         # Update missing fields colors
         js.window.highlightMissingFields()
         js.window.highlightDropdownMenus()
@@ -6334,12 +6431,10 @@
 
     js.window.clear_cache = clear_cache
     js.window.get_top_metar_stations = get_top_metar_stations
-
     js.window.update_dropdown = update_dropdown
 
     # CHECKLIST
     js.window.checklist_clean = checklist_clean
-    # js.window.save_checklist_to_json = save_checklist_to_json
     js.window.check_items_complete = check_items_complete
     js.window.checklist_print = checklist_print
     js.window.checklist_populate = checklist_populate
@@ -6438,13 +6533,13 @@
         if (targetTab === 'DEPARTURE') {
           // Sync checkboxes and fields on startup
            syncWeightCheckboxesAndFields(`ARRIVAL_WEIGHT_CHECKBOX`);
-           window.WeightBalanceMain(targetTab);
+           // window.WeightBalanceMain(targetTab);
         }
         // Calculate Weight and Balance and Departure tab
         if (targetTab === 'ARRIVAL') {
           // Sync checkboxes and fields on startup
            syncWeightCheckboxesAndFields(`DEPARTURE_WEIGHT_CHECKBOX`);
-           window.WeightBalanceMain(targetTab);
+           // window.WeightBalanceMain(targetTab);
         }
 
         // WHEN THE TAB MAP IS CLICKED, UPDATE THE MAP WITH THE ROUTE AND FILL WINDOW.WAYPOINTS
@@ -6622,11 +6717,14 @@
         updateFlag('DEPARTURE', 'remove');
         updateFlag('ARRIVAL', 'remove');
         // Clear the VFR icon
-        updateFlightCatagoryIcon('DEPARTURE', remove=true);
-        updateFlightCatagoryIcon('ARRIVAL', remove=true);
+        updateFlightCatagoryIcon('DEPARTURE', true);
+        updateFlightCatagoryIcon('ARRIVAL', true);
         // Remove the wind envelope plot
         cleanWindEnvelopeFields('DEPARTURE', 'empty');
         cleanWindEnvelopeFields('ARRIVAL', 'empty');
+        // Clean Weigth&Balance
+        cleanWeightBalanceFields('DEPARTURE', 'empty');
+        cleanWeightBalanceFields('ARRIVAL', 'empty');
         // Clean runway plot
         cleanRunwayFields('DEPARTURE', 'empty')
         cleanRunwayFields('ARRIVAL', 'empty')
@@ -7155,13 +7253,19 @@
 
                 // Populate aerodromes and aircraft settings
                 aircraft_populate_js();
-                WeightBalanceMain('SETTINGS');
                 update_aerodrome_weights_js("DEPARTURE");
                 update_aerodrome_weights_js("ARRIVAL");
-                highlightMissingFields();
+                // Compute Fuel per leg
                 computeArrivalFuelPerLeg();
+                // Compute Weight and Balance
+                WeightBalanceMain('SETTINGS');
+                WeightBalanceMain('DEPARTURE');
+                WeightBalanceMain('ARRIVAL');
+                // Compute Runway stats
                 displayRunwayMain("DEPARTURE");
                 displayRunwayMain("ARRIVAL");
+                // Highlight any missing fields
+                highlightMissingFields();
 
             } catch (err) {
                 console.error("Invalid aircraft data in localStorage", err);
@@ -7664,18 +7768,18 @@
             'DEPARTURE_WIND_DIRECTION': {
                 element: document.getElementById('DEPARTURE_WIND_DIRECTION'),
                 name: 'Departure Wind Direction',
-                color_empty: '',
+                color_empty: "#ffeb3b",
                 color_filled: 'transparent',
-                required_atc_departure: false,
+                required_atc_departure: true,
                 required_atc_arrival: false,
                 required_atc_enroute: false,
             },
             'DEPARTURE_WIND_STRENGTH': {
                 element: document.getElementById('DEPARTURE_WIND_STRENGTH'),
                 name: 'Departure Wind Speed',
-                color_empty: '',
+                color_empty: '#ffeb3b',
                 color_filled: 'transparent',
-                required_atc_departure: false,
+                required_atc_departure: true,
                 required_atc_arrival: false,
                 required_atc_enroute: false,
             },
@@ -7719,19 +7823,19 @@
             'ARRIVAL_WIND_DIRECTION': {
                 element: document.getElementById('ARRIVAL_WIND_DIRECTION'),
                 name: 'Arrival Wind Direction',
-                color_empty: '',
+                color_empty: '#ffeb3b',
                 color_filled: 'transparent',
                 required_atc_departure: false,
-                required_atc_arrival: false,
+                required_atc_arrival: true,
                 required_atc_enroute: false,
             },
             'ARRIVAL_WIND_STRENGTH': {
                 element: document.getElementById('ARRIVAL_WIND_STRENGTH'),
                 name: 'Arrival Wind Speed',
-                color_empty: '',
+                color_empty: '#ffeb3b',
                 color_filled: 'transparent',
                 required_atc_departure: false,
-                required_atc_arrival: false,
+                required_atc_arrival: true,
                 required_atc_enroute: false,
             },
             'ARRIVAL_WIND_GUST': {
@@ -7911,8 +8015,13 @@
             'ARRIVAL_ATC_TOWER', 'ARRIVAL_ATC_GROUND', 'ARRIVAL_ATC_ATIS_FREQ',
         ];
 
+        const metarFieldIds = [
+            'DEPARTURE_WIND_DIRECTION', 'DEPARTURE_WIND_DIRECTION',
+            'ARRIVAL_WIND_DIRECTION', 'ARRIVAL_WIND_DIRECTION',
+        ];
+
         const highlightDropdownMenu = (prefix) => {
-            const elementAerodrome = document.getElementById(`${prefix}_AERODROME_MENU`);
+            const elementAerodrome = document.getElementById(`${prefix}_AERODROME_MENU_TOP`);
             if (!elementAerodrome) {
                 console.warn(`Missing AERODROME_MENU element for ${prefix}`);
                 return;
@@ -7937,7 +8046,16 @@
                 allFilled = nameVal !== '' && posVal !== '' && rwyVal !== '' && routeVal !== '' && altVal !== '';
             }
 
-            elementAerodrome.style.backgroundColor = allFilled ? '#E9E9E9' : '#ffeb3b';
+            let TopMenuColor = window.DEFAULTCOLOR
+            if (prefix === "DEPARTURE") {
+              metarObject = window.METAR_DEPARTURE;
+            } else {
+              metarObject = window.METAR_ARRIVAL;
+            }
+            if (metarObject) TopMenuColor = metarObject.color;
+
+            elementAerodrome.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
+            elementAerodrome.textContent = allFilled ? "✅ AERODROME" : "⚠️ AERODROME";
         };
 
         const updateContactColor = (prefix) => {
@@ -7966,7 +8084,59 @@
                 allFilled = false;
             }
 
-            elementContact.style.backgroundColor = allFilled ? '#E9E9E9' : '#ffeb3b';
+            let TopMenuColor = window.DEFAULTCOLOR
+            if (prefix === "DEPARTURE") {
+              metarObject = window.METAR_DEPARTURE;
+            } else {
+              metarObject = window.METAR_ARRIVAL;
+            }
+            if (metarObject) TopMenuColor = metarObject.color;
+
+            elementContact.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
+            elementContact.textContent = allFilled ? "✅ CONTACT" : "⚠️ CONTACT";
+        };
+
+        const updateMetarColor = (prefix) => {
+            const elementContact = document.getElementById(`${prefix}_METARMENU_TOP`);
+            if (!elementContact) {
+                console.warn(`Missing _METARMENU_TOP element for ${prefix}`);
+                return;
+            }
+
+            const element1 = document.getElementById(`${prefix}_WIND_DIRECTION`);
+            const element2 = document.getElementById(`${prefix}_WIND_STRENGTH`);
+
+            const windDirection = element1?.value ?? '';
+            const windStrength = element2?.value ?? '';
+            const allFilled = windDirection !== '' && windStrength !== '';
+
+            let TopMenuColor = window.DEFAULTCOLOR;
+            let metarObject;
+            if (prefix === "DEPARTURE") {
+              metarObject = window.METAR_DEPARTURE;
+            } else {
+              metarObject = window.METAR_ARRIVAL;
+            }
+            if (metarObject) {
+              TopMenuColor = metarObject.color;
+            }
+            // if (metarObject) {
+            //   TopMenuColor = metarObject.color;
+            //   const metarTime = metarObject.dateTime.date;
+            //   const maxMinutes = 60;
+            //   // Parse the NOW date parts
+            //   const now = nowtime(false);
+            //   const currenTime = createTimeObject(now);
+            //   const diff = Math.abs(currenTime - metarTime);
+            //   const isOld = diff > maxMinutes * 60 * 1000; // 35 minutes in milliseconds
+            //   const minutesOld = Math.round(diff / 1000 / 60);
+            //   // Create text content
+            //   elementContact.textContent = `⚠️ METAR - ${minutesOld} min.`;
+            // } else {
+            //   elementContact.textContent = allFilled ? "✅ METAR" : "⚠️ METAR";
+            // }
+            elementContact.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
+
         };
 
         const handleAerodromeEvent = (e) => {
@@ -7981,12 +8151,19 @@
             updateContactColor(prefix);
         };
 
+        const handleMetarEvent = (e) => {
+            const targetId = e.target.id;
+            const prefix = targetId.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
+            updateMetarColor(prefix);
+        };
+
         // Attach listeners for aerodrome fields
         aerodromeFieldIds.forEach(id => {
             const el = document.getElementById(id);
             if (!el) return;
             el.addEventListener('input', handleAerodromeEvent);
             el.addEventListener('keydown', handleAerodromeEvent);
+            el.addEventListener('change', handleAerodromeEvent);
         });
 
         // Attach listeners for contact fields
@@ -7995,6 +8172,16 @@
             if (!el) return;
             el.addEventListener('input', handleContactEvent);
             el.addEventListener('keydown', handleContactEvent);
+            el.addEventListener('change', handleContactEvent);
+        });
+
+        // Attach listeners for contact fields
+        metarFieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('input', handleMetarEvent);
+            el.addEventListener('keydown', handleMetarEvent);
+            el.addEventListener('change', handleMetarEvent);
         });
 
         // Return a public function to manually trigger updates
@@ -8003,6 +8190,7 @@
             prefixes.forEach(p => {
                 highlightDropdownMenu(p);
                 updateContactColor(p);
+                updateMetarColor(p);
             });
         };
     })();
@@ -8050,6 +8238,7 @@
 
 
 <script>
+
     function initializeAerodromeFields(fname) {
         // Download the aerodrome data when the country changes
         document.getElementById(`${fname}_COUNTRY`).addEventListener('change', async function() {
