@@ -130,10 +130,11 @@
             <div class="info" style="margin-bottom: 20px;">SkyWalk is a web-based tool designed to help pilots communicate effectively with Air Traffic Control (ATC). The app is free for use, is for educational purposes and does not require any registration or login. If you enjoy using SkyWalk, please consider supporting by donating a coffee.</div>
         </div>
 
-    	<button class="tablinks" data-tab="Config" style="cursor: pointer;">⚙️ Config</button>
         <button class="tablinks" data-tab="MAP" style="cursor: pointer;">🗺️ Map</button>
         <button class="tablinks" data-tab="Checklist" style="cursor: pointer;">📋 Checklist</button>
         <button class="tablinks" data-tab="Aircraft Specifications" style="cursor: pointer;">📐 Aircraft Specifications</button>
+       	<button class="tablinks" data-tab="Config" style="cursor: pointer;">⚙️ Config</button>
+        <button class="tablinks" data-tab="Countries" style="cursor: pointer;">🌍 Select Countries</button>
         <div class="button-row">
             <button id="BTN-WEIGHTBALANCE"
                 type="button"
@@ -1660,14 +1661,22 @@
 
     </div>
 
-    <!-- =============== TAB CONFIGURATIONS =============== -->
+    <!-- =============== TAB COUNTRIES OF INTEREST =============== -->
 
-    <div id="Config" class="tabcontent">
-        <!-- CONFIGURATIONS -->
+    <div id="Countries" class="tabcontent">
         <label_h1>COUNTRIES OF INTEREST</label_h1>
-        <div class="border-round-eged">
-            <!--<label style="display: block; margin-bottom: 10px; font-weight: bold; color: #333;">Select countries of interest</label>-->
 
+        <div style="border: 0px solid lightgrey; border-radius: 10px; padding: 10px;">
+            <div id="bottom-container">
+                <div class="info">
+                    This section allows you to manage your countries of interest for aerodrome and flight planning workflows.
+                    Select the countries you want to include so airport lists, ICAO selections, and related data stay focused on the regions you fly most often.
+                    Use the search fields to quickly find entries, move countries between the Available and Selected lists, and keep your setup organized and efficient.
+                </div>
+            </div>
+        </div>
+
+        <div class="border-round-eged">
             <div style="display: grid; grid-template-columns: 1fr auto 1fr; gap: 15px; align-items: center;">
                 <!-- Available Countries -->
                 <div>
@@ -1709,6 +1718,21 @@
             </div>
         </div>
 
+    </div>
+
+
+    <!-- =============== TAB CONFIGURATIONS =============== -->
+
+    <div id="Config" class="tabcontent">
+        <label_h1>Configurations</label_h1>
+
+        <div style="border: 0px solid lightgrey; border-radius: 10px; padding: 10px;">
+            <div id="bottom-container">
+                <div class="info">
+                    This section is to manage general configurations.
+                </div>
+            </div>
+        </div>
 
 
         <label_h1>CLEAR CACHE</label_h1>
@@ -1716,11 +1740,12 @@
             <div class="disclaimer" style="margin-bottom: 20px;">
                 Warning: This will permanently delete all saved flightplans and aerodrome images from your local browser storage. The reason for using this is when you want to start fresh or when you suspect that your flightplans or images are corrupted or the ATC page does not show or update. This action cannot be undone.
             </div>
+
             <div class="button-row" style="margin-top: 20px;">
                 <button id="clear_cache_btn" style="background-color: #ff4444; color: white; cursor: pointer;">Clear Cache</button>
             </div>
-        </div>
 
+        </div>
     </div>
 
 
@@ -1876,9 +1901,24 @@
         </div>
 
 
+        <!-- IMPORT -->
         <div class="border-round-eged">
             <div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
-                <!-- Inputfield -->
+                <input type="text" class="tile-value UPPERCASE_input" placeholder="Import" style="background-color:transparent; font-size: 18px; padding: 0.5px;" disabled>
+            </div>
+
+
+            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
+                <select id="import_aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                    <option value="">Select and Load</option>
+                </select>
+                <!--Save button-->
+                <button id="import_and_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Import and save selected data">💾</button>
+            </div>
+        </div>
+
+        <div class="border-round-eged">
+            <div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
                 <input id="aircraft_field" type="text" class="tile-value UPPERCASE_input" placeholder="New Registration Name" style="background-color:transparent; font-size: 18px; padding: 0.5px;">
             </div>
 
@@ -3072,7 +3112,10 @@
         # Save to cache
         js.localStorage.setItem(cache_key, json_data)
 
-        # Update the checklist list
+        # print(json_data)
+        # js.window.downloadCacheEntry(cache_key)
+
+        # Update the spinner list
         update_dropdown(f'{cacheName.lower()}_spinner', cacheName=cacheName, keepSelection=True, elementId2=f'{cacheName.lower()}_field');
         message = f"✅ {cacheName} {listname} is saved with the catagories and items."
         print(message)
@@ -8235,6 +8278,41 @@
   // });
 
 </script>
+
+<script>
+const spinner = document.getElementById("import_aircraft_spinner");
+
+// Populate on first open, so AIRCRAFT_LIST is guaranteed to exist by then
+spinner.addEventListener("mousedown", () => {
+    if (spinner.dataset.populated) return;
+    spinner.dataset.populated = "1";
+    (window.AIRCRAFT_LIST || []).forEach(ac => {
+        const opt = document.createElement("option");
+        opt.value = ac.url;
+        opt.textContent = ac.label;
+        spinner.appendChild(opt);
+    });
+}, { once: false });
+
+document.getElementById("import_and_save_btn").addEventListener("click", async () => {
+    const url = spinner.value;
+    if (!url) return alert("Please select an aircraft first.");
+    const btn = document.getElementById("import_and_save_btn");
+    btn.textContent = "⏳";
+    try {
+        await importCacheEntryFromUrl(url);
+        btn.textContent = "✅";
+        setTimeout(() => btn.textContent = "💾", 2000);
+        updateDropdown('aircraft_spinner', 'AIRCRAFT', false);
+        alert("Aircraft is imported and can now be used.");
+    } catch (err) {
+        btn.textContent = "❌";
+        setTimeout(() => btn.textContent = "💾", 2000);
+        alert(err.message);
+    }
+});
+</script>
+
 
 
 <script>
