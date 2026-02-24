@@ -2,8 +2,8 @@
 
 **Professional Aviation Flight Planning & Performance Analysis**
 
-[![App](https://img.shields.io/badge/App-Live-blue)](https://skywalk-platform.github.io/app/)
-[![Docs](https://img.shields.io/badge/Docs-Available-green)](https://skywalk-platform.github.io/docs/)
+[![App](https://img.shields.io/badge/App-Live-blue)](https://skywalk-aviation.github.io/app/)
+[![Docs](https://img.shields.io/badge/Docs-Available-green)](https://skywalk-aviation.github.io/docs/)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](LICENSE)
 
 SkyWalk is a flight planning tool designed for general aviation pilots. It provides real-time runway performance calculations, weight & balance analysis, METAR integration, and aerodrome information management to help pilots make informed go/no-go decisions.
@@ -12,9 +12,9 @@ SkyWalk is a flight planning tool designed for general aviation pilots. It provi
 
 ## 🚀 Quick Start
 
-**Access the application:** [https://skywalk-platform.github.io/app/](https://skywalk-platform.github.io/app/)
+**Access the application:** [https://skywalk-aviation.github.io/app/](https://skywalk-aviation.github.io/app/)
 
-**Read the documentation:** [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
+**Read the documentation:** [https://skywalk-aviation.github.io/docs/](https://skywalk-aviation.github.io/docs/)
 
 ---
 
@@ -160,7 +160,7 @@ Per-aerodrome settings include:
 
 ## 📚 Documentation
 
-Comprehensive documentation is available at: [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
+Comprehensive documentation is available at: [https://skywalk-aviation.github.io/docs/](https://skywalk-aviation.github.io/docs/)
 
 Documentation covers:
 - Getting started guide
