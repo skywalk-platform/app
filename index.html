@@ -88,7 +88,6 @@
     <script src="./scripts/snow.js" defer></script>
     <script src="./scripts/dark.js" defer></script>
     <script src="./scripts/cloudPlot.js" defer></script>
-    <!--<script src="./scripts/textoverlay.js" defer></script>-->
     <script src="./scripts/metar.js" defer></script>
     <!--MAP-->
     <script src="./scripts/maps.js" defer></script>
@@ -475,17 +474,11 @@
             <canvas class="flare-canvas"  data-prefix="DEPARTURE"></canvas>
             <canvas class="snow-canvas"  data-prefix="DEPARTURE"></canvas>
             <canvas class="dark-canvas"  data-prefix="DEPARTURE"></canvas>
-            <!--<canvas class="textoverlay-canvas"  data-prefix="DEPARTURE"></canvas>-->
-            <!--<canvas class="controls-canvas"  data-prefix="DEPARTURE"></canvas>-->
-            <!--<div class="controls-wrapper" data-prefix="DEPARTURE">
-              <canvas class="controls-canvas"></canvas>
-            </div>-->
 
         </div>
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0px; margin-top: 0px; padding-bottom: 0px; margin: 0px;">
             <button id="DEPARTURE_ANIMATION_START" title="Start the animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">▶️</button>
             <button id="DEPARTURE_ANIMATION_STOP" title="Stop the animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⏸️</button>
-            <button id="DEPARTURE_ANIMATION_METARTEXT" title="Update animation directly on the METAR textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
         </div>
 
 
@@ -582,6 +575,7 @@
                 <button id="DEPARTURE_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
                     Refresh METAR Information
                 </button>
+                <button id="DEPARTURE_ANIMATION_METARTEXT" title="Update animation directly on the METAR textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
             </div>
 
         </div>
@@ -629,7 +623,9 @@
             <!-- Cloud layers -->
             <div class="wind-grid">
                 <div id="DEPARTURE_CLOUD_CONTAINER" style="display:none; margin-top: 8px;">
-                    <canvas id="DEPARTURE_CLOUD_CANVAS"></canvas>
+                    <canvas class="cloudplot-canvas" id="DEPARTURE_CLOUD_CANVAS"></canvas>
+                    <!-- Canvas overlay -->
+                    <!--<canvas class="flare-canvas" data-prefix="DEPARTURE"></canvas>-->
                 </div>
             </div>
 
@@ -996,17 +992,11 @@
             <canvas class="flare-canvas"  data-prefix="ARRIVAL"></canvas>
             <canvas class="snow-canvas"  data-prefix="ARRIVAL"></canvas>
             <canvas class="dark-canvas"  data-prefix="ARRIVAL"></canvas>
-            <!--<canvas class="textoverlay-canvas"  data-prefix="ARRIVAL"></canvas>-->
-            <!--<canvas class="controls-canvas"  data-prefix="ARRIVAL"></canvas>-->
-            <!--<div class="controls-wrapper" data-prefix="ARRIVAL">
-              <canvas class="controls-canvas"></canvas>
-            </div>-->
         </div>
 
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0px; margin-top: 0px; padding-bottom: 0px; margin: 0px;">
             <button id="ARRIVAL_ANIMATION_START" title="Start the METAR Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">▶️</button>
             <button id="ARRIVAL_ANIMATION_STOP" title="Stop the METAR Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⏸️</button>
-            <button id="ARRIVAL_ANIMATION_METARTEXT" title="Update animation directly on the METAR textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
         </div>
 
         <label_h1>Select Arrival</label_h1>
@@ -1102,6 +1092,7 @@
                 <button id="ARRIVAL_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
                     Refresh METAR Information
                 </button>
+                <button id="ARRIVAL_ANIMATION_METARTEXT" title="Update animation directly on the METAR textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
             </div>
 
         </div>
@@ -1152,7 +1143,7 @@
             <!-- Cloud layers -->
             <div class="wind-grid">
                 <div id="ARRIVAL_CLOUD_CONTAINER" style="display:none; margin-top: 8px;">
-                    <canvas id="ARRIVAL_CLOUD_CANVAS"></canvas>
+                    <canvas class="cloudplot-canvas" id="ARRIVAL_CLOUD_CANVAS"></canvas>
                 </div>
             </div>
 
@@ -2697,8 +2688,10 @@
        // Determine prefix based on the field's id
        let element = (elementOrEvent && elementOrEvent.target) ? elementOrEvent.target : elementOrEvent;
        let prefix = element.id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
+
        // Update the runway
        displayRunwayMain(prefix);
+
        // If wind direction is not a number (e.g., 'VRB' or any non-numeric input)
        if (`${prefix}_WIND_DIRECTION` === element.id && isNaN(Number(element.value))) {
          cleanWindEnvelopeFields(prefix, action = "empty", "Wind direction is invalid or variable.", "Retrieve METAR information or set the wind direction manually.")
@@ -2707,11 +2700,21 @@
          cleanWindEnvelopeFields(prefix, action = "empty", "Wind strength is invalid or variable.", "Retrieve METAR information or set the wind strength manually.")
        }
        // Update the weight & balance
-       WeightBalanceMain(prefix);
-       const depCheckbox = document.getElementById("DEPARTURE_WEIGHT_CHECKBOX");
-       if (depCheckbox.checked) {
-         WeightBalanceMain(prefix === 'DEPARTURE' ? 'ARRIVAL' : 'DEPARTURE');
+       // WeightBalanceMain(prefix);
+       // const depCheckbox = document.getElementById("DEPARTURE_WEIGHT_CHECKBOX");
+       // if (depCheckbox.checked) {
+       //   WeightBalanceMain(prefix === 'DEPARTURE' ? 'ARRIVAL' : 'DEPARTURE');
+       // }
+       if (`${prefix}_ELEVATION` === element.id) {
+         createCloudPlot(prefix, "show", true)
        }
+
+       // Update weight and balance
+       WeightBalanceMain('DEPARTURE');
+       WeightBalanceMain('ARRIVAL');
+       // Update highlights
+       highlightMissingFields()
+       highlightDropdownMenus()
      }
 
      // Setup event listeners for RUNWAY fields

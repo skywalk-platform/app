@@ -381,18 +381,6 @@ input[type="number"]:disabled {
     border-radius: 10px;
 }
 
-.textoverlay-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    inset: 0;
-    pointer-events: auto;
-    z-index: 8;
-    border-radius: 10px;
-}
-
 .controls-wrapper {
     position: absolute;
     top: 0;
@@ -405,6 +393,12 @@ input[type="number"]:disabled {
     border-radius: 10px;
 }
 
+.cloudplot-canvas {
+    z-index: 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08); /* optional for a soft shadow */
+}
+
 /* =================== UTILITY CLASSES =================== */
 
 .warning {
@@ -415,16 +409,24 @@ input[type="number"]:disabled {
 }
 
 .info-blue {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
     color: #005082;
     margin: 4px 0;
     text-align: center;
 }
 
+.info-gray {
+    font-size: 10px;
+    font-weight: 400;
+    color: grey;
+    margin: 4px 0;
+    text-align: center;
+}
+
 .info {
     font-size: 14px;
-    color: darkgrey;
+    color: grey;
     margin: 4px 0;
     text-align: center;
 }
@@ -806,12 +808,12 @@ body.mobile-fullscreen .output-box {
     color: #333;
     background: #fff;
     text-align: left;
-    font-weight: 600;
+    font-weight: 700;
     display: block;
     margin-bottom: 6px;
     padding: 8px 6px;
     border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    border-radius: 10px;
     outline: #f5f5f5;
     transition: all 0.2s ease;
     cursor: pointer;
@@ -1117,4 +1119,47 @@ body.mobile-fullscreen .output-box {
     padding-bottom: 10px;
     box-sizing: border-box;
     position: relative;
+}
+
+/* =================== FLASHCARDS =================== */
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  grid-template-rows: repeat(2, 1fr);    /* 2 rows */
+  gap: 0;                                /* gap handled by borders */
+  width: 600px;                           /* adjust as needed */
+  border: 1px solid #f5f5f5;                /* outer border */
+}
+
+.cell {
+  border-right: 1px solid #f5f5f5;   /* vertical line */
+  border-bottom: 1px solid #f5f5f5;  /* horizontal line */
+  padding: 20px;
+  text-align: center;
+  box-sizing: border-box;         /* include border in cell size */
+}
+
+/* Remove extra borders on last row and last column */
+.grid-container .cell:nth-child(3),
+.grid-container .cell:nth-child(6) {
+  border-right: none;
+}
+
+.grid-container .cell:nth-child(n+4) {
+  border-bottom: none;
+}
+
+.summary-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* On smaller screens, collapse to 2 columns */
+@media (max-width: 480px) {
+  .summary-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
