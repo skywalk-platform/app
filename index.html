@@ -477,8 +477,8 @@
 
         </div>
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0px; margin-top: 0px; padding-bottom: 0px; margin: 0px;">
-            <button id="DEPARTURE_ANIMATION_START" title="Start the animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">▶️</button>
-            <button id="DEPARTURE_ANIMATION_STOP" title="Stop the animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⏸️</button>
+            <button id="DEPARTURE_ANIMATION_STOP" title="Stop Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⏸️</button>
+            <button id="DEPARTURE_ANIMATION_START" title="Play Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">▶️</button>
         </div>
 
 
@@ -622,7 +622,7 @@
 
             <!-- Cloud layers -->
             <div class="wind-grid">
-                <div id="DEPARTURE_CLOUD_CONTAINER" style="display:none; margin-top: 8px;">
+                <div id="DEPARTURE_CLOUD_CONTAINER" style="display:none; margin-top: 8px;" onclick="toggleCloudAnimationOnClick('DEPARTURE')" title="Toggle animation by clicking on the image">
                     <canvas class="cloudplot-canvas" id="DEPARTURE_CLOUD_CANVAS"></canvas>
                     <!-- Canvas overlay -->
                     <!--<canvas class="flare-canvas" data-prefix="DEPARTURE"></canvas>-->
@@ -995,8 +995,8 @@
         </div>
 
         <div style="display: flex; justify-content: flex-end; align-items: center; gap: 0px; margin-top: 0px; padding-bottom: 0px; margin: 0px;">
-            <button id="ARRIVAL_ANIMATION_START" title="Start the METAR Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">▶️</button>
-            <button id="ARRIVAL_ANIMATION_STOP" title="Stop the METAR Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⏸️</button>
+            <button id="ARRIVAL_ANIMATION_STOP" title="Stop Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⏸️</button>
+            <button id="ARRIVAL_ANIMATION_START" title="Play Animation" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">▶️</button>
         </div>
 
         <label_h1>Select Arrival</label_h1>
@@ -1018,10 +1018,6 @@
                 <img id="ARRIVAL_CATAGORY_ICON" src="" alt="" style="width:35px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="ARRIVAL_VFR_ICON" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="ARRIVAL_METAR_WARNING" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
-                <!--<button id="ARRIVAL_LOAD_ICAO" title="Reset to default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🏬</button>-->
-                <!--<button id="ARRIVAL_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🌦</button>-->
-                <!--<input type="text" id="ARRIVAL_ICAO" class="tile-value UPPERCASE_input sync-arrival" onchange="window.load_aerodrome_from_json('ARRIVAL')" placeholder="ICAO" disabled>-->
-                <!--<button onclick="window.save_aerodrome_to_json('ARRIVAL')" title="Save custom aerodrome information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">💾</button>-->
             </div>
         </div>
 
@@ -1141,11 +1137,21 @@
             </div>
 
             <!-- Cloud layers -->
-            <div class="wind-grid">
-                <div id="ARRIVAL_CLOUD_CONTAINER" style="display:none; margin-top: 8px;">
+            <!--<div class="wind-grid">
+                <div id="ARRIVAL_CLOUD_CONTAINER" style="display:none; margin-top: 8px;" onclick="toggleCloudAnimationOnClick('ARRIVAL')" title="Toggle animation by clicking on the image">
                     <canvas class="cloudplot-canvas" id="ARRIVAL_CLOUD_CANVAS"></canvas>
                 </div>
+            </div>-->
+
+            <!-- Cloud layers -->
+            <div class="wind-grid">
+                <div id="ARRIVAL_CLOUD_CONTAINER" style="display:none; margin-top: 8px;" onclick="toggleCloudAnimationOnClick('ARRIVAL')" title="Toggle animation by clicking on the image">
+                    <canvas class="cloudplot-canvas" id="ARRIVAL_CLOUD_CANVAS"></canvas>
+                    <!-- Canvas overlay -->
+                    <!--<canvas class="flare-canvas" data-prefix="ARRIVAL"></canvas>-->
+                </div>
             </div>
+
 
             <div class="button-row">
                 <button id="ARRIVAL_LOAD_ICAO" class="button-style" title="Reset to default aerodrome (ICAO) information">
@@ -2706,7 +2712,7 @@
        //   WeightBalanceMain(prefix === 'DEPARTURE' ? 'ARRIVAL' : 'DEPARTURE');
        // }
        if (`${prefix}_ELEVATION` === element.id) {
-         createCloudPlot(prefix, "show", true)
+         createCloudPlot(prefix, "show", false)
        }
 
        // Update weight and balance
@@ -7229,7 +7235,6 @@
         const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
         // Start animations
         animations(prefix, "start");
-        // createCloudPlot(prefix, "show", true);
       });
     });
 
@@ -7242,7 +7247,6 @@
         const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
         // Stop animations
         animations(prefix, "stop");
-        // createCloudPlot(prefix, "show", false);
       });
     });
 
@@ -8673,7 +8677,7 @@ document.getElementById("aircraft_download_btn").addEventListener("click", () =>
                         fieldId.endsWith('_CIRCUIT_ALTITUDE')
                     ) {
                       // alert('update cloud plot');
-                      createCloudPlot(fname, "show", true)
+                      createCloudPlot(fname, "show", false)
                     }
                 });
             }
