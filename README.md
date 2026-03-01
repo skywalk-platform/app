@@ -2,19 +2,19 @@
 
 **Professional Aviation Flight Planning & Performance Analysis**
 
-[![App](https://img.shields.io/badge/App-Live-blue)](https://skywalk-aviation.github.io/app/)
-[![Docs](https://img.shields.io/badge/Docs-Available-green)](https://skywalk-aviation.github.io/docs/)
+[![App](https://img.shields.io/badge/App-Live-blue)](https://skywalk-platform.github.io/app/)
+[![Docs](https://img.shields.io/badge/Docs-Available-green)](https://skywalk-platform.github.io/docs/)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](LICENSE)
 
-SkyWalk is a flight planning tool designed for general aviation pilots. It provides real-time runway performance calculations, weight & balance analysis, METAR integration, and aerodrome information management to help pilots make informed go/no-go decisions.
+SkyWalk is a comprehensive flight planning platform designed for general aviation pilots. It provides real-time runway performance calculations, weight & balance analysis, METAR integration, and aerodrome information management to help pilots make informed go/no-go decisions.
 
 ---
 
 ## 🚀 Quick Start
 
-**Access the application:** [https://skywalk-aviation.github.io/app/](https://skywalk-aviation.github.io/app/)
+**Access the application:** [https://skywalk-platform.github.io/app/](https://skywalk-platform.github.io/app/)
 
-**Read the documentation:** [https://skywalk-aviation.github.io/docs/](https://skywalk-aviation.github.io/docs/)
+**Read the documentation:** [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
 
 ---
 
@@ -32,7 +32,7 @@ SkyWalk is a flight planning tool designed for general aviation pilots. It provi
 - **Cloud Ceiling Visualization**: Interactive cloud layer charts with circuit/CTR altitude overlays
 - **Wind Envelope Analysis**: Visual assessment of crosswind and headwind limits across variable wind conditions
 
-### ⚖️ Weight & Balance
+### Weight & Balance
 - **Interactive Charts**: Visual center of gravity plotting against aircraft envelope
 - **Multi-Point Validation**: Supports departure, arrival, and custom weight scenarios
 - **Real-Time Calculations**: Automatic updates as fuel burn and passenger weights change
@@ -63,6 +63,28 @@ SkyWalk is a flight planning tool designed for general aviation pilots. It provi
 - **Training & Education**: Teaching runway performance calculations and weather interpretation
 
 ---
+
+## 🏗️ Technical Architecture
+
+### Frontend
+- **Framework**: Streamlit-based web application
+- **Visualization**: Plotly, Chart.js, Folium
+- **Interactivity**: Real-time form updates and dynamic SVG generation
+
+### Backend
+- **Language**: Python 3.x
+- **Key Libraries**:
+  - `numpy`, `pandas`: Data processing
+  - `scikit-learn`: Linear regression for POH modeling
+  - `streamlit`: Web framework
+  - Custom modules: `compute`, `runway`, `metar_info`, `helper`
+
+### Data Storage
+- **Firestore Integration**: User settings and aerodrome preferences
+- **Session State**: In-memory flight plan data
+- **POH Models**: Cached regression models for performance calculations
+
+### Core Modules
 
 #### `runway.py`
 Runway performance calculations including:
@@ -136,6 +158,10 @@ Components:
 - Fuel × fuel arm
 ```
 
+Point-in-polygon algorithm validates CG is within aircraft envelope boundaries.
+
+---
+
 ## 🔧 Configuration
 
 ### Aircraft Setup
@@ -160,7 +186,7 @@ Per-aerodrome settings include:
 
 ## 📚 Documentation
 
-Comprehensive documentation is available at: [https://skywalk-aviation.github.io/docs/](https://skywalk-aviation.github.io/docs/)
+Comprehensive documentation is available at: [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
 
 Documentation covers:
 - Getting started guide
@@ -182,14 +208,15 @@ Documentation covers:
 
 ---
 
-## ⚠️ Important Disclaimers
+## Important Disclaimers
 
-**FOR EDUCATIONAL PURPOSES ONLY**
+**FOR EDUCATIONAL AND PLANNING PURPOSES ONLY**
 
 - This software is **NOT certified** for operational flight planning
-- Always verify all calculations with the official aircraft POH
-- METAR/TAF data should be always be manually verified
+- Always verify all calculations with official aircraft POH
+- METAR/TAF data may be outdated or incomplete - check official sources
 - Runway and aerodrome data should be verified with current NOTAM and charts
+- Pilots are solely responsible for all flight planning decisions
 - The developer assumes **NO LIABILITY** for use of this software
 
 **REGULATORY COMPLIANCE**: Pilots must comply with all applicable aviation regulations and always maintain appropriate safety margins.
@@ -201,11 +228,16 @@ Documentation covers:
 - **METAR Coverage**: Limited to stations with publicly available data
 - **Runway Database**: May not include all smaller aerodromes
 - **VRB Winds**: Variable wind (VRB) prevents accurate wind corrections
-- **POH Fitting**: Requires a minimum of 3 data points for accurate modelling
+- **POH Fitting**: Requires minimum 3 data points for accurate modeling
 - **Surface Types**: Generic classifications may not match specific runway conditions
 
 ---
 
+## 🤝 Contributing
+
+This is proprietary software. For bug reports or feature requests, please contact the developer.
+
+---
 
 ## 📄 License
 
@@ -217,12 +249,27 @@ Unauthorized copying, modification, or distribution of this software, via any me
 
 ## 👤 Author
 
-**Erdogan Taskesen**  
+**Erdogan Taskesen**
+Email: erdogant@gmail.com
 Year: 2024-2025
 
 ---
 
+## 📞 Support
 
+For questions, bug reports, or feature requests:
+- **Documentation**: [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
+- **Email**: erdogant@gmail.com
+
+---
+
+## 🙏 Acknowledgments
+
+- METAR data provided by public aviation weather services
+- Aerodrome information sourced from Wikipedia and official aviation databases
+- Chart.js, Plotly, and Folium for visualization libraries
+
+---
 
 ## 📝 Version History
 
