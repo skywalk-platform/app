@@ -87,6 +87,7 @@
     <script src="./scripts/sun.js" defer></script>
     <script src="./scripts/snow.js" defer></script>
     <script src="./scripts/dark.js" defer></script>
+    <script src="./scripts/cloudPlot.js" defer></script>
     <!--<script src="./scripts/textoverlay.js" defer></script>-->
     <script src="./scripts/metar.js" defer></script>
     <!--MAP-->
@@ -126,21 +127,27 @@
     </div>
 
 	<div id="More" class="tabcontent">
-        <div class="border-round-eged">
-            <div class="info" style="margin-bottom: 20px;">SkyWalk is a web-based tool designed to help pilots communicate effectively with Air Traffic Control (ATC). The app is free for use, is for educational purposes and does not require any registration or login. If you enjoy using SkyWalk, please consider supporting by donating a coffee.</div>
+	    <label_h1>More</label_h1>
+
+        <div style="border: 0px solid lightgrey; border-radius: 10px; padding: 10px;">
+            <div id="bottom-container">
+                <div class="info">
+                    SkyWalk is a web-based tool designed to help pilots communicate effectively with Air Traffic Control (ATC). The app is free for use, is for educational purposes and does not require any registration or login. If you enjoy using SkyWalk, please consider supporting by donating a coffee.
+                </div>
+            </div>
         </div>
 
         <button class="tablinks" data-tab="MAP" style="cursor: pointer;">🗺️ Map</button>
         <button class="tablinks" data-tab="Checklist" style="cursor: pointer;">📋 Checklist</button>
-        <button class="tablinks" data-tab="Aircraft Specifications" style="cursor: pointer;">📐 Aircraft Specifications</button>
-       	<button class="tablinks" data-tab="Config" style="cursor: pointer;">⚙️ Config</button>
+        <button class="tablinks" data-tab="Aircrafts" style="cursor: pointer;">📐 Aircrafts</button>
         <button class="tablinks" data-tab="Countries" style="cursor: pointer;">🌍 Select Countries</button>
+       	<button class="tablinks" data-tab="Config" style="cursor: pointer;">⚙️ Config</button>
         <div class="button-row">
             <button id="BTN-WEIGHTBALANCE"
                 type="button"
                 onclick="window.open('https://www.vliegclubrotterdam.nl/wb/', '_blank')"
                 title="Weight and Balance calculator vliegclub Rotterdam">
-                    ⚖️ Weight & Balance vliegclub Rotterdam
+                    ⚖️ Weight & Balance
             </button>
         </div>
         <!--CHECK FOR UPDATES-->
@@ -365,13 +372,32 @@
         <div class="flight-card">
             <span class="tile-label" style="text-align: left; font-size: 14px; font-weight: bold;">DEPARTURE <span style="font-size: 8px;">OVERVIEW</span></span>
             <div class="summary-grid">
+                <div id="DEPARTURE_FLASHCARD_FLIGHTRULES"></div>
+                <div id="DEPARTURE_FLASHCARD_TEMPDEW"></div>
+                <div id="DEPARTURE_FLASHCARD_DIRSTRENGTH"></div>
+            </div>
+
+            <div class="divider-general-section" style="background: #f0f0f0;"></div>
+
+            <div class="summary-grid">
                 <div id="DEPARTURE_FLASHCARD_WINDENV"></div>
                 <div id="DEPARTURE_FLASHCARD_HEADWIND"></div>
                 <div id="DEPARTURE_FLASHCARD_CROSSWIND"></div>
-                <div id="DEPARTURE_FLASHCARD_FLIGHTRULES"></div>
+            </div>
+
+            <div class="divider-general-section" style="background: #f0f0f0;"></div>
+
+            <div class="summary-grid">
+                <div id="DEPARTURE_FLASHCARD_RUNWAY_NR"></div>
+                <div id="DEPARTURE_FLASHCARD_RUNWAY"></div>
+                <div id="DEPARTURE_FLASHCARD_CLOUDS"></div>
+            </div>
+
+            <div class="divider-general-section" style="background: #f0f0f0;"></div>
+
+            <div class="summary-grid">
                 <div id="DEPARTURE_FLASHCARD_WEIGHT"></div>
                 <div id="DEPARTURE_FLASHCARD_FUEL"></div>
-                <div id="DEPARTURE_FLASHCARD_RUNWAY"></div>
             </div>
         </div>
 
@@ -379,13 +405,32 @@
         <div class="flight-card">
             <span class="tile-label" style="text-align: left; font-size: 14px; font-weight: bold;">ARRIVAL <span style="font-size: 8px;">OVERVIEW</span></span>
             <div class="summary-grid">
+                <div id="ARRIVAL_FLASHCARD_FLIGHTRULES"></div>
+                <div id="ARRIVAL_FLASHCARD_TEMPDEW"></div>
+                <div id="ARRIVAL_FLASHCARD_DIRSTRENGTH"></div>
+            </div>
+
+            <div class="divider-general-section" style="background: #f0f0f0;"></div>
+
+            <div class="summary-grid">
                 <div id="ARRIVAL_FLASHCARD_WINDENV"></div>
                 <div id="ARRIVAL_FLASHCARD_HEADWIND"></div>
                 <div id="ARRIVAL_FLASHCARD_CROSSWIND"></div>
-                <div id="ARRIVAL_FLASHCARD_FLIGHTRULES"></div>
+            </div>
+
+            <div class="divider-general-section" style="background: #f0f0f0;"></div>
+
+            <div class="summary-grid">
+                <div id="ARRIVAL_FLASHCARD_RUNWAY_NR"></div>
+                <div id="ARRIVAL_FLASHCARD_RUNWAY"></div>
+                <div id="ARRIVAL_FLASHCARD_CLOUDS"></div>
+            </div>
+
+            <div class="divider-general-section" style="background: #f0f0f0;"></div>
+
+            <div class="summary-grid">
                 <div id="ARRIVAL_FLASHCARD_WEIGHT"></div>
                 <div id="ARRIVAL_FLASHCARD_FUEL"></div>
-                <div id="ARRIVAL_FLASHCARD_RUNWAY"></div>
             </div>
         </div>
 
@@ -463,7 +508,7 @@
                 <img id="DEPARTURE_CATAGORY_ICON" src="" alt="" style="width:35px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="DEPARTURE_VFR_ICON" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="DEPARTURE_METAR_WARNING" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
-                <button id="DEPARTURE_LOAD_ICAO" title="Reset to default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🏬</button>
+                <!--<button id="DEPARTURE_LOAD_ICAO" title="Reset to default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🏬</button>-->
                 <!--<button id="DEPARTURE_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⛅</button>-->
                 <!--<input type="text" id="DEPARTURE_ICAO" class="tile-value UPPERCASE_input sync-departure" onchange="window.load_aerodrome_from_json('DEPARTURE')" placeholder="ICAO" disabled>-->
             </div>
@@ -535,10 +580,9 @@
             <!--<button id="DEPARTURE_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">⛅</button>-->
             <div class="button-row">
                 <button id="DEPARTURE_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
-                    Retrieve New METAR Information
+                    Refresh METAR Information
                 </button>
             </div>
-
 
         </div>
         </div>
@@ -580,10 +624,22 @@
                     <input id="DEPARTURE_CIRCUIT_ALTITUDE" type="text" class="tile-value" title="The altitude of the circuit in feet.">
                     <span class="tile-label">Altitude circuit(ft)</span>
                 </div>
-
             </div>
 
-            <button onclick="window.save_aerodrome_to_json('DEPARTURE')" title="Save custom aerodrome information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">💾</button>
+            <!-- Cloud layers -->
+            <div class="wind-grid">
+                <div id="DEPARTURE_CLOUD_CONTAINER" style="display:none; margin-top: 8px;">
+                    <canvas id="DEPARTURE_CLOUD_CANVAS"></canvas>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button id="DEPARTURE_LOAD_ICAO" class="button-style" title="Reset to default aerodrome (ICAO) information">
+                    Reset aerodrome information
+                </button>
+                <button onclick="window.save_aerodrome_to_json('DEPARTURE')" title="Save custom aerodrome information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">💾</button>
+            </div>
+
 
         </div>
         </div>
@@ -672,9 +728,9 @@
             <div class="border-round-eged">
                 <div class="weight-card-header">Totals</div>
                 <div class="wind-grid_3">
-                    <input type="number" class="tile-value" id="DEPARTURE_total_moment" value="0" disabled>
-                    <input type="number" class="tile-value" id="DEPARTURE_total_weight" value="0" disabled>
-                    <input type="number" class="tile-value" id="DEPARTURE_takeoff_cg" value="0" disabled>
+                    <input type="number" class="tile-value" id="DEPARTURE_total_moment" value="" disabled>
+                    <input type="number" class="tile-value" id="DEPARTURE_total_weight" value="" disabled>
+                    <input type="number" class="tile-value" id="DEPARTURE_takeoff_cg" value="" disabled>
                 </div>
                 <div class="wind-grid_3">
                     <span class="tile-label">Total Moment</span>
@@ -688,7 +744,7 @@
 
                 <div class="grid-middle-small">
                     <div class="tile" style="border-color: transparent">
-                        <input type="number" id="DEPARTURE_WEIGHT_FUEL_LITERS" value="0">
+                        <input type="number" id="DEPARTURE_WEIGHT_FUEL_LITERS" value="">
                         <span class="tile-label">Fuel (liters)</span>
                     </div>
                 </div>
@@ -700,28 +756,28 @@
 
                 <div class="wind-grid" style="margin:2; padding:0; gap:0; display:flex; align-items:center;">
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="DEPARTURE_WEIGHT_PILOT" value="0" min="0">
+                        <input type="number" id="DEPARTURE_WEIGHT_PILOT" value="" min="0">
                         <span class="tile-label">Pilot (kg)</span>
                     </div>
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="DEPARTURE_WEIGHT_COPILOT" value="0" min="0">
+                        <input type="number" id="DEPARTURE_WEIGHT_COPILOT" value="" min="0">
                         <span class="tile-label">Front Passenger (kg)</span>
                     </div>
                 </div>
                 <div class="wind-grid" style="margin:2; padding:0; gap:0; display:flex; align-items:center;">
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="DEPARTURE_WEIGHT_REAR_LEFT" value="0" min="0">
+                        <input type="number" id="DEPARTURE_WEIGHT_REAR_LEFT" value="" min="0">
                         <span class="tile-label">Left Passenger (kg)</span>
                     </div>
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="DEPARTURE_WEIGHT_REAR_RIGHT" value="0" min="0">
+                        <input type="number" id="DEPARTURE_WEIGHT_REAR_RIGHT" value="" min="0">
                         <span class="tile-label">Right Passenger (kg)</span>
                     </div>
                 </div>
 
                 <div class="grid-middle-small">
                     <div class="tile" style="border-color: transparent">
-                        <input type="number" id="DEPARTURE_WEIGHT_BAGAGE" value="0" min="0">
+                        <input type="number" id="DEPARTURE_WEIGHT_BAGAGE" value="" min="0">
                         <span class="tile-label">Baggage (kg)</span>
                     </div>
                 </div>
@@ -811,6 +867,9 @@
                         <span class="tile-label" style="text-align: center;">Condition</span>
                     </div>
                 </div>
+
+                <textarea id="DEPARTURE_RUNWAY_CONDITION" class="tile-value" title="Runway condition." style="background-color: transparent; font-size: 12px; font-weight: normal; resize: vertical; min-height: 32px; max-height: 80px; width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word; margin-top: 10px;"></textarea>
+
            </div>
 
            <div class="border-round-eged">
@@ -829,8 +888,6 @@
                 </div>
 
            </div>
-
-           <textarea id="DEPARTURE_RUNWAY_CONDITION" class="tile-value" title="Runway condition." style="background-color: transparent; font-size: 12px; font-weight: normal; resize: vertical; min-height: 32px; max-height: 80px; width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word;"></textarea>
 
            <!-- Add a button to calculate -->
            <button class="button-style" onclick="window.displayRunwayMain('DEPARTURE')">
@@ -971,7 +1028,7 @@
                 <img id="ARRIVAL_CATAGORY_ICON" src="" alt="" style="width:35px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="ARRIVAL_VFR_ICON" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
                 <img id="ARRIVAL_METAR_WARNING" src="" alt="" style="width:70px; height:auto; vertical-align:middle; margin-left:6px;">
-                <button id="ARRIVAL_LOAD_ICAO" title="Reset to default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🏬</button>
+                <!--<button id="ARRIVAL_LOAD_ICAO" title="Reset to default aerodrome (ICAO) information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🏬</button>-->
                 <!--<button id="ARRIVAL_USE_CACHED" title="Retrieve most recent METAR weather information from Aviation weather" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🌦</button>-->
                 <!--<input type="text" id="ARRIVAL_ICAO" class="tile-value UPPERCASE_input sync-arrival" onchange="window.load_aerodrome_from_json('ARRIVAL')" placeholder="ICAO" disabled>-->
                 <!--<button onclick="window.save_aerodrome_to_json('ARRIVAL')" title="Save custom aerodrome information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">💾</button>-->
@@ -1043,7 +1100,7 @@
 
             <div class="button-row">
                 <button id="ARRIVAL_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
-                    Retrieve New METAR Information
+                    Refresh METAR Information
                 </button>
             </div>
 
@@ -1092,7 +1149,20 @@
 
             </div>
 
-            <button onclick="window.save_aerodrome_to_json('ARRIVAL')" title="Save custom aerodrome information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">💾</button>
+            <!-- Cloud layers -->
+            <div class="wind-grid">
+                <div id="ARRIVAL_CLOUD_CONTAINER" style="display:none; margin-top: 8px;">
+                    <canvas id="ARRIVAL_CLOUD_CANVAS"></canvas>
+                </div>
+            </div>
+
+            <div class="button-row">
+                <button id="ARRIVAL_LOAD_ICAO" class="button-style" title="Reset to default aerodrome (ICAO) information">
+                    Reset aerodrome information
+                </button>
+                <button onclick="window.save_aerodrome_to_json('ARRIVAL')" title="Save custom aerodrome information" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">💾</button>
+            </div>
+
 
         </div>
         </div>
@@ -1182,9 +1252,9 @@
            <div class="border-round-eged">
                <div class="weight-card-header">Totals</div>
                <div class="wind-grid_3">
-                    <input type="number" class="tile-value" id="ARRIVAL_total_moment" value="0" disabled>
-                    <input type="number" class="tile-value" id="ARRIVAL_total_weight" value="0" disabled>
-                    <input type="number" class="tile-value" id="ARRIVAL_takeoff_cg" value="0" disabled>
+                    <input type="number" class="tile-value" id="ARRIVAL_total_moment" value="" disabled>
+                    <input type="number" class="tile-value" id="ARRIVAL_total_weight" value="" disabled>
+                    <input type="number" class="tile-value" id="ARRIVAL_takeoff_cg" value="" disabled>
                </div>
                <div class="wind-grid_3">
                     <span class="tile-label">Total Moment</span>
@@ -1196,7 +1266,7 @@
            <div class="border-round-eged" style="background-color: #ffffff;">
                 <div class="grid-middle-small">
                     <div class="tile" style="border-color: transparent">
-                        <input type="number" id="ARRIVAL_WEIGHT_FUEL_LITERS" value="0">
+                        <input type="number" id="ARRIVAL_WEIGHT_FUEL_LITERS" value="">
                         <span class="tile-label">Fuel (liters)</span>
                     </div>
                 </div>
@@ -1208,28 +1278,28 @@
 
                 <div class="wind-grid" style="margin:2; padding:0; gap:0; display:flex; align-items:center;">
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="ARRIVAL_WEIGHT_PILOT" value="0" min="0">
+                        <input type="number" id="ARRIVAL_WEIGHT_PILOT" value="" min="0">
                         <span class="tile-label">Pilot (kg)</span>
                     </div>
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="ARRIVAL_WEIGHT_COPILOT" value="0" min="0">
+                        <input type="number" id="ARRIVAL_WEIGHT_COPILOT" value="" min="0">
                         <span class="tile-label">Front Passenger (kg)</span>
                     </div>
                 </div>
                 <div class="wind-grid" style="margin:2; padding:0; gap:0; display:flex; align-items:center;">
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="ARRIVAL_WEIGHT_REAR_LEFT" value="0" min="0">
+                        <input type="number" id="ARRIVAL_WEIGHT_REAR_LEFT" value="" min="0">
                         <span class="tile-label">Left Passenger (kg)</span>
                     </div>
                     <div class="tile" style="border-color: transparent; margin:2; padding:10; gap:2; align-items:center;">
-                        <input type="number" id="ARRIVAL_WEIGHT_REAR_RIGHT" value="0" min="0">
+                        <input type="number" id="ARRIVAL_WEIGHT_REAR_RIGHT" value="" min="0">
                         <span class="tile-label">Right Passenger (kg)</span>
                     </div>
                 </div>
 
                 <div class="grid-middle-small">
                     <div class="tile" style="border-color: transparent">
-                        <input type="number" id="ARRIVAL_WEIGHT_BAGAGE" value="0" min="0">
+                        <input type="number" id="ARRIVAL_WEIGHT_BAGAGE" value="" min="0">
                         <span class="tile-label">Baggage (kg)</span>
                     </div>
                 </div>
@@ -1318,6 +1388,8 @@
                        <span class="tile-label" style="text-align: center;">Condition</span>
                    </div>
                </div>
+
+            <textarea id="ARRIVAL_RUNWAY_CONDITION" class="tile-value" title="Runway condition." style="background-color: transparent; font-size: 12px; font-weight: normal; resize: vertical; min-height: 32px; max-height: 80px; width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word; margin-top: 10px;"></textarea>
           </div>
 
           <div class="border-round-eged">
@@ -1336,8 +1408,6 @@
                </div>
 
           </div>
-
-          <textarea id="ARRIVAL_RUNWAY_CONDITION" class="tile-value" title="Runway condition." style="background-color: transparent; font-size: 12px; font-weight: normal; resize: vertical; min-height: 32px; max-height: 80px; width: 100%; box-sizing: border-box; white-space: pre-wrap; word-break: break-word; overflow-wrap: break-word;"></textarea>
 
           <!-- Add a button to calculate -->
           <button class="button-style" onclick="window.displayRunwayMain('ARRIVAL')">
@@ -1664,14 +1734,12 @@
     <!-- =============== TAB COUNTRIES OF INTEREST =============== -->
 
     <div id="Countries" class="tabcontent">
-        <label_h1>COUNTRIES OF INTEREST</label_h1>
+        <label_h1>SELECT COUNTRIES</label_h1>
 
         <div style="border: 0px solid lightgrey; border-radius: 10px; padding: 10px;">
             <div id="bottom-container">
                 <div class="info">
-                    This section allows you to manage your countries of interest for aerodrome and flight planning workflows.
-                    Select the countries you want to include so airport lists, ICAO selections, and related data stay focused on the regions you fly most often.
-                    Use the search fields to quickly find entries, move countries between the Available and Selected lists, and keep your setup organized and efficient.
+                    Select the countries for ICAO selection by moving countries from Available to Selected lists.
                 </div>
             </div>
         </div>
@@ -1755,7 +1823,8 @@
         <div style="border: 0px solid lightgrey; border-radius: 10px; padding: 10px;">
             <div id="bottom-container">
                 <div class="info">
-                    Flight preparations requires doing many tasks carefully. Here we seperate them into catagories to keep it organized.                </div>
+                    Flight preparations requires doing many tasks carefully. Here we seperate them into catagories to keep it organized.
+                </div>
             </div>
         </div>
 
@@ -1888,32 +1957,36 @@
 
 
     <!-- AIRCRAFT SPECIFICATIONS-->
-    <div id="Aircraft Specifications" class="tabcontent">
-        <label_h1>Aircraft Specifications</label_h1>
+    <div id="Aircrafts" class="tabcontent">
+        <label_h1>Aircrafts</label_h1>
 
         <div style="border: 0px solid lightgrey; border-radius: 10px; padding: 10px;">
             <div id="bottom-container">
                 <div class="info">
-                    This section is to manage your aircrafts. You can set the technical (POH) specifications for one or multiple aircrafts.
-                    The information is used for weight and balance calculations, and the takeoff and landing performance calculations.
+                    Specify the technical (POH) specifications for one or multiple aircrafts.
+                    The parameters are used for weight and balance calculations, and the takeoff and landing performance calculations.
                 </div>
             </div>
         </div>
-
 
         <!-- IMPORT -->
         <div class="collapsible" data-title="IMPORT">
         <div class="collapsible-header"></div>
         <div class="collapsible-content">
-            <div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
+            <!--<div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
                 <input type="text" class="tile-value UPPERCASE_input" placeholder="Import" style="background-color:transparent; font-size: 18px; padding: 0.5px;" disabled>
-            </div>
+            </div>-->
             <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
+                <!--Add spacing -->
+                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
+                <!--Selection spinner-->
                 <select id="import_aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
                     <option value="">Select and Load</option>
                 </select>
                 <!--Save button-->
-                <button id="import_and_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Import and save selected data">💾</button>
+                <button id="import_and_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Import and save selected data">📥</button>
+                <!--Add spacing -->
+                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
             </div>
         </div>
         </div>
@@ -1927,14 +2000,23 @@
                 <!-- Delete Button -->
                 <button id="aircraft_delete_btn" onclick="window.delete_item_from_spinner('aircraft_spinner', 'AIRCRAFT', 'aircraft_field')" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Delete Aircraft">🗑️</button>
                 <!-- Clean Button -->
-                <button id="aircraft_clear_btn" onclick="aircraft_clean()" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Create New Aircraft">🧹</button>
+                <!--<button id="aircraft_clear_btn" onclick="aircraft_clean()" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Create New Aircraft">🧹</button>-->
                 <!-- Spinner, loaded from load_spinner_selection() -->
                 <select id="aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
                     <option value="">Select and Load</option>
                 </select>
                 <!-- Save button -->
                 <button id="aircraft_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save Aircraft Specifications">💾</button>
+                <!-- Download button -->
+                <button id="aircraft_download_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Download Aircraft Specifications">📥</button>
             </div>
+
+            <div class="button-row">
+                <button id="aircraft_clear_btn" class="button-style" title="Clean all aircraft fields." onclick="aircraft_clean()">
+                    Clean all aircraft fields
+                </button>
+            </div>
+
         </div>
 
 
@@ -1945,26 +2027,26 @@
 
             <div class="wind-grid">
                  <div class="tile">
-                    <input id="SETTINGS_WEIGHT_PILOT" type="number" value="0" min="0">
+                    <input id="SETTINGS_WEIGHT_PILOT" type="number" value="" min="0">
                     <span class="tile-label">Pilot (kg)</span>
                 </div>
                 <div class="tile">
-                   <input id="SETTINGS_WEIGHT_COPILOT" type="number" value="0" min="0">
+                   <input id="SETTINGS_WEIGHT_COPILOT" type="number" value="" min="0">
                    <span class="tile-label">Front Passenger (kg)</span>
                </div>
             </div>
 
             <div class="wind-grid">
                  <div class="tile">
-                    <input id="SETTINGS_WEIGHT_REAR_LEFT" type="number" value="0" min="0">
+                    <input id="SETTINGS_WEIGHT_REAR_LEFT" type="number" value="" min="0">
                     <span class="tile-label">Left Passenger (kg)</span>
                 </div>
                 <div class="tile">
-                   <input id="SETTINGS_WEIGHT_REAR_RIGHT" type="number" value="0" min="0">
+                   <input id="SETTINGS_WEIGHT_REAR_RIGHT" type="number" value="" min="0">
                    <span class="tile-label">Right Passenger (kg)</span>
                </div>
                <div class="tile">
-                  <input id="SETTINGS_WEIGHT_BAGAGE" type="number" value="0" min="0">
+                  <input id="SETTINGS_WEIGHT_BAGAGE" type="number" value="" min="0">
                   <span class="tile-label">Baggage (kg)</span>
               </div>
             </div>
@@ -1995,7 +2077,7 @@
                     <span class="tile-label">Cruise Speed (k/h)</span>
                 </div>
                 <div class="tile">
-                   <input id="aircraft_mtow" type="number" value="0" min="0">
+                   <input id="aircraft_mtow" type="number" value="" min="0">
                    <span class="tile-label">MTOW</span>
                 </div>
             </div>
@@ -2022,11 +2104,11 @@
 
             <div class="wind-grid">
                 <div class="tile">
-                    <input id="aircraft_fuel_consumption" type="number" value="0", min="0">
+                    <input id="aircraft_fuel_consumption" type="number" value="", min="0">
                     <span class="tile-label">Fuel Consumption (l/h)</span>
                 </div>
                 <div class="tile">
-                    <input id="SETTINGS_WEIGHT_FUEL_LITERS" type="number" value="0", min="0">
+                    <input id="SETTINGS_WEIGHT_FUEL_LITERS" type="number" value="", min="0">
                     <span class="tile-label">Maximum Fuel (l)</span>
                 </div>
             </div>
@@ -2056,7 +2138,7 @@
                 <div class="weight-card">
                     <div class="grid-two-thirds-one-third">
                         <div class="weight-card-header">Empty aircraft weight (kg)</div>
-                        <input type="number" id="weight_empty" value="0", min="0">
+                        <input type="number" id="weight_empty" value="", min="0">
                     </div>
                 </div>
 
@@ -2069,50 +2151,50 @@
 
                     <div class="wind-grid_3">
                         <div class="weight-card-header">Empty Weight</div>
-                        <input type="number" id="arm_empty" value="0", min="0">
-                        <input type="number" id="moment_empty" value="0" disabled>
+                        <input type="number" id="arm_empty" value="", min="0">
+                        <input type="number" id="moment_empty" value="" disabled>
                     </div>
 
                     <!-- Pilot -->
                     <div class="wind-grid_3">
                         <div class="weight-card-header">Pilot</div>
-                        <input type="number" id="arm_pilot" value="0", min="0">
-                        <input type="number" id="moment_pilot" value="0" disabled>
+                        <input type="number" id="arm_pilot" value="", min="0">
+                        <input type="number" id="moment_pilot" value="" disabled>
                     </div>
 
                     <!-- Front Passenger -->
                     <div class="wind-grid_3">
                         <div class="weight-card-header">Front Passenger</div>
-                        <input type="number" id="arm_copilot" value="0", min="0">
-                        <input type="number" id="moment_copilot" value="0" disabled>
+                        <input type="number" id="arm_copilot" value="", min="0">
+                        <input type="number" id="moment_copilot" value="" disabled>
                     </div>
 
                     <!-- Rear Left Passenger -->
                     <div class="wind-grid_3">
                         <div class="weight-card-header">Rear Left Passenger</div>
-                        <input type="number" id="arm_rl" value="0", min="0">
-                        <input type="number" id="moment_rl" value="0" disabled>
+                        <input type="number" id="arm_rl" value="", min="0">
+                        <input type="number" id="moment_rl" value="" disabled>
                     </div>
 
                     <!-- Rear Right Passenger -->
                     <div class="wind-grid_3">
                         <div class="weight-card-header">Rear Right Passenger</div>
-                        <input type="number" id="arm_rr" value="0", min="0">
-                        <input type="number" id="moment_rr" value="0" disabled>
+                        <input type="number" id="arm_rr" value="", min="0">
+                        <input type="number" id="moment_rr" value="" disabled>
                     </div>
 
                     <!-- Baggage -->
                     <div class="wind-grid_3">
                         <div class="weight-card-header">Baggage</div>
-                        <input type="number" id="arm_bagage" value="0", min="0">
-                        <input type="number" id="moment_bagage" value="0" disabled>
+                        <input type="number" id="arm_bagage" value="", min="0">
+                        <input type="number" id="moment_bagage" value="" disabled>
                     </div>
 
                     <!-- Fuel -->
                     <div class="wind-grid_3">
                         <div class="weight-card-header">Fuel</div>
-                        <input type="number" id="arm_fuel" value="0", min="0">
-                        <input type="number" id="moment_fuel" value="0" disabled>
+                        <input type="number" id="arm_fuel" value="", min="0">
+                        <input type="number" id="moment_fuel" value="" disabled>
                     </div>
 
                 </div>
@@ -2122,9 +2204,9 @@
             <div class="border-round-eged">
                 <div class="weight-card-header">Totals</div>
                 <div class="wind-grid_3">
-                     <input type="number" class="tile-value" id="SETTINGS_total_moment" value="0" disabled>
-                     <input type="number" class="tile-value" id="SETTINGS_total_weight" value="0" disabled>
-                     <input type="number" class="tile-value" id="SETTINGS_takeoff_cg" value="0" disabled>
+                     <input type="number" class="tile-value" id="SETTINGS_total_moment" value="" disabled>
+                     <input type="number" class="tile-value" id="SETTINGS_total_weight" value="" disabled>
+                     <input type="number" class="tile-value" id="SETTINGS_takeoff_cg" value="" disabled>
                 </div>
                 <div class="wind-grid_3">
                      <span class="tile-label">Total Moment</span>
@@ -2258,6 +2340,9 @@
                     </div>
                 </div>
 
+                <div class="info-gray", id="message_tailwind_corr">
+                    As an example: Tailwind (kts)=2 and Correction Factor=1.1 describes: Add 10% to the distance for each 2 kt increase in tail wind.
+                </div>
             </div>
 
             <!--RUNWAY CORRECTION FACTORS-->
@@ -2268,6 +2353,9 @@
 
                 <div class="divider"></div>
 
+                <div class="wind-grid_3">
+                    <div class="input-label" style="text-align: center;">Correction Factor</div>
+                </div>
                 <div class="wind-grid_3">
                     <div class="input-label" style="text-align: center;">Runway Type</div>
                     <div class="input-label" style="text-align: center;">Dry Surface</div>
@@ -2289,6 +2377,10 @@
                     <input type="number" id="takeoff_runway_custom_dry" value="" min="0" step="0.05">
                     <input type="number" id="takeoff_runway_custom_wet" value="" min="0" step="0.05">
                 </div>
+
+                <div class="info-gray", id="message_runway_corr">
+                    Example: Dry Surface and Soft with value 1.15 describes: Add 15% for short, dry, grass.
+                </div>
             </div>
 
             <div class="weight-card">
@@ -2306,18 +2398,25 @@
                     <input type="number" id="takeoff_runway_slope_paved" value="" min="0" step="0.05">
                     <input type="number" id="takeoff_runway_correction_factor" value="" min="0" step="0.05">
                 </div>
+                <div class="info-gray", id="message_slope_corr">
+                    Example: Runway slope: 2 and correction factor: 1.1 describes: An upward slope of 2% (2 m in 100 m) increases the take-off distance by 10%.
+                </div>
+            </div>
 
+            <div class="weight-card">
                 <div class="wind-grid">
                     <div class="input-label" style="text-align: center;">Minimum Takeoff Distance (% runway)</div>
                 </div>
                 <div class="wind-grid">
                     <input type="number" id="takeoff_runway_safety_correction" value="" min="0" step="0.1">
                 </div>
-
+                <div class="info-gray", id="message_safety_corr">
+                    Example: 0.7 describes: Minimum distance for take-off is 70% of the runway length.
+                </div>
             </div>
 
             <button id="takeoff_load_defaults" onclick="load_performance_defaults('takeoff')" style="border: 2px solid #f5f5f5; color: #333333; padding: 8px 12px; border-radius: 8px; cursor: pointer;">
-                Load Default Takeoff Settings
+                Load Example Takeoff Settings
             </button>
 
         </div>
@@ -2347,7 +2446,7 @@
                     <div class="divider"></div>
 
                     <div class="wind-grid">
-                        <div class="input-label" style="text-align: center;">Headwind (kts)</div>
+                        <div class="input-label" style="text-align: center;">Headwind (KIAS)</div>
                         <div class="input-label" style="text-align: center;">Correction Factor</div>
                     </div>
 
@@ -2429,18 +2528,94 @@
                     <input type="number" id="landing_runway_slope_paved" value="" min="0" step="0.05">
                     <input type="number" id="landing_runway_correction_factor" value="" min="0" step="0.05">
                 </div>
+            </div>
 
+            <div class="weight-card">
                 <div class="wind-grid">
                     <div class="input-label" style="text-align: center;">Minimum Landing Distance (% runway)</div>
                 </div>
                 <div class="wind-grid">
                     <input type="number" id="landing_runway_safety_correction" value="" min="0" step="0.1">
                 </div>
-
             </div>
 
             <button id="landing_load_defaults" onclick="load_performance_defaults('landing')" style="border: 2px solid #f5f5f5; color: #333333; padding: 8px 12px; border-radius: 8px; cursor: pointer;">
-                Load Default Landing Settings
+                Load Example Landing Settings
+            </button>
+
+        </div>
+        </div>
+
+
+
+        <!-- TAKEOFF PERFORMANCE POH TABLE -->
+        <div class="collapsible" data-title="Takeoff Performance Distance Table">
+        <div class="collapsible-header"></div>
+        <div class="collapsible-content">
+
+            <div class="container">
+                <div class="weight-card">
+                    <div class="info-blue">Set your takeoff performance distances from the POH for the defined MTOW. Add/remove rows as needed.</div>
+                    <div class="divider"></div>
+                    <table id="poh_takeoff_table" style="width:100%; border-collapse: collapse; font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th style="padding: 6px; border: 1px solid #ccc;">Alt (ft)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;">Temp (°C)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;">Dist (m)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;">50ft (m)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="POH_TAKEOFF_RECORDS"></tbody>
+                    </table>
+                    <button onclick="addPohRow('POH_TAKEOFF_RECORDS')" style="margin-top: 8px; font-size: 11px;">+ Add row</button>
+                </div>
+            </div>
+
+            <p id="poh_takeoff_equation" style="font-family: monospace; font-size: 12px; margin: 8px 0;"></p>
+            <canvas id="poh_takeoff_canvas" width="300" height="220" style="border: 1px solid #eee;"></canvas>
+            <button onclick="plotLinearModel(getPohTableData('POH_TAKEOFF_RECORDS'), 'distance', 'poh_takeoff_canvas', 'poh_takeoff_equation')">
+                Fit model
+            </button>
+
+        </div>
+        </div>
+
+
+        <!-- LANDING PERFORMANCE POH TABLE -->
+        <div class="collapsible" data-title="Landing Performance Distance Table">
+        <div class="collapsible-header"></div>
+        <div class="collapsible-content">
+
+            <div class="container">
+                <div class="weight-card">
+                    <div class="info-blue">Set your landing performance distances from the POH for the defined MTOW. Add/remove rows as needed.</div>
+                    <div class="divider"></div>
+                    <table id="poh_landing_table" style="width:100%; border-collapse: collapse; font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th style="padding: 6px; border: 1px solid #ccc;">Alt (ft)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;">Temp (°C)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;">Dist (m)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;">50ft (m)</th>
+                                <th style="padding: 6px; border: 1px solid #ccc;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="POH_LANDING_RECORDS"></tbody>
+                    </table>
+                    <button onclick="addPohRow('POH_LANDING_RECORDS')" style="margin-top: 8px; font-size: 11px;">+ Add row</button>
+                </div>
+            </div>
+
+            <p id="poh_landing_equation" style="font-family: monospace; font-size: 12px; margin: 8px 0;"></p>
+            <canvas id="poh_landing_canvas" width="300" height="220" style="border: 1px solid #eee;"></canvas>
+            <button onclick="plotLinearModel(getPohTableData('POH_LANDING_RECORDS'), 'distance', 'poh_landing_canvas', 'poh_landing_equation')">
+                Fit model
+            </button>
+
+            <button id="load_defaults_poh" onclick="window.initPOHTables()" style="border: 2px solid #f5f5f5; color: #333333; padding: 8px 12px; border-radius: 8px; cursor: pointer;">
+                Load example POH table
             </button>
 
         </div>
@@ -2451,7 +2626,6 @@
                 The calculations are for educational purposes only and does not replace procedures. Always verify your calculations and consult official aircraft documentation before flight.
             </div>
         </div>
-
 
     </div>
 
@@ -2523,14 +2697,20 @@
        // Determine prefix based on the field's id
        let element = (elementOrEvent && elementOrEvent.target) ? elementOrEvent.target : elementOrEvent;
        let prefix = element.id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
+       // Update the runway
        displayRunwayMain(prefix);
-
        // If wind direction is not a number (e.g., 'VRB' or any non-numeric input)
        if (`${prefix}_WIND_DIRECTION` === element.id && isNaN(Number(element.value))) {
          cleanWindEnvelopeFields(prefix, action = "empty", "Wind direction is invalid or variable.", "Retrieve METAR information or set the wind direction manually.")
        }
        if (`${prefix}_WIND_STRENGTH` === element.id && isNaN(Number(element.value))) {
          cleanWindEnvelopeFields(prefix, action = "empty", "Wind strength is invalid or variable.", "Retrieve METAR information or set the wind strength manually.")
+       }
+       // Update the weight & balance
+       WeightBalanceMain(prefix);
+       const depCheckbox = document.getElementById("DEPARTURE_WEIGHT_CHECKBOX");
+       if (depCheckbox.checked) {
+         WeightBalanceMain(prefix === 'DEPARTURE' ? 'ARRIVAL' : 'DEPARTURE');
        }
      }
 
@@ -2755,6 +2935,8 @@
                       'runway_correction_factor': '',
                       'runway_safety_correction': '',
                     },
+                    'POH_TAKEOFF_RECORDS': {'altitude': [], 'temperature': [], 'distance': [], "50ft": []},
+                    'POH_LANDING_RECORDS': {'altitude': [], 'temperature': [], 'distance': [], "50ft": []},
         }
 
         return template
@@ -3083,6 +3265,8 @@
                 js.window.displayRunwayMain('ARRIVAL');
                 # Highlight any missing fields
                 js.window.highlightMissingFields();
+                # Update poh Table
+                js.window.LoadPOHData()
 
             print(f"   >✅ [elementId] '{user_selection}' loaded successfully")
         except Exception as e:
@@ -3094,33 +3278,33 @@
         """Save custom data to localStorage. """
         print(f'> func: save_to_json()')
 
-        # Store to localStorage
-        listname = js.document.getElementById(elementId).value.strip()
-        if listname == '':
-            print('Name is required. Nothing saved. <return>')
-            js.window.alert(f"ℹ️ Please provide a {cacheName} name before saving.")
-            return
+        try:
+            # Store to localStorage
+            listname = js.document.getElementById(elementId).value.strip()
+            if listname == '':
+                print('Name is required. Nothing saved. <return>')
+                js.window.alert(f"ℹ️ Please provide a {cacheName} name before saving.")
+                return
 
-        # Update the flightplan with the latest version of the GUI fields before dumping to json
-        if cacheName=='AIRCRAFT':
-            aircraft_update_flightplan()
+            # Update the flightplan with the latest version of the GUI fields before dumping to json
+            if cacheName=='AIRCRAFT':
+                aircraft_update_flightplan()
 
-        cache_key = f'{cacheName}_{listname}'
-        # Store Cache key in flightplan
-        js.window.flight_plan_data[cacheName]['CACHENAME'] = cache_key
-        # Convert to JSON string
-        json_data = json.dumps(js.window.flight_plan_data[cacheName])
-        # Save to cache
-        js.localStorage.setItem(cache_key, json_data)
+            cache_key = f'{cacheName}_{listname}'
+            # Store Cache key in flightplan
+            js.window.flight_plan_data[cacheName]['CACHENAME'] = cache_key
+            # Convert to JSON string
+            json_data = json.dumps(js.window.flight_plan_data[cacheName])
+            # Save to cache
+            js.localStorage.setItem(cache_key, json_data)
 
-        # print(json_data)
-        # js.window.downloadCacheEntry(cache_key)
-
-        # Update the spinner list
-        update_dropdown(f'{cacheName.lower()}_spinner', cacheName=cacheName, keepSelection=True, elementId2=f'{cacheName.lower()}_field');
-        message = f"✅ {cacheName} {listname} is saved with the catagories and items."
-        print(message)
-        js.window.alert(message)
+            # Update the spinner list
+            update_dropdown(f'{cacheName.lower()}_spinner', cacheName=cacheName, keepSelection=True, elementId2=f'{cacheName.lower()}_field');
+            message = f"✅ {cacheName} {listname} is saved with the catagories and items."
+            print(message)
+            js.window.alert(message)
+        except Exception as e:
+            js.window.alert(f"⚠️ Saving was not succesful. Error: {e}")
 
         # Return
         return True
@@ -3216,13 +3400,34 @@
 
     def aircraft_clean(verbose='info'):
         print('> func: aircraft_clean()')
+        if verbose=='info':
+            if js.window.confirm("All aircraft fields will be cleaned. Do you want to proceed?"):
+                js.window.alert("✅ All aircraft fields are cleaned.")
+            else:
+                return
+
         # Clean the fields
         js.document.getElementById('aircraft_field').value = ''
         select = js.document.getElementById('aircraft_spinner')
         select.value = 'Select and Load'
 
-        # Set the default checklist
+        # Load the default checklist
         js.window.flight_plan_data['AIRCRAFT'] = get_default_aircraft()
+
+        # Update the poh console table
+        js.window.LoadPOHData()
+
+        # Now also set computed fields to 0
+        js.document.getElementById('moment_empty').value = 0
+        js.document.getElementById('moment_pilot').value = 0
+        js.document.getElementById('moment_copilot').value = 0
+        js.document.getElementById('moment_rl').value = 0
+        js.document.getElementById('moment_rr').value = 0
+        js.document.getElementById('moment_bagage').value = 0
+        js.document.getElementById('moment_fuel').value = 0
+        js.document.getElementById('SETTINGS_total_moment').value = 0
+        js.document.getElementById('SETTINGS_total_weight').value = 0
+        js.document.getElementById('SETTINGS_takeoff_cg').value = 0
 
         # Populate aircraft with defaults
         js.window.aircraft_populate_js(updateGeneralTab=False)
@@ -3233,12 +3438,19 @@
         js.window.flashcardClean('ARRIVAL')
 
         if verbose=='info':
-            js.window.alert(f"ℹ️ Default aircraft specifications are loaded.")
-            print(js.window.flight_plan_data['AIRCRAFT'])
+          print(js.window.flight_plan_data['AIRCRAFT'])
 
     def aircraft_update_flightplan():
         """Update the flightplan: js.window.flight_plan_data['AIRCRAFT'] with the values from the GUI."""
         print(f'>func: aircraft_update_flightplan()')
+
+        js.window.SavePOHData('DEPARTURE')
+        js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS'] = json.loads(js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS'])
+        js.window.SavePOHData('ARRIVAL')
+        js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS'] = json.loads(js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS'])
+
+        print('HERE')
+        print(js.window.flight_plan_data['AIRCRAFT'])
 
         # Matching pairs for GUI and dictionary
         matching_pairs = aircraft_matching_pairs()
@@ -4509,6 +4721,8 @@
         js.window.updateFlightCatagoryIcon(fname, remove=True)
         # Stop animations
         js.window.animations(fname, "stop")
+        # Create cloud plot
+        js.window.createCloudPlot(fname, "clean");
         # Update weight and balance
         if clearAircraftFields:
             js.window.WeightBalanceMain(fname)
@@ -5921,40 +6135,78 @@
 
         return fontsizes
 
+    async def load_template(template_source):
+        """
+        Load template from URL or local disk.
+        Auto-detects based on http/https prefix.
+        """
 
-    async def load_template_from_url(template_name):
-        """Fetch from URL, store in localStorage, and return text content."""
+        template_name = os.path.basename(template_source)
         template_key = f"template_{template_name}"
-        base_url = js.window.URL_HTML_TEMPLATES
-        url = os.path.join(base_url, template_name)
 
-        # 1. Try cache
         cached = js.localStorage.getItem(template_key)
         if cached:
             print("✅ Loaded from cache")
             return cached
 
-        # 2. Fetch template using JS fetch
-        print(f" Fetching from URL: {url}")
-
         try:
-            response = await js.fetch(url)
-            if response.ok:
-                content = await response.text()  # get the text content
-                js.localStorage.setItem(template_key, content)  # store content
-                print(f"✅ Template cached under key '{template_key}'")
-                return content
+            # 🌐 URL
+            if template_source.startswith(("http://", "https://")):
+                response = await js.fetch(template_source)
+                if not response.ok:
+                    print(f"❌ Fetch failed: {response.status}")
+                    return None
+                content = await response.text()
+
+            # 💾 Local file
             else:
-                print(f"❌ Fetch failed: {response.status}")
-                return None
+                with open(template_source, "r", encoding="utf-8") as f:
+                    content = f.read()
+
+            js.localStorage.setItem(template_key, content)
+            print(f"✅ Template cached under key '{template_key}'")
+            return content
+
         except Exception as e:
-            print(f"❌ Error fetching template: {e}")
+            print(f"❌ Error loading template: {e}")
             return None
+
+    # async def load_template_from_url(template_name):
+    #     """Fetch from URL, store in localStorage, and return text content."""
+    #     template_key = f"template_{template_name}"
+
+    #     base_url = js.window.URL_HTML_TEMPLATES
+    #     url = os.path.join(base_url, template_name)
+
+    #     # 1. Try cache
+    #     cached = js.localStorage.getItem(template_key)
+    #     if cached:
+    #         print("✅ Loaded from cache")
+    #         return cached
+
+    #     # 2. Fetch template using JS fetch
+    #     print(f" Fetching from URL: {url}")
+
+    #     try:
+    #         response = await js.fetch(url)
+    #         if response.ok:
+    #             content = await response.text()  # get the text content
+    #             js.localStorage.setItem(template_key, content)  # store content
+    #             print(f"✅ Template cached under key '{template_key}'")
+    #             return content
+    #         else:
+    #             print(f"❌ Fetch failed: {response.status}")
+    #             return None
+    #     except Exception as e:
+    #         print(f"❌ Error fetching template: {e}")
+    #         return None
 
 
     async def personalize_content(content, template_name):
         # Load template
-        template_content = await load_template_from_url(template_name)
+        # template_content = await load_template_from_url(template_name)
+        load_template
+        template_content = await load_template(template_name)
 
         # Use DictLoader to store template
         jinja_env = Environment(loader=DictLoader({template_name: template_content}))
@@ -6974,6 +7226,7 @@
         const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
         // Start animations
         animations(prefix, "start");
+        // createCloudPlot(prefix, "show", true);
       });
     });
 
@@ -6986,6 +7239,7 @@
         const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
         // Stop animations
         animations(prefix, "stop");
+        // createCloudPlot(prefix, "show", false);
       });
     });
 
@@ -7294,13 +7548,18 @@
                     if (Number.isFinite(num) && num > 0) positiveCount++;
                 });
                 popField.value = String(positiveCount);
+                const time_dep_val = document.getElementById('DEPARTURE_clockField').value;
 
                 // Populate aerodromes and aircraft settings
                 aircraft_populate_js();
                 update_aerodrome_weights_js("DEPARTURE");
                 update_aerodrome_weights_js("ARRIVAL");
+                // Update METAR
+                retrieve_metar('DEPARTURE', verbose='silent')
+                retrieve_metar('ARRIVAL', verbose='silent')
                 // Compute Fuel per leg
                 computeArrivalFuelPerLeg();
+                UpdateFlightInfoFields(time_dep_val, false, false);
                 // Compute Weight and Balance
                 WeightBalanceMain('SETTINGS');
                 WeightBalanceMain('DEPARTURE');
@@ -8303,16 +8562,29 @@ document.getElementById("import_and_save_btn").addEventListener("click", async (
     try {
         await importCacheEntryFromUrl(url);
         btn.textContent = "✅";
-        setTimeout(() => btn.textContent = "💾", 2000);
+        setTimeout(() => btn.textContent = "📥", 2000);
         updateDropdown('aircraft_spinner', 'AIRCRAFT', false);
         alert("Aircraft is imported and can now be used.");
     } catch (err) {
         btn.textContent = "❌";
-        setTimeout(() => btn.textContent = "💾", 2000);
+        setTimeout(() => btn.textContent = "📥", 2000);
         alert(err.message);
     }
 });
+
+document.getElementById("aircraft_download_btn").addEventListener("click", () => {
+    // Cache key
+    const cacheKey = "AIRCRAFT_" + document.getElementById("aircraft_spinner").value;
+    // Get from local storage
+    const data = localStorage.getItem(cacheKey);
+    if (!data) return alert(`No cached data found for ${cacheKey}`);
+    // Download json file
+    downloadCacheEntry(cacheKey)
+});
+
 </script>
+
+
 
 
 
@@ -8391,6 +8663,14 @@ document.getElementById("import_and_save_btn").addEventListener("click", async (
                     if (window.flight_plan_data) {
                         window.flight_plan_data[fieldId] = element.value;
                         console.log(`Updated ${fieldId}:`, element.value);
+                    }
+                    if (
+                        fieldId.endsWith('_ROUTE_NAME') ||
+                        fieldId.endsWith('_ROUTE_ALTITUDE') ||
+                        fieldId.endsWith('_CIRCUIT_ALTITUDE')
+                    ) {
+                      // alert('update cloud plot');
+                      createCloudPlot(fname, "show", true)
                     }
                 });
             }
