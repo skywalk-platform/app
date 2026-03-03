@@ -47,6 +47,9 @@
     <meta charset="UTF-8">
     <title>Skywalk Flightplan</title>
 
+    <!--Prevent White Flash / Hard Reload Feel-->
+    <meta name="theme-color" content="#0a0f1c">
+
     <!--RUN FULL SCREEN-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="mobile-web-app-capable" content="yes">
@@ -575,7 +578,7 @@
                 <button id="DEPARTURE_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
                     Refresh METAR Information
                 </button>
-                <button id="DEPARTURE_ANIMATION_METARTEXT" title="Update animation directly on the METAR textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
+                <button id="DEPARTURE_ANIMATION_METARTEXT" title="Update METAR on textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
             </div>
 
         </div>
@@ -1086,7 +1089,7 @@
                 <button id="ARRIVAL_USE_CACHED" class="button-style" title="Retrieve most recent METAR weather information from Aviation weather">
                     Refresh METAR Information
                 </button>
-                <button id="ARRIVAL_ANIMATION_METARTEXT" title="Update animation directly on the METAR textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
+                <button id="ARRIVAL_ANIMATION_METARTEXT" title="Update METAR on textfield" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🔀</button>
             </div>
 
         </div>
@@ -2331,10 +2334,10 @@
                         <input type="number" id="takeoff_tailwind_kts" value="" min="0" step="1">
                         <input type="number" id="takeoff_tailwind_cor" value="" min="0" step="0.05">
                     </div>
-                </div>
 
-                <div class="info-gray", id="message_tailwind_corr">
-                    As an example: Tailwind (kts)=2 and Correction Factor=1.1 describes: Add 10% to the distance for each 2 kt increase in tail wind.
+                    <div class="info-gray", id="message_tailwind_corr">
+                        As an example: Tailwind (kts)=2 and Correction Factor=1.1 describes: Add 10% to the distance for each 2 kt increase in tail wind.
+                    </div>
                 </div>
             </div>
 
@@ -2685,6 +2688,20 @@
     /**
      * Auto-update for RUNWAY PLOT when inputs change
      */
+     // function RunRunwayMain(prefix) {
+     //   // Update the runway
+     //   displayRunwayMain(prefix);
+     //   // If wind direction is not a number (e.g., 'VRB' or any non-numeric input)
+     //   cleanWindEnvelopeFields(prefix, action = "empty", "Wind direction or strength is invalid or variable.", "Retrieve METAR information or set the wind strength manually.")
+     //   createCloudPlot(prefix, "show", false)
+     //   // Update weight and balance
+     //   WeightBalanceMain('DEPARTURE');
+     //   WeightBalanceMain('ARRIVAL');
+     //   // Update highlights
+     //   highlightMissingFields()
+     //   highlightDropdownMenus()
+     // }
+
      function AutoUpdateRunwayResults(elementOrEvent) {
        console.log('> func: AutoUpdateRunwayResults()');
        // Determine prefix based on the field's id
@@ -2693,7 +2710,6 @@
 
        // Update the runway
        displayRunwayMain(prefix);
-
        // If wind direction is not a number (e.g., 'VRB' or any non-numeric input)
        if (`${prefix}_WIND_DIRECTION` === element.id && isNaN(Number(element.value))) {
          cleanWindEnvelopeFields(prefix, action = "empty", "Wind direction is invalid or variable.", "Retrieve METAR information or set the wind direction manually.")
@@ -2701,16 +2717,9 @@
        if (`${prefix}_WIND_STRENGTH` === element.id && isNaN(Number(element.value))) {
          cleanWindEnvelopeFields(prefix, action = "empty", "Wind strength is invalid or variable.", "Retrieve METAR information or set the wind strength manually.")
        }
-       // Update the weight & balance
-       // WeightBalanceMain(prefix);
-       // const depCheckbox = document.getElementById("DEPARTURE_WEIGHT_CHECKBOX");
-       // if (depCheckbox.checked) {
-       //   WeightBalanceMain(prefix === 'DEPARTURE' ? 'ARRIVAL' : 'DEPARTURE');
-       // }
        if (`${prefix}_ELEVATION` === element.id) {
          createCloudPlot(prefix, "show", false)
        }
-
        // Update weight and balance
        WeightBalanceMain('DEPARTURE');
        WeightBalanceMain('ARRIVAL');
@@ -2750,10 +2759,9 @@
        // Trigger on blur
        field.addEventListener("blur", AutoUpdateRunwayResults);
        // Trigger on Enter key
-       field.addEventListener('keydown', e => e.key === 'Enter' && displayRunwayMain(prefix));
+       field.addEventListener('keydown', e => e.key === 'Enter' && AutoUpdateRunwayResults(e));
        // Trigger when value is increased/decreased using the button (arrow keys or spinner)
        field.addEventListener('input', AutoUpdateRunwayResults);
-
        // If the field is a select (dropbox), also trigger on change
        if (
          id === 'DEPARTURE_RUNWAY_SURFACE' ||
@@ -7452,6 +7460,9 @@
         const metarField = document.getElementById(`METAR-FIELD-${prefix}`).value;
         // Retrieve METAR based on the text input field
         window.retrieve_metar(prefix, 'info', metarField);
+        // Highlight any missing fields
+        window.highlightMissingFields();
+        window.highlightDropdownMenus();
       });
     });
 
@@ -7933,11 +7944,12 @@
             'DEPARTURE_RUNWAY_SLOPE': {
                 element: document.getElementById('DEPARTURE_RUNWAY_SLOPE'),
                 name: 'Runway Slope (departure)',
-                color_empty: '',
+                color_empty: window.EMPTYCOLOR,
                 color_filled: 'transparent',
                 required_atc_departure: false,
                 required_atc_arrival: false,
                 required_atc_enroute: false,
+                required_general: true,
             },
 
             'DEPARTURE_RUNWAY_SURFACE': {
@@ -8004,11 +8016,12 @@
             'ARRIVAL_RUNWAY_SLOPE': {
                 element: document.getElementById('ARRIVAL_RUNWAY_SLOPE'),
                 name: 'Runway Slope (arrival)',
-                color_empty: '',
+                color_empty: window.EMPTYCOLOR,
                 color_filled: 'transparent',
                 required_atc_departure: false,
                 required_atc_arrival: false,
                 required_atc_enroute: false,
+                required_general: true,
             },
 
             'ARRIVAL_RUNWAY_SURFACE': {
