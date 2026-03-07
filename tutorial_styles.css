@@ -197,15 +197,16 @@
   background: #f5f7fb;
 }
 .tut-mock-header {
-  background: linear-gradient(90deg, #0d2a4e, #1a6dcc);
+  /*background: linear-gradient(90deg, #0d2a4e, #1a6dcc);*/
+  background: linear-gradient(0deg, white 0%, gray 100%);
   padding: 8px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
 }
-.tut-mock-logo { color: #fff; font-weight: 700; font-size: 1rem; }
+.tut-mock-logo { color: #333; font-weight: 700; font-size: 1rem; }
 .tut-mock-btns { display: flex; gap: 6px; margin-left: auto; }
-.tut-mock-btn { padding: 4px 10px; border-radius: 5px; font-size: 0.72rem; font-weight: 600; color: #fff; }
+.tut-mock-btn { padding: 4px 10px; border-radius: 5px; font-size: 0.72rem; font-weight: 600; color: #333; }
 .tut-mock-btn.blue   { background: #3a9ae8; }
 .tut-mock-btn.green  { background: #28a745; }
 .tut-mock-btn.orange { background: #fd7e14; }
