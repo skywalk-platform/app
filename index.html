@@ -1993,27 +1993,6 @@
             </div>
         </div>
 
-        <!-- IMPORT -->
-        <div class="collapsible" data-title="IMPORT">
-        <div class="collapsible-header"></div>
-        <div class="collapsible-content">
-            <!--<div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
-                <input type="text" class="tile-value UPPERCASE_input" placeholder="Import" style="background-color:transparent; font-size: 18px; padding: 0.5px;" disabled>
-            </div>-->
-            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
-                <!--Add spacing -->
-                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
-                <!--Selection spinner-->
-                <select id="import_aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
-                    <option value="">Select and Load</option>
-                </select>
-                <!--Save button-->
-                <button id="import_and_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Import and save selected data">📥</button>
-                <!--Add spacing -->
-                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
-            </div>
-        </div>
-        </div>
 
         <div class="border-round-eged">
             <div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
@@ -2043,6 +2022,27 @@
 
         </div>
 
+        <!-- IMPORT -->
+        <div class="collapsible" data-title="Import Registered Aircrafts">
+        <div class="collapsible-header"></div>
+        <div class="collapsible-content">
+            <!--<div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
+                <input type="text" class="tile-value UPPERCASE_input" placeholder="Import" style="background-color:transparent; font-size: 18px; padding: 0.5px;" disabled>
+            </div>-->
+            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
+                <!--Add spacing -->
+                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
+                <!--Selection spinner-->
+                <select id="import_aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                    <option value="">Select and Load</option>
+                </select>
+                <!--Save button-->
+                <button id="import_and_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Import and save selected data">📥</button>
+                <!--Add spacing -->
+                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
+            </div>
+        </div>
+        </div>
 
         <!-- PERSONAL SPECIFICATIONS -->
         <div class="collapsible" data-title="Personal Specifications">
@@ -3466,6 +3466,14 @@
         js.document.getElementById('aircraft_field').value = ''
         select = js.document.getElementById('aircraft_spinner')
         select.value = 'Select and Load'
+
+        # Set REGISTRATION on start/main page to default.
+        callsignLabel = js.document.getElementById("CALLSIGN_LABEL")
+        callsignLabel.textContent = "REGISTRATION"
+
+        # Remove passengers
+        popField = js.document.getElementById("POB");
+        popField.value = ""
 
         # Load the default checklist
         js.window.flight_plan_data['AIRCRAFT'] = get_default_aircraft()
@@ -7582,7 +7590,7 @@
         window.WeightBalanceMain(prefix);
     }
 
-    function handleRegistrationClick() {
+    async function handleRegistrationClick() {
         console.log("> func: handleRegistrationClick()");
         const callsignField = document.getElementById("CALLSIGN");
         const callsignLabel = document.getElementById("CALLSIGN_LABEL");
@@ -7598,8 +7606,22 @@
         }
 
         // Check whether stored aircraft with this callsign exists
+        let jsonData = {}
         const cacheKey = `AIRCRAFT_${callsignValue}`; // e.g. AIRCRAFT_PH-SVU
-        const jsonData = localStorage.getItem(cacheKey);
+        const url = `${window.URL_AIRCRAFTS}${cacheKey}.json`;
+
+        // Load from cache
+        jsonData = localStorage.getItem(cacheKey);
+
+        // If no json is available, check whether it can be downloaded from url
+        if (!jsonData) {
+          callsignLabel.textContent = "⏳ REGISTRATION";
+          // Download jsondata from url and store in cache
+          jsonData = await importCacheEntryFromUrl(url, cacheKey);
+          // setTimeout(() => callsignLabel.textContent = "📥 REGISTRATION", 2000);
+          // Update the dropdown in aircraft-settings menu
+          updateDropdown('aircraft_spinner', 'AIRCRAFT', false);
+        }
 
         if (jsonData) {
             callsignLabel.textContent = "✅ REGISTRATION";
@@ -7640,6 +7662,7 @@
                 // Highlight any missing fields
                 highlightMissingFields();
 
+                alert(`✅ ${callsignValue} is set. For more details go here: ☰More → 🛠️Aircrafts.`);
             } catch (err) {
                 console.error("Invalid aircraft data in localStorage", err);
             }
