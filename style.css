@@ -743,12 +743,11 @@ body.mobile-fullscreen .output-box {
 }
 
 /* =================== TILES =================== */
-
 .tile {
-    background: white;
+    background: linear-gradient(to bottom, #ffffff 0%, #f5f5f5 100%);
     border: 1px solid #dcdcdc;
-    border-radius: 14px;
-    padding: 12px 10px;
+    border-radius: 10px;
+    padding: 12px 10px 8px 10px;
     text-align: center;
     font-size: 16px;
     line-height: 1.2;
