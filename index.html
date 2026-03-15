@@ -1876,7 +1876,7 @@
                     <option value="">Select and Load</option>
                 </select>
                 <!-- Save button -->
-                <button id="checklist_save_btn" onclick="window.save_to_json('checklist_field', 'CHECKLIST')" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save Checklist">💾</button>
+                <button id="checklist_save_btn" onclick="save_to_json('checklist_field', 'CHECKLIST')" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save Checklist">💾</button>
             </div>
         </div>
 
@@ -3337,18 +3337,26 @@
                 aircraft_update_flightplan()
 
             cache_key = f'{cacheName}_{listname}'
-            # Store Cache key in flightplan
-            js.window.flight_plan_data[cacheName]['CACHENAME'] = cache_key
-
-            # Convert before dumping in json
+            # Convert to Python dict first (flight_plan_data[cacheName] may be a JsProxy when the aircraft was loaded from the main menu dropdown)
             raw = js.window.flight_plan_data[cacheName]
-            py_obj = raw.to_py() if hasattr(raw, 'to_py') else raw
-            json_data = json.dumps(py_obj, allow_nan=False)
-
+            if hasattr(raw, 'to_py'):
+                raw = raw.to_py()
+            # Store Cache key in flightplan
+            raw['CACHENAME'] = cache_key
             # Convert to JSON string
-            # json_data = json.dumps(js.window.flight_plan_data[cacheName], allow_nan=False)
+            json_data = json.dumps(raw, allow_nan=False)
             # Save to cache
             js.localStorage.setItem(cache_key, json_data)
+
+            #cache_key = f'{cacheName}_{listname}'
+            ## Store Cache key in flightplan
+            #js.window.flight_plan_data[cacheName]['CACHENAME'] = cache_key
+            ## Convert before dumping in json
+            #raw = js.window.flight_plan_data[cacheName]
+            #py_obj = raw.to_py() if hasattr(raw, 'to_py') else raw
+            #json_data = json.dumps(py_obj, allow_nan=False)
+            ## Save to cache
+            #js.localStorage.setItem(cache_key, json_data)
 
             # Update the spinner list
             update_dropdown(f'{cacheName.lower()}_spinner', cacheName=cacheName, keepSelection=True, elementId2=f'{cacheName.lower()}_field');
@@ -3503,14 +3511,35 @@
     def aircraft_update_flightplan():
         """Update the flightplan: js.window.flight_plan_data['AIRCRAFT'] with the values from the GUI."""
         print(f'>func: aircraft_update_flightplan()')
+        aircraft_data = js.window.flight_plan_data['AIRCRAFT']
+        if hasattr(aircraft_data, 'to_py'):
+            aircraft_data = aircraft_data.to_py()
+        elif isinstance(aircraft_data, str):
+            aircraft_data = json.loads(aircraft_data)
+        print(aircraft_data)
+
+        #js.window.SavePOHData('DEPARTURE')
+        #js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS'] = json.loads(js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS'])
+        #js.window.SavePOHData('ARRIVAL')
+        #js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS'] = json.loads(js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS'])
 
         js.window.SavePOHData('DEPARTURE')
-        js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS'] = json.loads(js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS'])
+        poh_takeoff = js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS']
+        if hasattr(poh_takeoff, 'to_py'):
+            poh_takeoff = poh_takeoff.to_py()
+        elif isinstance(poh_takeoff, str):
+            poh_takeoff = json.loads(poh_takeoff)
+        js.window.flight_plan_data['AIRCRAFT']['POH_TAKEOFF_RECORDS'] = poh_takeoff
         js.window.SavePOHData('ARRIVAL')
-        js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS'] = json.loads(js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS'])
+        poh_landing = js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS']
+        if hasattr(poh_landing, 'to_py'):
+            poh_landing = poh_landing.to_py()
+        elif isinstance(poh_landing, str):
+            poh_landing = json.loads(poh_landing)
+        js.window.flight_plan_data['AIRCRAFT']['POH_LANDING_RECORDS'] = poh_landing
 
-        #print('HERE')
-        #print(js.window.flight_plan_data['AIRCRAFT'])
+        print('HERE PH')
+        print(js.window.flight_plan_data['AIRCRAFT'])
 
         # Matching pairs for GUI and dictionary
         matching_pairs = aircraft_matching_pairs()
@@ -3526,6 +3555,9 @@
                 if (cat == '') or (cat is None):
                     js.window.flight_plan_data['AIRCRAFT'][item] = elementId.value
                 else:
+                    # If the subcategory is a JsProxy (loaded from main menu), convert it to a plain Python dict first so subscript assignment works
+                    sub = js.window.flight_plan_data['AIRCRAFT'][cat]
+                    js.window.flight_plan_data['AIRCRAFT'][cat] = _safe_py(sub)
                     js.window.flight_plan_data['AIRCRAFT'][cat][item] = elementId.value
 
             # Directly populate to all fields. This is required because some fields needs to be updated in General tab too.
@@ -4119,11 +4151,6 @@
                 df = extract_csv_from_zip(zip_bytes, UNZIPK)
                 js.console.log(f"   >✅ Aerodromes loaded for {country}: {len(df)} rows.")
                 print(f"   >✅ Successfully loaded {len(df)} aerodromes for {country}")
-                # print(df['country_code'])
-
-                # For now, just show the first few entries
-                # print(df.head().to_string())
-                # print(f"Available columns: {df.columns.tolist()}")
 
                 country_code = np.unique(df.get('country_code', ['']))
                 country_code = country_code[0]
@@ -4545,13 +4572,14 @@
 
             # Get the HTML element
             element = js.document.getElementById(field_id)
+            #print(f'>>> {field_id} - {value} - {element}')
 
             # Only continue if element exists
             if element:
                 # Convert value to string and handle special cases
                 if value is not None and value != '' and str(value) != 'nan' and str(value) != 'None':
 
-                  # Handle boolean for CTR
+                    # Handle boolean for CTR
                     if field_id == f'{fname}_CTR':
                         element.value = 'CTR' if (value or str(value).lower() == 'true') else ''
                     elif field_id == f'{fname}_CITY':
@@ -4559,7 +4587,7 @@
                         #element.textContent = str(value[:15].ljust(15, ' '))
                         element.textContent = str(value)
                     elif field_id == f'{fname}_RUNWAY_LENGTH':
-                        #print('HERE')
+                        #print('HERE RUNWAY LENGTH')
                         #print(f"  ✓ Updated {field_id}: {str(value)}")
                         #value = js.window.ft2meter(value)
                         element.value = str(value)
@@ -4710,7 +4738,7 @@
             f'{fname}_COUNTRY', f'{fname}_COUNTRY_CODE', f'{fname}_ICAO_CITY',
             f'{fname}_ICAO', f'{fname}_ICAO_CITY', f'{fname}_CITY', f'{fname}_NAME',
             f'{fname}_POSITION',
-            f'{fname}_RUNWAYS', f'{fname}_RUNWAY_PROPERTIES', f'{fname}_RUNWAY_NR'
+            f'{fname}_RUNWAYS', f'{fname}_RUNWAY_PROPERTIES', f'{fname}_RUNWAY_NR',
             f'{fname}_RUNWAY_LENGTH', f'{fname}_RUNWAY_SLOPE', f'{fname}_RUNWAY_SURFACE',
             f'{fname}_RUNWAY_CONDITION', f'{fname}_RUNWAY_SLIPPERY', f'{fname}_ELEVATION',
             f'{fname}_ROUTE_NAME', f'{fname}_ROUTE_ALTITUDE',
@@ -5299,7 +5327,9 @@
             js.window.alert(f"❗ Error loading flight plan: {e}")
 
     def store_field(element_id=None):
-        js.window.flight_plan_data[element_id] = js.document.getElementById(element_id).value
+        element = js.document.getElementById(element_id)
+        if element:
+            js.window.flight_plan_data[element_id] = element.value
 
     def save_flightplan(to_cache=True, verbose=True):
         """Save current flightplan data to localStorage"""
@@ -5321,6 +5351,11 @@
         for field in route_fields:
             store_field(field)
 
+        # STORE RUNWAY FIELDS
+        runway_fields = ["ARRIVAL_ELEVATION", "DEPARTURE_ELEVATION", "ARRIVAL_RUNWAY_SLIPPERY", "DEPARTURE_RUNWAY_SLIPPERY", "ARRIVAL_RUNWAY_CONDITION", "DEPARTURE_RUNWAY_CONDITION", "ARRIVAL_RUNWAY_SURFACE", "DEPARTURE_RUNWAY_SURFACE", "DEPARTURE_RUNWAY_LENGTH", "DEPARTURE_RUNWAY_SLOPE", "ARRIVAL_RUNWAY_LENGTH", "ARRIVAL_RUNWAY_SLOPE"]
+        for field in runway_fields:
+            store_field(field)
+
         # STORE WEIGHT AND BALANCE
         weight_fields = ["WEIGHT_FUEL_LITERS", "WEIGHT_PILOT", "WEIGHT_COPILOT", "WEIGHT_REAR_LEFT", "WEIGHT_REAR_RIGHT", "WEIGHT_BAGAGE"]
         fnames = ['DEPARTURE', 'ARRIVAL']
@@ -5337,13 +5372,13 @@
         js.window.flight_plan_data['WAYPOINTS'] = js.window.waypoints;
         js.window.flight_plan_data['LEGINFO'] = js.window.leginfo;
 
-        # ALL OTHER FIELDS SHOULD BE STORE ALREADY IN THE FLIGHTPLAN DATA
+        # ALL OTHER FIELDS SHOULD BE STORED ALREADY IN THE FLIGHTPLAN DATA
 
         # GET FLIGHTPLAN NAME
         flightplan_name = js.window.flight_plan_data["FLIGHTPLAN"]
 
-        # print('HERE')
-        # print(js.window.flight_plan_data)
+        #print('HERE')
+        #print(js.window.flight_plan_data)
 
         if (flightplan_name is None or flightplan_name == ''):
             if verbose:
@@ -5362,18 +5397,14 @@
                 # Convert JavaScript objects to Python objects
                 value = js.window.flight_plan_data.get(key)
                 flight_plan_dict[key] = _safe_py(value)
-                #value = js.window.flight_plan_data.get(key)
-                #if hasattr(value, 'to_py'):
-                #    value = value.to_py()
-                #flight_plan_dict[key] = value
             except Exception as e:
                 print(f"   >⚠️ Failed to save {key}: {e}")
 
         # Print Data
         if verbose:
             for key, value in flight_plan_dict.items():
-                if value != '' and value != None and value != {} and value != []:
-                    print(f"     >{key}: '{value}'")
+                #if value != '' and value != None and value != {} and value != []:
+                print(f"     >{key}: '{value}'")
 
         # Save to cache
         if to_cache and flightplan_name and flightplan_name != "":
@@ -6641,6 +6672,7 @@
     js.window.create_new_flightplan = create_new_flightplan
     js.window.delete_flightplan = delete_flightplan
     js.window.save_flightplan = save_flightplan
+    js.window.aircraft_update_flightplan = aircraft_update_flightplan
 
     js.window.load_enroute_fic = load_enroute_fic
     js.window.delete_item_from_spinner = delete_item_from_spinner
@@ -7559,6 +7591,7 @@
       document.getElementById('aircraft_callsign').value = document.getElementById('aircraft_field').value
       // Save
       window.save_to_json('aircraft_field', 'AIRCRAFT')
+      // saveToJson('aircraft_field', 'AIRCRAFT')
     });
 
     // Add clear cache button handler
@@ -8333,18 +8366,29 @@
             return;
         }
 
+        window.waypoints = [];
+        window.leginfo   = {};
+        window.RUNWAY    = {};
+        window.flight_plan_data = await window.get_default_data()
+
         try {
             let fpDict = JSON.parse(jsonData);
-            console.log(`   >✅ Loaded ${Object.keys(fpDict).length} fields`);
-
-            window.waypoints = [];
-            window.leginfo   = {};
-            window.RUNWAY    = {};
+            console.log(`   >✅ Loaded flightplan ${Object.keys(fpDict).length} fields`);
+            // window.flight_plan_data = fpDict
 
             for (const [key, value] of Object.entries(fpDict)) {
                 window.flight_plan_data[key] = value;
             }
             loadProgress.step(); // 2
+
+            // ── 6. Flags / runway / VFR icons
+            window.updateFlag('DEPARTURE', 'remove');
+            window.updateFlag('ARRIVAL',   'remove');
+            window.cleanRunwayFields('DEPARTURE', 'empty');
+            window.cleanRunwayFields('ARRIVAL',   'empty');
+            window.updateFlightCatagoryIcon('DEPARTURE', true);
+            window.updateFlightCatagoryIcon('ARRIVAL',   true);
+            loadProgress.step(); // 6
 
             // ── 3. GUI fields
             update_general_gui_fields_js(fpDict);
@@ -8357,15 +8401,6 @@
             loadProgress.step(); // 4
             await window.update_aerodrome_image('ARRIVAL');
             loadProgress.step(); // 5
-
-            // ── 6. Flags / runway / VFR icons
-            window.updateFlag('DEPARTURE', 'remove');
-            window.updateFlag('ARRIVAL',   'remove');
-            window.cleanRunwayFields('DEPARTURE', 'empty');
-            window.cleanRunwayFields('ARRIVAL',   'empty');
-            window.updateFlightCatagoryIcon('DEPARTURE', true);
-            window.updateFlightCatagoryIcon('ARRIVAL',   true);
-            loadProgress.step(); // 6
 
             // ── 7 & 8. Country data
             if (fpDict['DEPARTURE_COUNTRY']) {
@@ -8392,7 +8427,6 @@
             loadProgress.step(); // 11
 
             if (fpDict['DEPARTURE_RUNWAYS']) {
-              // Get all runways seperated by /
               const runwayString = (fpDict['DEPARTURE_RUNWAYS'] || []).filter(r => r).join("/");
               windDirection = document.getElementById('DEPARTURE_WIND_DIRECTION').value
               windStrength = document.getElementById('DEPARTURE_WIND_STRENGTH').value
@@ -8400,7 +8434,6 @@
               document.getElementById('DEPARTURE_RUNWAY_NR').value = runway_pred || '';
             }
             if (fpDict['ARRIVAL_RUNWAYS']) {
-              // Get all runways seperated by /
               const runwayString = (fpDict['ARRIVAL_RUNWAYS'] || []).filter(r => r).join("/");
               windDirection = document.getElementById('ARRIVAL_WIND_DIRECTION').value
               windStrength = document.getElementById('ARRIVAL_WIND_STRENGTH').value
@@ -8433,6 +8466,54 @@
             loadProgress.done();
         }
     };
+
+
+    // function saveToJson(elementId, cacheName) {
+    //     console.log("> func: saveToJson()");
+
+    //     try {
+    //         // Get name from input
+    //         const listname = document.getElementById(elementId).value.trim();
+
+    //         if (listname === "") {
+    //             console.log("Name is required. Nothing saved. <return>");
+    //             window.alert(`ℹ️ Please provide a ${cacheName} name before saving.`);
+    //             return false;
+    //         }
+
+    //         // Update aircraft data before saving
+    //         if (cacheName === "AIRCRAFT" && typeof window.aircraft_update_flightplan === "function") {
+    //             window.aircraft_update_flightplan();
+    //         }
+
+    //         const cacheKey = `${cacheName}_${listname}`;
+    //         console.log('HERE2')
+    //         console.log(cacheKey)
+    //         // Get data from global flight plan object
+    //         let data = window.flight_plan_data[cacheName];
+    //         data["CACHENAME"] = cacheKey;
+    //         // console.log(data)
+    //         // Save to localStorage
+    //         localStorage.setItem(cacheKey, data);
+
+    //         // Update dropdown list
+    //         if (typeof window.update_dropdown === "function") {
+    //             window.update_dropdown(`${cacheName.toLowerCase()}_spinner`, cacheName, true, `${cacheName.toLowerCase()}_field`);
+    //         } else if (typeof window.updateDropdown === "function") {
+    //             window.updateDropdown(`${cacheName.toLowerCase()}_spinner`, cacheName, true, `${cacheName.toLowerCase()}_field`);
+    //         }
+
+    //         const message = `✅ ${cacheName} ${listname} is saved with the categories and items.`;
+    //         console.log(message);
+    //         window.alert(message);
+
+    //     } catch (e) {
+    //         window.alert(`⚠️ Saving was not successful. Error: ${e}`);
+    //     }
+
+    //     return true;
+    // }
+
 
     function update_general_gui_fields_js(flight_plan_dict) {
         console.log("----> update_general_gui_fields_js()");
