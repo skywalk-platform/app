@@ -4912,8 +4912,6 @@
         # Reset
         js.document.getElementById('DEPARTURE_ICAO_CITY').innerHTML = '<option value="">Select ICAO</option>'
         js.document.getElementById('ARRIVAL_ICAO_CITY').innerHTML = '<option value="">Select ICAO</option>'
-        #js.document.getElementById('DEPARTURE_COUNTRY').innerHTML = '<option value="">Select Country</option>'
-        #js.document.getElementById('ARRIVAL_COUNTRY').innerHTML = '<option value="">Select Country</option>'
 
         js.window.AERODROME_DEPARTURE_DATA = {}
         js.window.AERODROME_ARRIVAL_DATA = {}
@@ -8044,8 +8042,8 @@
             window.updateFlag('DEPARTURE', 'remove');
             window.updateFlag('ARRIVAL',   'remove');
             // SET SPINNERS TO DEFAULT
-            document.getElementById('DEPARTURE_COUNTRY').innerHTML = '<option value="">Select Country</option>';
-            document.getElementById('ARRIVAL_COUNTRY').innerHTML  = '<option value="">Select Country</option>';
+            // document.getElementById('DEPARTURE_COUNTRY').innerHTML = '<option value="">Select Country</option>';
+            // document.getElementById('ARRIVAL_COUNTRY').innerHTML  = '<option value="">Select Country</option>';
             document.getElementById('DEPARTURE_ICAO_CITY').innerHTML = '<option value="">Select ICAO</option>';
             document.getElementById('ARRIVAL_ICAO_CITY').innerHTML  = '<option value="">Select ICAO</option>';
             loadProgress.step();
