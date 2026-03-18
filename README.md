@@ -2,7 +2,7 @@
 
 **Professional Aviation Flight Planning & Performance Analysis**
 
-[![App](https://img.shields.io/badge/App-Live-blue)](https://skywalk-platform.github.io/app/)
+[![App](https://img.shields.io/badge/App-Live-blue)](https://skywalk-aviation.github.io/app/)
 [![Docs](https://img.shields.io/badge/Docs-Available-green)](https://skywalk-platform.github.io/docs/)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](LICENSE)
 
@@ -12,7 +12,7 @@ SkyWalk is a comprehensive flight planning platform designed for general aviatio
 
 ## 🚀 Quick Start
 
-**Access the application:** [https://skywalk-platform.github.io/app/](https://skywalk-platform.github.io/app/)
+**Access the application:** [https://skywalk-aviation.github.io/app/](https://skywalk-aviation.github.io/app/)
 
 **Read the documentation:** [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
 
