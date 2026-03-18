@@ -3,8 +3,6 @@
   "short_name": "SkyWalk",
   "start_url": "/index.html",
   "display": "standalone",
-  // "background_color": "#f1f1f1",
-  // "theme_color": "#f1f1f1",
   "icons": [
     {
       "src": "./icons/airplane_gray.png",
