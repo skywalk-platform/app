@@ -140,7 +140,7 @@
             </div>
         </div>-->
 
-        <button class="tablinks" data-tab="MAP" style="cursor: pointer;">🗺️ Map</button>
+        <!--<button class="tablinks" data-tab="MAP" style="cursor: pointer;">🗺️ Map</button>-->
         <button class="tablinks" data-tab="Checklist" style="cursor: pointer;">📋 Checklist</button>
         <button class="tablinks" data-tab="Aircrafts" style="cursor: pointer;">🛠️ Aircrafts</button>
         <button class="tablinks" data-tab="Countries" style="cursor: pointer;">🌍 Select Countries</button>
@@ -1531,7 +1531,10 @@
     <div id="Enroute" class="tabcontent">
         <label_h1>Enroute Information</label_h1>
 
-        <div class="border-round-eged">
+        <div class="collapsible" data-title="Flight Information Centre (FIC)">
+        <div class="collapsible-header" id="FICMENU_TOP1"></div>
+        <div class="collapsible-content" id="FICMENU_BACKGROUND1">
+
             <label_h2>Flight Information Centre (FIC)</label_h2>
             <div class="grid-two-thirds-one-third">
                 <div class="tile">
@@ -1567,9 +1570,13 @@
             </div>
 
         </div>
+        </div>
 
 
-        <div class="border-round-eged">
+        <div class="collapsible" data-title="Flight Information Centre (FIC2)">
+        <div class="collapsible-header" id="FICMENU_TOP2"></div>
+        <div class="collapsible-content" id="FICMENU_BACKGROUND2">
+
             <label_h2>Second Flight Information Centre (FIC)</label_h2>
 
             <div class="grid-two-thirds-one-third">
@@ -1607,10 +1614,139 @@
             </div>
 
         </div>
+        </div>
 
 
 
-    </div>
+        <!-- =============== TAB MAP =============== -->
+        <!--<div id="map-gui-container"></div>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+            fetch('mapGUI.html')
+                .then(response => response.text())
+                .then(html => {
+                document.getElementById('map-gui-container').innerHTML = html;
+                });
+            });
+        </script>-->
+
+
+        <!-- =============== TAB MAP =============== -->
+
+        <label_h1>MAP</label_h1>
+
+        <div class="collapsible" data-title="MAP">
+        <div class="collapsible-header" id="MAP_MENU_TOP"></div>
+        <div class="collapsible-content" id="MAP_MENU_BACKGROUND">
+
+            <div class="wind-grid">
+                <select id="layer-select" class="tile-value-dropdown">
+                    <option value="OpenStreetMap">OpenStreetMap</option>
+                    <option value="EsriWorldStreetMap">EsriWorldStreetMap</option>
+                    <option value="CartoVoyager">CartoVoyager</option>
+                    <!--<option value="MapTiler">MapTiler</option>-->
+                </select>
+            </div>
+
+            <div class="wind-grid">
+                <label><input type="checkbox" id="aviation-toggle" checked>Airports</label>
+                <label><input type="checkbox" id="airspace-toggle" checked>Airspaces</label>
+            </div>
+            <div class="wind-grid">
+                <label><input type="checkbox" id="danger-toggle" unchecked>Danger</label>
+                <label><input type="checkbox" id="prohibited-toggle" unchecked>Prohibited</label>
+            </div>
+            <div class="wind-grid">
+                <label><input type="checkbox" id="TMZ-toggle" unchecked>TMZ</label>
+                <label><input type="checkbox" id="CTA_TMA-toggle" unchecked>CTA/TMA</label>
+            </div>
+
+            <div class="divider-general-section" style="background: #ffffff"></div>
+
+            <div class="button-row">
+                <label><input type="checkbox" id="metar-toggle">METAR Stations</label>
+                <button id="refresh-metar-btn"
+                        onclick="window.refreshMetarData()"
+                        style="margin-left: 10px; padding: 4px 12px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                        title="Update METAR data">
+                    🔄 Update
+                </button>
+            </div>
+
+            <div class="divider-general-section" style="background: #ffffff"></div>
+
+            <div class="button-row">
+                <div style="display: flex; align-items: center; margin-top: 5px;">
+                    <label style="margin-right: 5px;">Airspaces at altitude (ft):</label>
+                    <input type="number" id="airspace-altitude" value="1500" min="150" max="10000" step="150" style="width: 80px;">
+                </div>
+            </div>
+
+            <div class="divider-general-section" style="background: #ffffff"></div>
+
+
+            <div class="section-title" style="margin-top: 18px;">Circuit pattern (Arrival)</div>
+            <div class="wind-grid">
+                <select id="ARRIVAL_CIRCUIT_DIRECTION" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                    <option value="north">North</option>
+                    <option value="south">South</option>
+                </select>
+                <select id="ARRIVAL_CIRCUIT_SIZE" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                    <option value="standard" selected>Standard pattern</option>
+                    <option value="circuit">Circuit pattern</option>
+                    <option value="wide">Wide pattern</option>
+                </select>
+            </div>
+            <div class="wind-grid">
+                <button id="add-circuit-pattern-btn" class="button-style" onclick="window.initCircuitPatterns()">Add circuit pattern</button>
+                <button id="reset-circuit-pattern-btn" class="button-style" onclick="window.resetRoute()">Reset Route</button>
+            </div>
+
+            <div class="divider-general-section" style="background: #ffffff"></div>
+
+            <div id="map-container" style="height: 500px;">
+                <div id="route-map" style="height: 100%;"></div>
+                <div class="map-controls" style="position: absolute; top: 10px; right: 10px; background: none; padding: 0; z-index: 1000;">
+                    <button id="fullscreen-btn" onclick="toggleFullscreen()" style="width: 44px; height: 44px; padding: 0; background: white; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; touch-action: manipulation;">
+                        <svg class="fullscreen-enter" viewBox="0 0 24 24" style="width: 24px; height: 24px; margin: 8px;">
+                            <path d="M7,14H5v5h5v-2H7V14z M5,10h2V7h3V5H5V10z M17,17h-3v2h5v-5h-2V17z M14,5v2h3v3h2V5H14z"/>
+                        </svg>
+                        <svg class="fullscreen-exit" viewBox="0 0 24 24" style="width: 24px; height: 24px; margin: 8px; display: none;">
+                            <path d="M5,16h3v3h2v-5H5V16z M8,8H5v2h5V5H8V8z M14,19h2v-3h3v-2h-5V19z M16,8V5h-2v5h5V8H16z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="divider-general-section" style="background: #ffffff"></div>
+
+            <div class="divider-general-section">
+                <svg class="divider-plane" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#666" d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                </svg>
+            </div>
+
+                <div class="distance-section">
+                    <div class="distance-info">
+                        <span style="white-space: nowrap;"><span id="distance-km">0</span> km</span> |
+                        <span style="white-space: nowrap;"><span id="flying-minutes">0</span> min</span> |
+                        <span id="departure-time">--:--</span> →
+                        <span id="arrival-time">--:--</span>
+                    </div>
+                </div>
+
+                <div class="divider-general-section" style="background: #ffffff"></div>
+
+               <div class="border-round-eged">
+                   <div class="disclaimer">
+                       The airspace projections on the map are based on data that can be outdated or inaccurate. Do not navigate using the map but only use it for educational purposes.
+                   </div>
+               </div>
+
+        </div>
+        </div>
+        </div>
+
 
     <!-- =============== TAB ATC =============== -->
 
@@ -1626,6 +1762,7 @@
 
 
        <label_h1>Air Traffic Control (ATC)</label_h1>
+
 
        <div style="border: 1px solid lightgrey; border-radius: 10px; padding: 10px;">
 
@@ -1669,119 +1806,6 @@
                 <button id="BTN_HTML_EN_REV">Reverse</button>
             </div>
        </div>
-
-    </div>
-
-
-
-    <!-- =============== TAB MAP =============== -->
-    <div id="MAP" class="tabcontent">
-        <label_h1>MAP</label_h1>
-
-        <div class="border-round-eged">
-            <div class="wind-grid">
-                <select id="layer-select" class="tile-value-dropdown">
-                    <option value="OpenStreetMap">OpenStreetMap</option>
-                    <option value="EsriWorldStreetMap">EsriWorldStreetMap</option>
-                    <option value="CartoVoyager">CartoVoyager</option>
-                    <option value="EsriWorldImagery">EsriWorldImagery</option>
-                </select>
-            </div>
-
-            <div class="button-row">
-                <label>
-                    <input type="checkbox" id="aviation-toggle" checked> Show Airports
-                </label>
-                <label>
-                    <input type="checkbox" id="airspace-toggle" checked> Show Airspaces
-                </label>
-            </div>
-
-            <div class="button-row">
-                <div style="display: flex; align-items: center; margin-top: 5px;">
-                    <label style="margin-right: 5px;">Airspaces at altitude (ft):</label>
-                    <input type="number" id="airspace-altitude" value="1500" min="150" max="10000" step="150" style="width: 80px;">
-                </div>
-            </div>
-
-            <div class="button-row">
-                <div style="display: flex; gap: 10px;">
-                    <label><input type="checkbox" id="TMZ-toggle" unchecked>TMZ</label>
-                    <label><input type="checkbox" id="CTA_TMA-toggle" unchecked>CTA/TMA</label>
-                    <label><input type="checkbox" id="danger-toggle" unchecked>Danger</label>
-                    <label><input type="checkbox" id="prohibited-toggle" unchecked>Prohibited</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="border-round-eged">
-            <div class="button-row">
-                <label>
-                    <input type="checkbox" id="metar-toggle"> Show METAR Stations
-                </label>
-                <button id="refresh-metar-btn"
-                        onclick="window.refreshMetarData()"
-                        style="margin-left: 10px; padding: 4px 12px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;"
-                        title="Update METAR data">
-                    🔄 Update
-                </button>
-            </div>
-        </div>
-
-        <div class="border-round-eged">
-            <div class="section-title" style="margin-top: 18px;">Circuit pattern (Arrival)</div>
-            <div class="wind-grid">
-                <select id="ARRIVAL_CIRCUIT_DIRECTION" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
-                    <option value="north">North</option>
-                    <option value="south">South</option>
-                </select>
-                <select id="ARRIVAL_CIRCUIT_SIZE" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
-                    <option value="standard" selected>Standard pattern</option>
-                    <option value="circuit">Circuit pattern</option>
-                    <option value="wide">Wide pattern</option>
-                </select>
-            </div>
-            <div class="wind-grid">
-                <button id="add-circuit-pattern-btn" class="button-style" onclick="window.initCircuitPatterns()">Add circuit pattern</button>
-                <button id="reset-circuit-pattern-btn" class="button-style" onclick="window.resetRoute()">Reset Route</button>
-            </div>
-        </div>
-
-        <div class="border-round-eged">
-            <div class="divider-general-section">
-                <svg class="divider-plane" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path fill="#666" d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
-                </svg>
-            </div>
-            <div class="distance-section">
-                <div class="distance-info">
-                    <span style="white-space: nowrap;"><span id="distance-km">0</span> km</span> |
-                    <span style="white-space: nowrap;"><span id="flying-minutes">0</span> min</span> |
-                    <span id="departure-time">--:--</span> →
-                    <span id="arrival-time">--:--</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="map-container" style="height: 500px;">
-            <div id="route-map" style="height: 100%;"></div>
-            <div class="map-controls" style="position: absolute; top: 10px; right: 10px; background: none; padding: 0; z-index: 1000;">
-                <button id="fullscreen-btn" onclick="toggleFullscreen()" style="width: 44px; height: 44px; padding: 0; background: white; border: 2px solid rgba(0,0,0,0.2); border-radius: 4px; cursor: pointer; touch-action: manipulation;">
-                    <svg class="fullscreen-enter" viewBox="0 0 24 24" style="width: 24px; height: 24px; margin: 8px;">
-                        <path d="M7,14H5v5h5v-2H7V14z M5,10h2V7h3V5H5V10z M17,17h-3v2h5v-5h-2V17z M14,5v2h3v3h2V5H14z"/>
-                    </svg>
-                    <svg class="fullscreen-exit" viewBox="0 0 24 24" style="width: 24px; height: 24px; margin: 8px; display: none;">
-                        <path d="M5,16h3v3h2v-5H5V16z M8,8H5v2h5V5H8V8z M14,19h2v-3h3v-2h-5V19z M16,8V5h-2v5h5V8H16z"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <div class="border-round-eged">
-            <div class="disclaimer">
-                The airspace projections on the map are based on data that can be outdated or inaccurate. Do not navigate using the map but only use it for educational purposes.
-            </div>
-        </div>
 
     </div>
 
@@ -6608,7 +6632,7 @@
         }
 
         // WHEN THE TAB MAP IS CLICKED, UPDATE THE MAP WITH THE ROUTE AND FILL WINDOW.WAYPOINTS
-        if (targetTab === "MAP") {
+        if (targetTab === "ENROUTE") {
           initRouteMap(true);
           updateRoute(true); // Add all waypoints
         }
