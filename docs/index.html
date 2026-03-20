@@ -1655,6 +1655,7 @@
                     <option value="south">South</option>
                 </select>
                 <select id="ARRIVAL_CIRCUIT_SIZE" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                    <option value="direct" selected>Direct</option>
                     <option value="standard" selected>Standard pattern</option>
                     <option value="circuit">Circuit pattern</option>
                     <option value="wide">Wide pattern</option>
@@ -1662,7 +1663,7 @@
             </div>
             <div class="wind-grid">
                 <button id="add-circuit-pattern-btn" class="button-style" onclick="window.initCircuitPatterns()">Add circuit pattern</button>
-                <button id="reset-circuit-pattern-btn" class="button-style" onclick="window.resetRoute()">Reset Route</button>
+                <button id="reset-circuit-pattern-btn" class="button-style" onclick="window.resetRoute()">Remove circuit pattern</button>
             </div>
 
             <div class="divider-general-section" style="background: #ffffff"></div>
