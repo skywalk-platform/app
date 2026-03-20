@@ -112,12 +112,6 @@
 <body>
 
 <div id="app">
-        <!--<div id="loading-spinner" class="spinner-overlay" style="display: flex;">
-            <div class="spinner-container">
-                <div class="spinner"></div>
-                <div class="spinner-text">Loading SkyWalk. Please wait..</div>
-            </div>
-        </div>-->
 
     <!-- Tab links -->
     <div class="tab">
@@ -211,7 +205,7 @@
                     <div id="DEPARTURE_CITY" class="airport-name">DEPARTURE</div>
                     <div><img id="DEPARTURE_FLAG_2" src="" alt="" style="width:30px; height:auto; vertical-align:middle; margin-left:6px;"></div>
                     <div class="schedule-label">Scheduled</div>
-                    <input type="time" id="DEPARTURE_clockField" class="clock-input" onclick="this.showPicker?.()" step="300" style="width: 100%; box-sizing: border-box;">
+                    <input type="time" id="DEPARTURE_CLOCK" class="clock-input" onclick="this.showPicker?.()" step="300" style="width: 100%; box-sizing: border-box;">
                 </div>
 
                 <div class="plane-icon" onclick="handlePlaneClick()">
@@ -223,18 +217,23 @@
                 <div class="airport" style="min-width: 0; overflow: hidden;">
                     <div class="airport-code">
                         <input id="ARRIVAL_ICAO" type="text" class="UPPERCASE_input" title="Arrival ICAO"
-                            style="font-size: 26px; font-weight: bold; color: #2c2c2c; margin-bottom: 2px; text-align: center; width: 100%; box-sizing: border-box;">                    </div>
+                        style="font-size: 26px; font-weight: bold; color: #2c2c2c; margin-bottom: 2px; text-align: center; width: 100%; box-sizing: border-box;">
+                    </div>
                     <div id="ARRIVAL_CITY" class="airport-name">ARRIVAL</div>
                     <div><img id="ARRIVAL_FLAG_2" src="" alt="" style="width:30px; height:auto; vertical-align:middle; margin-left:6px;"></div>
                     <div class="schedule-label">Scheduled</div>
-                    <input type="time" id="ARRIVAL_clockField" class="clock-input" onclick="this.showPicker?.()" step="300" style="width: 100%; box-sizing: border-box;">                </div>
-
+                    <input type="time" id="ARRIVAL_CLOCK" class="clock-input" onclick="this.showPicker?.()" step="300" style="width: 100%; box-sizing: border-box;">
+                </div>
             </div>
 
             <div class="divider-general-section">
                 <svg class="divider-plane" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path fill="#666" d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
                 </svg>
+                <!-- Load progress bar – shown only while ARRIVAL_ICAO is loading -->
+                <div id="ICAO_load_progress_track" style="display:none; height:4px; width:100%; background:#e0e0e0; border-radius:2px; margin-top:3px; overflow:hidden;">
+                    <div id="ICAO_load_progress_bar" style="height:100%; width:0%; background:#006280; border-radius:2px; transition:width 0.25s ease;"></div>
+                </div>
             </div>
 
             <div class="distance-section">
@@ -327,7 +326,6 @@
 
 
                 <div class="flight-card-content">
-
                     <div class="wind-grid">
                         <div class="aircraft" style="text-align: left;">
                             <span id='DATETIME_CREATION' class="tile-label" style="text-align: left;">FLIGHT PLAN</span>
@@ -339,7 +337,15 @@
                         </div>
                     </div>
 
-                    <div class="divider-general-section" style="background: #f0f0f0"></div>
+                    <div class="divider-general-section">
+                        <svg class="divider-plane-line" viewBox="0 0 24 2" xmlns="http://www.w3.org/2000/svg">
+                          <line x1="0" y1="1" x2="24" y2="1" stroke="#f0f0f0" stroke-width="2"/>
+                        </svg>
+                        <!-- Load progress bar – shown only while ARRIVAL_ICAO is loading -->
+                        <div id="flightplan_load_progress_track" style="display:none; height:4px; width:100%; background:#e0e0e0; border-radius:2px; margin-top:3px; overflow:hidden;">
+                            <div id="flightplan_load_progress_bar" style="height:100%; width:0%; background:#006280; border-radius:2px; transition:width 0.25s ease;"></div>
+                        </div>
+                    </div>
 
                     <div class="wind-grid" style="display: flex; ">
                         <!-- Delete Button -->
@@ -352,10 +358,6 @@
                             <select id="plan_spinner" class="tile-value-dropdown" onchange="this.value && load_flightplan_js()" style="text-align: left; background: lightgray; font-size: 12px; font-weight: normal;">
                                 <option value="">Select and Load</option>
                             </select>
-                            <!-- Load progress bar – shown only while load_flightplan_js() is running -->
-                            <div id="load_progress_track" style="display:none; height:4px; width:100%; background:#e0e0e0; border-radius:2px; margin-top:3px; overflow:hidden;">
-                                <div id="load_progress_bar" style="height:100%; width:0%; background:#006280; border-radius:2px; transition:width 0.25s ease;"></div>
-                            </div>
                         </div>
                         <!-- Save button -->
                         <button id="save_fields_btn" onclick="window.save_flightplan()" style="display: flex; justify-content: right; align-items: right; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save Flight Plan">💾</button>
@@ -3090,7 +3092,7 @@
         return {
             # General Flightplan
             'FLIGHTPLAN': '',           # Name of the flightplan
-            'DATETIME_CREATION': 'FLIGHT PLAN',
+            'DATETIME_CREATION': 'FLIGHT PLAN', # The datetime is extended behind flightplan.
             'CALLSIGN': '',             # Aircraft callsign
             'CALLSIGN_SHORT': '',       # Short callsign (auto-generated)
             'AIRCRAFT_TYPE': '',        # Aircraft type/model
@@ -3103,6 +3105,7 @@
             'DEPARTURE_CITY': '',               # City
             'DEPARTURE_NAME': '',               # Aerodrome name
             'DEPARTURE_POSITION': '',           # Position at apron
+            'DEPARTURE_CLOCK': '',              # clock
 
             'DEPARTURE_RUNWAYS': '',            # All available Runways
             'DEPARTURE_RUNWAY_PROPERTIES': '',  # The runway properties
@@ -3151,6 +3154,7 @@
             'ARRIVAL_CITY': '',                   # City
             'ARRIVAL_NAME': '',                   # Aerodrome name
             'ARRIVAL_POSITION': '',               # Position at apron
+            'ARRIVAL_CLOCK': '',                  # clock
 
             'ARRIVAL_RUNWAYS': '',                # All available Runways
             'ARRIVAL_RUNWAY_PROPERTIES': '',      # The runway properties
@@ -4173,8 +4177,8 @@
         update_aerodrome_gui_fields(fname, updateAircraftFields=False)
 
         # Update time and clock for departure only
-        #time_dep = js.document.getElementById('DEPARTURE_clockField').value
-        js.window.UpdateFlightInfoFields(None, True, True)
+        time_dep = js.document.getElementById('DEPARTURE_CLOCK').value
+        js.window.UpdateFlightInfoFields(time_dep, True, True)
 
         # Update images for aerodrome
         await update_aerodrome_image(fname)
@@ -4260,8 +4264,8 @@
             else:
                 js.window.flight_plan_data[key] = ''
 
-        js.document.getElementById('DEPARTURE_clockField').value = '00:00'
-        js.document.getElementById('ARRIVAL_clockField').value = '00:00'   # Default is '--:--'
+        js.document.getElementById('DEPARTURE_CLOCK').value = '00:00'
+        js.document.getElementById('ARRIVAL_CLOCK').value = '00:00'
         js.document.getElementById('DEPARTURE_FLIGHT_DISTANCE_INFO').textContent = '- km, - min.'
         js.document.getElementById('ARRIVAL_FLIGHT_DISTANCE_INFO').textContent = '- km, - min.'
         js.document.getElementById('distance-km').textContent = '0'
@@ -4279,19 +4283,19 @@
         js.window.flight_plan_data['AIRCRAFT'] = get_default_aircraft()
 
 
-    def update_general_gui_fields(flight_plan_dict):
-        """Update GENERAL GUI fields from js.window.flight_plan_data"""
-        print('----> update_general_gui_fields()')
-        print("🔄 Updating GENERAL GUI fields...")
+    #def update_general_gui_fields(flight_plan_dict):
+    #    """Update GENERAL GUI fields from js.window.flight_plan_data"""
+    #    print('----> update_general_gui_fields()')
+    #    print("🔄 Updating GENERAL GUI fields...")
 
-        fields = ['FLIGHTPLAN', 'CALLSIGN', 'AIRCRAFT_TYPE', 'POB', 'FLIGHT_RULES', 'DATETIME_CREATION']
-        for field in fields:
-            if flight_plan_dict.get(field):
-                element = js.document.getElementById(field)
-                if field=='DATETIME_CREATION':
-                    element.textContent = flight_plan_dict[field]
-                else:
-                    element.value = flight_plan_dict[field]
+    #    fields = ['FLIGHTPLAN', 'CALLSIGN', 'AIRCRAFT_TYPE', 'POB', 'FLIGHT_RULES', 'DATETIME_CREATION']
+    #    for field in fields:
+    #        if flight_plan_dict.get(field):
+    #            element = js.document.getElementById(field)
+    #            if field=='DATETIME_CREATION':
+    #                element.textContent = flight_plan_dict[field]
+    #            else:
+    #                element.value = flight_plan_dict[field]
 
 
     def update_enroute_gui_fields(enroute_dict, spinner_name):
@@ -4329,6 +4333,7 @@
             f'{fname}_CITY',
             f'{fname}_NAME',
             f'{fname}_ICAO',
+            #f'{fname}_CLOCK',
             f'{fname}_POSITION',
             f'{fname}_RUNWAY_NR',
             f'{fname}_RUNWAY_LENGTH',
@@ -4459,6 +4464,7 @@
             f'{fname}_CTR',
             f'{fname}_NAME',
             f'{fname}_ICAO',
+            f'{fname}_CLOCK',
             f'{fname}_POSITION',
             f'{fname}_RUNWAY_NR',
             f'{fname}_RUNWAY_LENGTH',
@@ -4942,8 +4948,8 @@
         js.window.aircraftClean('silent')
 
         js.document.getElementById("CALLSIGN_LABEL").textContent = 'REGISTRATION'
-        js.document.getElementById('DEPARTURE_clockField').value = '00:00'
-        js.document.getElementById('ARRIVAL_clockField').value = '00:00'   # Default is '00:00'
+        js.document.getElementById('DEPARTURE_CLOCK').value = '00:00'
+        js.document.getElementById('ARRIVAL_CLOCK').value = '00:00'
         js.document.getElementById('DEPARTURE_FLIGHT_DISTANCE_INFO').textContent = 'Departure'
         js.document.getElementById('ARRIVAL_FLIGHT_DISTANCE_INFO').textContent = '- km, - min.'
         js.document.getElementById('distance-km').textContent = '0'
@@ -5141,7 +5147,7 @@
 
         # STORE FIELDS FROM GENERAL IN FLIGHTPLAN
         js.window.flight_plan_data["CALLSIGN_SHORT"] = js.window.create_callsign_short(js.document.getElementById('CALLSIGN').value);
-        general_fields = ["FLIGHTPLAN", "POB", "FLIGHT_RULES", "AIRCRAFT_TYPE", "CALLSIGN"]
+        general_fields = ["FLIGHTPLAN", "POB", "FLIGHT_RULES", "AIRCRAFT_TYPE", "CALLSIGN", "DEPARTURE_CLOCK", "ARRIVAL_CLOCK"]
         for field in general_fields:
             store_field(field)
 
@@ -5354,7 +5360,7 @@
         # Initialize the waypoints when both Departure and arrival location are set.
         icao_dep = js.document.getElementById('DEPARTURE_ICAO')
         icao_arr = js.document.getElementById('ARRIVAL_ICAO')
-        #time_dep = js.document.getElementById('DEPARTURE_clockField')
+        time_dep = js.document.getElementById('DEPARTURE_CLOCK')
 
         js.window.waypoints = to_js([])
         js.window.LEGINFO = to_js({})
@@ -5366,7 +5372,7 @@
             js.window.addWaypoints([to_js(js.window.flight_plan_data['ARRIVAL_LATLON'])])
         if icao_dep.value != '' and icao_arr.value != '':
             js.window.addWaypoints(to_js([js.window.flight_plan_data['DEPARTURE_LATLON'], js.window.flight_plan_data['ARRIVAL_LATLON']]))
-            js.window.UpdateFlightInfoFields(None, True, True)
+            js.window.UpdateFlightInfoFields(time_dep.value, True, True)
 
         #js.window.alert('Here after loading or selecting icao from cache')
         # Update weight and balance
@@ -6519,7 +6525,7 @@
     # DEPARTURE/ARRIVAL TAB
     js.window.populate_aerodrome_fields_from_icao = create_proxy(populate_aerodrome_fields_from_icao)
     js.window.update_aerodrome_gui_fields = update_aerodrome_gui_fields
-    js.window.update_general_gui_fields = update_general_gui_fields
+    #js.window.update_general_gui_fields = update_general_gui_fields
     js.window.update_enroute_gui_fields = update_enroute_gui_fields
     js.window.update_aerodrome_image = update_aerodrome_image
 
@@ -6768,8 +6774,8 @@
         document.getElementById('DEPARTURE_ICAO_CITY').innerHTML = '<option value="">Select ICAO</option>';
         document.getElementById('ARRIVAL_ICAO_CITY').innerHTML  = '<option value="">Select ICAO</option>';
         // Set clock to default
-        document.getElementById('DEPARTURE_clockField').value = '00:00'
-        document.getElementById('ARRIVAL_clockField').value = '00:00'
+        document.getElementById('DEPARTURE_CLOCK').value = '00:00'
+        document.getElementById('ARRIVAL_CLOCK').value = '00:00'
         // Clear the Flags
         updateFlag('DEPARTURE', 'remove');
         updateFlag('ARRIVAL', 'remove');
@@ -7021,7 +7027,7 @@
     });
 
     // Update departure clock and compute distance/time/arrival
-    ['DEPARTURE_clockField', 'ARRIVAL_clockField'].forEach(id => {
+    ['DEPARTURE_CLOCK', 'ARRIVAL_CLOCK'].forEach(id => {
         document.getElementById(id)?.addEventListener('change', element => {
             const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
             // const timeValue = element.target.value; // "HH:MM" string
@@ -7086,8 +7092,11 @@
             // later, anywhere:
             const ICAO = getIcaoInformation(element.value)
             // Load ICAO data
+            loadProgress.start(3, `ICAO_load_progress_bar`, `ICAO_load_progress_track`);
+
             if (ICAO) {
               // Download the country and populate the selectionboxes
+              loadProgress.step();
               import_country_selected(prefix, ICAO.country, UNZIPK)
               // Set the selection to the country
               select = document.getElementById(`${prefix}_COUNTRY`);
@@ -7099,6 +7108,7 @@
               }
 
               // Download and populate the ICAO information
+              loadProgress.step();
               populate_aerodrome_fields_from_icao(prefix, ICAO.city_icao)
               // Set the selection to the country
               select = document.getElementById(`${prefix}_ICAO_CITY`);
@@ -7111,9 +7121,11 @@
               }
             }
             // Load aerodrome from json
+            loadProgress.step();
             window.load_aerodrome_from_json(prefix, element.id);
         }
 
+        loadProgress.done();
         return true;
     }
 
@@ -7145,6 +7157,7 @@
             const value = element.value.trim();
             if (value !== '') {
                 const isValid = validateAndLoadICAO(element, true);
+
                 if (!isValid) return;
             }
         }
@@ -7988,10 +8001,10 @@
 
     // ── Flight-plan load progress bar
     window.loadProgress = (function () {
-        let STEPS = 10; // Default number of steps
         let current = 0;
-        const track = document.getElementById('load_progress_track');
-        const bar   = document.getElementById('load_progress_bar');
+        let STEPS = 10;
+        let bar = null;
+        let track = null;
 
         function set(pct) {
             if (!bar || !track) return;
@@ -7999,9 +8012,11 @@
         }
 
         return {
-            start(steps = 10) {
+            start(steps = 10, barId = "flightplan_load_progress_bar", trackId = "flightplan_load_progress_track") {
                 STEPS = Number.isFinite(Number(steps)) && Number(steps) > 0 ? Number(steps) : 10;
                 current = 0;
+                bar = document.getElementById(barId);
+                track = document.getElementById(trackId);
                 if (track) track.style.display = 'block';
                 set(0);
             },
@@ -8012,9 +8027,15 @@
             done() {
                 set(100);
                 setTimeout(() => {
-                    if (track) track.style.display = 'none';
-                    set(0);
-                    current = 0;
+                  // track1 = document.getElementById("DEPARTURE_load_progress_track");
+                  // track2 = document.getElementById("ARRIVAL_load_progress_track");
+                  // track3 = document.getElementById("load_progress_track");
+                  // if (track1) track.style.display = 'none';
+                  // if (track2) track.style.display = 'none';
+                  // if (track3) track.style.display = 'none';
+                  if (track) track.style.display = 'none';
+                  set(0);
+                  current = 0;
                 }, 600);
             }
         };
@@ -8029,7 +8050,7 @@
                 return;
             }
 
-            loadProgress.start(steps=12);
+            loadProgress.start(steps=12, "flightplan_load_progress_bar", "flightplan_load_progress_track");
             // CLEAR GLOBAL VARIABLES
             window.waypoints = [];
             window.LEGINFO   = {};
@@ -8050,10 +8071,10 @@
             window.updateFlag('DEPARTURE', 'remove');
             window.updateFlag('ARRIVAL',   'remove');
             // SET SPINNERS TO DEFAULT
-            // document.getElementById('DEPARTURE_COUNTRY').innerHTML = '<option value="">Select Country</option>';
-            // document.getElementById('ARRIVAL_COUNTRY').innerHTML  = '<option value="">Select Country</option>';
             document.getElementById('DEPARTURE_ICAO_CITY').innerHTML = '<option value="">Select ICAO</option>';
             document.getElementById('ARRIVAL_ICAO_CITY').innerHTML  = '<option value="">Select ICAO</option>';
+            document.getElementById('DEPARTURE_CLOCK').value = "00:00"
+            document.getElementById('ARRIVAL_CLOCK').value = "00:00"
             loadProgress.step();
 
             // LOAD FROM LOCAL STORAGE
@@ -8162,7 +8183,7 @@
                 windEnvelopeMain('ARRIVAL');
 
                 // Set time and update info fields
-                // const timeDep = document.getElementById('DEPARTURE_clockField').value;
+                // const timeDep = document.getElementById('DEPARTURE_CLOCK').value;
                 window.UpdateFlightInfoFields(null, true, true);
                 loadProgress.step();
 
@@ -8178,7 +8199,7 @@
         };
 
     function update_general_gui_fields_js(flight_plan_dict) {
-        console.log("----> update_general_gui_fields_js()");
+        console.log("> func: update_general_gui_fields_js()");
 
         const fields = [
             "FLIGHTPLAN",
@@ -8186,8 +8207,10 @@
             "AIRCRAFT_TYPE",
             "POB",
             "FLIGHT_RULES",
-            "DATETIME_CREATION"
+            "DATETIME_CREATION",
+            "DEPARTURE_CLOCK",
         ];
+        // ARRIVAL_CLOCK wordt automatisch ge-update nadat flightplan is geladen
 
         fields.forEach(field => {
             if (flight_plan_dict[field]) {
@@ -8518,7 +8541,8 @@ document.getElementById("aircraft_download_btn").addEventListener("click", () =>
             `${fname}_ATC_APPROACH`,
             `${fname}_ATC_ATIS_FREQ`,
             `${fname}_ATC_GROUND`,
-            `${fname}_ATC_TELEPHONE`
+            `${fname}_ATC_TELEPHONE`,
+            // `${fname}_CLOCK`,
         ];
 
         fields.forEach(fieldId => {

@@ -1,7 +1,7 @@
 {
   "name": "SkyWalk",
   "short_name": "SkyWalk",
-  "start_url": "/index.html",
+  "start_url": "index.html",
   "display": "standalone",
   "icons": [
     {

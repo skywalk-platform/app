@@ -955,6 +955,14 @@ body.mobile-fullscreen .output-box {
     border-radius: 50%;
 }
 
+.divider-plane-line {
+    position: absolute;
+    left: 0;
+    height: 0px;
+    width: 100%;
+    background: #d5d5d5; /* solid = crisp */
+}
+
 .distance-section {
     display: flex;
     align-items: center;
