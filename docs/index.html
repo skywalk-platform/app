@@ -39,7 +39,7 @@
 
 // Contact:
 // For commercial licensing requests, contact:
-// <motel_voluten_7n@icloud.com>
+// <skywalk.aviation@icloud.com>
 
 -->
 
@@ -111,6 +111,7 @@
     <script src="./scripts/aircraft.js" defer></script>
     <!--login.js must be after config.js-->
     <script src="./scripts/login.js" defer></script>
+    <script src="./scripts/paywall.js" defer></script>
 
 
 </head>
@@ -722,7 +723,7 @@
            </div>
 
            <div class="button-row">
-               <button id="BTN-PLOT-WIND-DEPARTURE" class="button-style" onclick="window.windEnvelopeMain('DEPARTURE')">
+               <button id="BTN-PLOT-WIND-DEPARTURE" class="button-style" onclick="requireSubscription('Wind Envelope', null, true); window.windEnvelopeMain('DEPARTURE')">
                    Reset Plot
                </button>
            </div>
@@ -914,7 +915,7 @@
            </div>
 
            <!-- Add a button to calculate -->
-           <button class="button-style" onclick="window.displayRunwayMain('DEPARTURE')">
+           <button class="button-style" onclick="window.requireSubscription('Runway Performance', null, true); window.displayRunwayMain('DEPARTURE')">
                Calculate Runway Performance
            </button>
 
@@ -1246,7 +1247,7 @@
            </div>
 
            <div class="button-row">
-               <button id="BTN-PLOT-WIND-ARRIVAL" class="button-style" onclick="window.windEnvelopeMain('ARRIVAL')">
+               <button id="BTN-PLOT-WIND-ARRIVAL" class="button-style" onclick="requireSubscription('Wind Envelope', null, true); window.windEnvelopeMain('ARRIVAL')">
                    Reset Plot
                </button>
            </div>
@@ -1434,7 +1435,7 @@
           </div>
 
           <!-- Add a button to calculate -->
-          <button class="button-style" onclick="window.displayRunwayMain('ARRIVAL')">
+          <button class="button-style" onclick="window.requireSubscription('Runway Performance', null, true); window.displayRunwayMain('ARRIVAL')">
               Calculate Runway Performance
           </button>
 
@@ -1727,8 +1728,8 @@
                 <div class="distance-info">
                     <span style="white-space: nowrap;"><span id="distance-km">0</span> km</span> |
                     <span style="white-space: nowrap;"><span id="flying-minutes">0</span> min</span> |
-                    <span id="departure-time">--:--</span> →
-                    <span id="arrival-time">--:--</span>
+                    <span id="departure-time">00:00</span> →
+                    <span id="arrival-time">00:00</span>
                 </div>
             </div>
 
@@ -2760,97 +2761,11 @@ if ('serviceWorker' in navigator) {
         });
     });
 
-    // function syncFields(className) {
-    //     // SYNC FIELDS OF DEPARTURE_ICAO AND DEPARTURE_ICAO_2
-    //     const fields = document.querySelectorAll('.' + className);
-    //     fields.forEach(field => {
-    //         field.addEventListener('input', e => {
-    //             fields.forEach(f => {
-    //                 if (f !== e.target) f.value = e.target.value.toUpperCase();
-    //             });
-    //         });
-    //     });
-    // }
-
-    // syncFields('sync-departure');
-    // syncFields('sync-arrival');
 </script>
 
 
 
 <script>
-
-     function AutoUpdateRunwayResults(elementOrEvent) {
-       console.log('> func: AutoUpdateRunwayResults()');
-       // Determine prefix based on the field's id
-       let element = (elementOrEvent && elementOrEvent.target) ? elementOrEvent.target : elementOrEvent;
-       let prefix = element.id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-
-       // Update the runway
-       displayRunwayMain(prefix);
-       // If wind direction is not a number (e.g., 'VRB' or any non-numeric input)
-       if (`${prefix}_WIND_DIRECTION` === element.id && isNaN(Number(element.value))) {
-         cleanWindEnvelopeFields(prefix, action = "empty", "Wind direction is invalid or variable.", "Retrieve METAR information or set the wind direction manually.")
-       }
-       if (`${prefix}_WIND_STRENGTH` === element.id && isNaN(Number(element.value))) {
-         cleanWindEnvelopeFields(prefix, action = "empty", "Wind strength is invalid or variable.", "Retrieve METAR information or set the wind strength manually.")
-       }
-       if (`${prefix}_ELEVATION` === element.id) {
-         createCloudPlot(prefix, "show", false)
-       }
-       // Update weight and balance
-       WeightBalanceMain('DEPARTURE');
-       WeightBalanceMain('ARRIVAL');
-       // Update highlights
-       highlightMissingFields()
-       highlightDropdownMenus()
-     }
-
-     // Setup event listeners for RUNWAY fields
-     [
-       'DEPARTURE_RUNWAY_LENGTH',
-       'DEPARTURE_RUNWAY_SLOPE',
-       'DEPARTURE_TEMPERATURE',
-       'DEPARTURE_ELEVATION',
-       'DEPARTURE_WEIGHT_FUEL_LITERS',
-       'DEPARTURE_WEIGHT_PILOT',
-       'DEPARTURE_WIND_DIRECTION',
-       'DEPARTURE_WIND_STRENGTH',
-       'DEPARTURE_RUNWAY_SURFACE',
-       'DEPARTURE_RUNWAY_SLIPPERY',
-       // ARRIVAL FIELDS
-       'ARRIVAL_RUNWAY_LENGTH',
-       'ARRIVAL_RUNWAY_SLOPE',
-       'ARRIVAL_TEMPERATURE',
-       'ARRIVAL_ELEVATION',
-       'ARRIVAL_WEIGHT_FUEL_LITERS',
-       'ARRIVAL_WEIGHT_PILOT',
-       'ARRIVAL_WIND_DIRECTION',
-       'ARRIVAL_WIND_STRENGTH',
-       'ARRIVAL_RUNWAY_SURFACE',
-       'ARRIVAL_RUNWAY_SLIPPERY'
-     ].forEach(function(id) {
-       const field = document.getElementById(id);
-       if (!field) return;
-
-       let prefix = field.id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-       // Trigger on blur
-       field.addEventListener("blur", AutoUpdateRunwayResults);
-       // Trigger on Enter key
-       field.addEventListener('keydown', e => e.key === 'Enter' && AutoUpdateRunwayResults(e));
-       // Trigger when value is increased/decreased using the button (arrow keys or spinner)
-       field.addEventListener('input', AutoUpdateRunwayResults);
-       // If the field is a select (dropbox), also trigger on change
-       if (
-         id === 'DEPARTURE_RUNWAY_SURFACE' ||
-         id === 'DEPARTURE_RUNWAY_SLIPPERY' ||
-         id === 'ARRIVAL_RUNWAY_SURFACE' ||
-         id === 'ARRIVAL_RUNWAY_SLIPPERY'
-       ) {
-         field.addEventListener('change', AutoUpdateRunwayResults);
-       }
-     });
-
 
     document.getElementById('ATC_FONTSIZE').addEventListener('change', (e) => {
         window.ATC_FONTSIZE = e.target.value;
@@ -4314,22 +4229,6 @@ if ('serviceWorker' in navigator) {
         js.window.flight_plan_data['CHECKLIST'] = get_default_checklist()
         # Clear aircraft
         js.window.flight_plan_data['AIRCRAFT'] = get_default_aircraft()
-
-
-    #def update_general_gui_fields(flight_plan_dict):
-    #    """Update GENERAL GUI fields from js.window.flight_plan_data"""
-    #    print('----> update_general_gui_fields()')
-    #    print("🔄 Updating GENERAL GUI fields...")
-
-    #    fields = ['FLIGHTPLAN', 'CALLSIGN', 'AIRCRAFT_TYPE', 'POB', 'FLIGHT_RULES', 'DATETIME_CREATION']
-    #    for field in fields:
-    #        if flight_plan_dict.get(field):
-    #            element = js.document.getElementById(field)
-    #            if field=='DATETIME_CREATION':
-    #                element.textContent = flight_plan_dict[field]
-    #            else:
-    #                element.value = flight_plan_dict[field]
-
 
     def update_enroute_gui_fields(enroute_dict, spinner_name):
         """Update ENROUTE GUI fields from js.window.flight_plan_data"""
@@ -6558,7 +6457,6 @@ if ('serviceWorker' in navigator) {
     # DEPARTURE/ARRIVAL TAB
     js.window.populate_aerodrome_fields_from_icao = create_proxy(populate_aerodrome_fields_from_icao)
     js.window.update_aerodrome_gui_fields = update_aerodrome_gui_fields
-    #js.window.update_general_gui_fields = update_general_gui_fields
     js.window.update_enroute_gui_fields = update_enroute_gui_fields
     js.window.update_aerodrome_image = update_aerodrome_image
 
@@ -6674,32 +6572,32 @@ if ('serviceWorker' in navigator) {
     });
 
     // Flightplan elements
-    const CALLSIGN = document.getElementById('CALLSIGN');
-    const AIRCRAFT_TYPE = document.getElementById('AIRCRAFT_TYPE');
-    const POB = document.getElementById('POB');
-    const FLIGHTPLAN = document.getElementById('FLIGHTPLAN');
-    const FLIGHT_RULES = document.getElementById('FLIGHT_RULES');
-    const DATETIME_CREATION = document.getElementById('DATETIME_CREATION');
+    // const CALLSIGN = document.getElementById('CALLSIGN');
+    // const AIRCRAFT_TYPE = document.getElementById('AIRCRAFT_TYPE');
+    // const POB = document.getElementById('POB');
+    // const FLIGHTPLAN = document.getElementById('FLIGHTPLAN');
+    // const FLIGHT_RULES = document.getElementById('FLIGHT_RULES');
+    // const DATETIME_CREATION = document.getElementById('DATETIME_CREATION');
 
     // Create buttons at the START page
-    const new_plan_btn = document.getElementById('new_plan_btn');
-    const delete_btn = document.getElementById('delete_btn');
-    const fic_delete_btn = document.getElementById('fic_delete_btn');
-    const fic_save_btn = document.getElementById('fic_save_btn');
-    const fic_save_btn2 = document.getElementById('fic_save_btn2');
+    // const new_plan_btn = document.getElementById('new_plan_btn');
+    // const delete_btn = document.getElementById('delete_btn');
+    // const fic_delete_btn = document.getElementById('fic_delete_btn');
+    // const fic_save_btn = document.getElementById('fic_save_btn');
+    // const fic_save_btn2 = document.getElementById('fic_save_btn2');
 
     // Create buttons to generate ATC at the ATC page
-    const BTN_HTML_SUMMARY = document.getElementById('BTN_HTML_SUMMARY');
-    const BTN_HTML_SUMMARY_REV = document.getElementById('BTN_HTML_SUMMARY_REV');
-    const BTN_HTML_DEPARTURE = document.getElementById('BTN_HTML_DEPARTURE');
-    const BTN_HTML_DEPARTURE_REV = document.getElementById('BTN_HTML_DEPARTURE_REV');
-    const BTN_HTML_ARRIVAL = document.getElementById('BTN_HTML_ARRIVAL');
-    const BTN_HTML_ARRIVAL_REV = document.getElementById('BTN_HTML_ARRIVAL_REV');
-    const BTN_HTML_ENROUTE = document.getElementById('BTN_HTML_ENROUTE');
-    const BTN_HTML_ENROUTE_REV = document.getElementById('BTN_HTML_ENROUTE_REV');
+    // const BTN_HTML_SUMMARY = document.getElementById('BTN_HTML_SUMMARY');
+    // const BTN_HTML_SUMMARY_REV = document.getElementById('BTN_HTML_SUMMARY_REV');
+    // const BTN_HTML_DEPARTURE = document.getElementById('BTN_HTML_DEPARTURE');
+    // const BTN_HTML_DEPARTURE_REV = document.getElementById('BTN_HTML_DEPARTURE_REV');
+    // const BTN_HTML_ARRIVAL = document.getElementById('BTN_HTML_ARRIVAL');
+    // const BTN_HTML_ARRIVAL_REV = document.getElementById('BTN_HTML_ARRIVAL_REV');
+    // const BTN_HTML_ENROUTE = document.getElementById('BTN_HTML_ENROUTE');
+    // const BTN_HTML_ENROUTE_REV = document.getElementById('BTN_HTML_ENROUTE_REV');
 
     // Missing labels
-    const missing_label = document.getElementById('missing_label');
+    // const missing_label = document.getElementById('missing_label');
 
     // Uppercase for all fields with class="UPPERCASE_input"
     document.querySelectorAll('.UPPERCASE_input').forEach(input => {
@@ -6965,48 +6863,48 @@ if ('serviceWorker' in navigator) {
     });
 
     document.getElementById('BTN_HTML_SUMMARY')?.addEventListener('click', () => {
-      if (window.create_summary_atc) {
+      requireSubscription('ATC Communication Scripts', () => {
         window.create_summary_atc();
-      }
+      });
     });
     document.getElementById('BTN_HTML_SUMMARY_REV')?.addEventListener('click', () => {
-      if (window.create_summary_atc) {
-        window.create_summary_atc({ reverse_path: true, verbose: false });
-      }
+      requireSubscription('ATC Communication Scripts', () => {
+          window.create_summary_atc({ reverse_path: true, verbose: false });
+      });
     });
 
     document.getElementById('BTN_HTML_DEPARTURE')?.addEventListener('click', () => {
-      if (window.create_departure_atc) {
-        window.create_departure_atc();
-      }
+      requireSubscription('ATC Communication Scripts', () => {
+          window.create_departure_atc();
+      });
     });
     document.getElementById('BTN_HTML_DEPARTURE_REV')?.addEventListener('click', () => {
-      if (window.create_departure_atc) {
-        window.create_departure_atc({ reverse_path: true });
-      }
+      requireSubscription('ATC Communication Scripts', () => {
+          window.create_departure_atc({ reverse_path: true });
+      });
     });
 
     document.getElementById('BTN_HTML_ARRIVAL')?.addEventListener('click', () => {
-      if (window.create_arrival_atc) {
-        window.create_arrival_atc();
-      }
+      requireSubscription('ATC Communication Scripts', () => {
+          window.create_arrival_atc();
+      });
     });
     document.getElementById('BTN_HTML_ARRIVAL_REV')?.addEventListener('click', () => {
-      if (window.create_arrival_atc) {
-        window.create_arrival_atc({ reverse_path: true });
-      }
+      requireSubscription('ATC Communication Scripts', () => {
+          window.create_arrival_atc({ reverse_path: true });
+      });
     });
 
     document.getElementById('BTN_HTML_ENROUTE')?.addEventListener('click', () => {
-      if (window.create_enroute_atc) {
-        window.create_enroute_atc();
-      }
+      requireSubscription('ATC Communication Scripts', () => {
+          window.create_enroute_atc();
+      });
     });
 
     document.getElementById('BTN_HTML_EN_REV')?.addEventListener('click', () => {
-      if (window.create_enroute_atc) {
-        window.create_enroute_atc({ reverse_path: true });
-      }
+      requireSubscription('ATC Communication Scripts', () => {
+          window.create_enroute_atc({ reverse_path: true });
+      });
     });
 
     ['DEPARTURE_WEIGHT_CHECKBOX', 'ARRIVAL_WEIGHT_CHECKBOX'].forEach(btnId => {
