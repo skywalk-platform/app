@@ -109,6 +109,9 @@
     <script src="./scripts/checklist.js" defer></script>
     <script src="./scripts/tutorial.js" defer></script>
     <script src="./scripts/aircraft.js" defer></script>
+
+    <script src="./scripts/clickevents.js" defer></script>
+
     <!--login.js must be after config.js-->
     <script src="./scripts/login.js" defer></script>
     <script src="./scripts/paywall.js" defer></script>
@@ -139,17 +142,11 @@
         <button class="tablinks" data-tab="Countries" style="cursor: pointer;">🌍 Select Countries</button>
         <div class="button-row"> <button id="Tutorial" type="button" onclick="window.SkyWalkTutorial.show()" title="Tutorial"> 📘 Tutorial </button> </div>
        	<button class="tablinks" data-tab="Config" style="cursor: pointer;">⚙️ Config</button>
-        <!--<button class="tablinks" data-tab="Tutorial" style="cursor: pointer;" onclick="window.SkyWalkTutorial.show()">📘 Tutorial</button>-->
 
         <!--CHECK FOR UPDATES-->
         <button id="updateBtn" onclick="updateApp()">Check for updates</button>
-        <!--<script src="app.js"></script>-->
-
         <div class="divider-general-section" style="background: #f0f0f0;"></div>
-
-        <!--<button class="tablinks" data-tab="Login" style="cursor: pointer;">🔑 Login</button>-->
-        <button onclick="SkyWalkLogin.showOverlay()">🔑 Sign in</button>
-
+        <button class="tablinks" data-tab="Subscriptions" style="cursor: pointer;">💳 Subscriptions</button>
 
 
 	</div>
@@ -2488,10 +2485,6 @@
                     Example: 0.95 describes: Minimum distance for take-off is 95% of the runway length.
                 </div>
             </div>
-<!--
-            <button id="takeoff_load_defaults" onclick="load_performance_defaults('takeoff')" style="border: 2px solid #f5f5f5; color: #333333; padding: 8px 12px; border-radius: 8px; cursor: pointer;">
-                Load Example Takeoff Settings
-            </button>-->
 
         </div>
         </div>
@@ -2703,10 +2696,6 @@
                 Fit model
             </button>
 
-            <!--<button id="load_defaults_poh" onclick="window.initPOHTables()" style="border: 2px solid #f5f5f5; color: #333333; padding: 8px 12px; border-radius: 8px; cursor: pointer;">
-                Load example POH table
-            </button>-->
-
         </div>
         </div>
 
@@ -2718,17 +2707,27 @@
 
     </div>
 
-    <!--<div id="Login" class="tabcontent">
-        <label_h1>Subscription</label_h1>
-        <div class="wind-grid">
-            <button  class="button-style" id="buy_btn_month" title="SkyWalk (monthly)" onclick="window.open('https://buy.stripe.com/5kQdRa8MTgGa8H07BLcEw07', '_blank')" style="background-color: silver; color: #222;">SkyWalk (monthly)</button>
-            <button  class="button-style" id="buy_btn_year" title="SkyWalk (yearly)" onclick="window.open('https://buy.stripe.com/9AQdRH2oDguA0y4eV0', '_blank')" style="background-color: #FFD700; color: #222;">SkyWalk (yearly)</button>
-            <button  class="button-style" id="buy_btn_year" title="SkyWalk (yearly)" onclick="window.open('https://buy.stripe.com/test_7sIdSK0sE6LW8JW3cf', '_blank')" style="background-color: #FFD700; color: #222;">SkyWalk (test)</button>
+        <div id="Subscriptions" class="tabcontent">
+            <label_h1>Subscription</label_h1>
+            <div style="border: 0px solid lightgrey; border-radius: 10px; padding: 10px;">
+                <div id="bottom-container">
+                    <div class="info">
+                        This section is to manage SkyWalk subscriptions.
+                    </div>
+                </div>
+            </div>
+            <button onclick="SkyWalkLogin.showOverlay()">🔑 Sign in</button>
+            <button onclick="window.open('https://billing.stripe.com/p/login/7sIaIkb2Q0sg2iY6oo', '_blank', 'noopener,noreferrer')">
+              💳 Manage Stripe subscription
+            </button>
         </div>
-    </div>-->
 
 
-    <!-- Javascript functionality -->
+
+<!--======================================================================================-->
+<!--======================================================================================-->
+<!--======================================================================================-->
+
 <script>
 // MAKE REAL OFFLINE APP WITH SERVICEWORKER AND sw.js
 if ('serviceWorker' in navigator) {
@@ -2759,79 +2758,6 @@ if ('serviceWorker' in navigator) {
                 }
             });
         });
-    });
-
-</script>
-
-
-
-<script>
-
-    document.getElementById('ATC_FONTSIZE').addEventListener('change', (e) => {
-        window.ATC_FONTSIZE = e.target.value;
-        console.log('Updated ATC_FONTSIZE:', window.ATC_FONTSIZE);
-        // Save to localStorage
-        localStorage.setItem('ATC_FONTSIZE', e.target.value);
-    });
-
-    document.getElementById('ATC_COLUMNS').addEventListener('change', (e) => {
-        window.ATC_COLUMNS = e.target.value;
-        console.log('Updated nr. columns:', window.ATC_COLUMNS);
-        // Save to localStorage
-        localStorage.setItem('ATC_COLUMNS', e.target.value);
-    });
-
-
-    // Function to cache and set image source
-    async function cacheAndSetImage(url, imgElementId) {
-        // Import/save and then load cached image
-        if (pyscriptReady) {
-            await cache_and_display_image(url, imgElementId);
-        }
-    }
-
-    // Add event listeners for FIC spinners
-    document.getElementById('fic_spinner')?.addEventListener('change', function() {
-        if (this.value && window.load_enroute_fic) {
-            window.load_enroute_fic('fic_spinner');
-        }
-    });
-
-    document.getElementById('fic_spinner2')?.addEventListener('change', function() {
-        if (this.value && window.load_enroute_fic) {
-            window.load_enroute_fic('fic_spinner2');
-        }
-    });
-
-    // Add event listeners for checklist spinners
-    document.getElementById('checklist_spinner')?.addEventListener('change', async function() {
-        if (this.value && window.load_spinner_selection) {
-            console.log(`> addEventListener: checklist_spinner`);
-            // Update the checklist using the selection from cache (Python async)
-            await window.load_spinner_selection('checklist_spinner', 'CHECKLIST');
-            // Rebuild sections and categories after loading
-            // createChecklistSections();
-            populateChecklistCatagories();
-            // checklist_populate_js();
-        }
-    });
-
-    // Add event listeners for aircraft spinners
-    document.getElementById('aircraft_spinner')?.addEventListener('change', async function() {
-        if (this.value && window.load_spinner_selection) {
-            console.log(`> addEventListener: aircraft_spinner`);
-            // Update the checklist using the selection from cache (Python async)
-            await window.load_spinner_selection('aircraft_spinner', 'AIRCRAFT');
-        }
-    });
-
-    document.getElementById('aircraft_fuel_name')?.addEventListener('change', function() {
-        if (this.value && window.FUELDENSITY[this.value]) {
-            const densityInput = document.getElementById('aircraft_fuel_density');
-            if (densityInput) {
-                densityInput.value = window.FUELDENSITY[this.value];
-            }
-        }
     });
 
 </script>
@@ -6423,21 +6349,15 @@ if ('serviceWorker' in navigator) {
     js.window.checklist_clean = checklist_clean
     js.window.check_items_complete = check_items_complete
     js.window.checklist_print = checklist_print
-    #js.window.checklist_populate = checklist_populate
     js.window.get_default_checklist = get_default_checklist
     js.window.checklist_update_catagories = checklist_update_catagories
 
     # AIRCRAFT
-    #js.window.aircraft_clean = aircraft_clean
     js.window.get_default_aircraft = get_default_aircraft
 
     # GENERAL
     js.window.load_spinner_selection = load_spinner_selection
     js.window.extract_icao_from_string = extract_icao_from_string
-
-    # FLAG
-    # js.window.retrieve_flag = retrieve_flag
-    # js.window.updateFlag = updateFlag;
 
     # ATC
     js.window.create_summary_atc = create_proxy(create_summary_atc)
@@ -6571,34 +6491,6 @@ if ('serviceWorker' in navigator) {
       });
     });
 
-    // Flightplan elements
-    // const CALLSIGN = document.getElementById('CALLSIGN');
-    // const AIRCRAFT_TYPE = document.getElementById('AIRCRAFT_TYPE');
-    // const POB = document.getElementById('POB');
-    // const FLIGHTPLAN = document.getElementById('FLIGHTPLAN');
-    // const FLIGHT_RULES = document.getElementById('FLIGHT_RULES');
-    // const DATETIME_CREATION = document.getElementById('DATETIME_CREATION');
-
-    // Create buttons at the START page
-    // const new_plan_btn = document.getElementById('new_plan_btn');
-    // const delete_btn = document.getElementById('delete_btn');
-    // const fic_delete_btn = document.getElementById('fic_delete_btn');
-    // const fic_save_btn = document.getElementById('fic_save_btn');
-    // const fic_save_btn2 = document.getElementById('fic_save_btn2');
-
-    // Create buttons to generate ATC at the ATC page
-    // const BTN_HTML_SUMMARY = document.getElementById('BTN_HTML_SUMMARY');
-    // const BTN_HTML_SUMMARY_REV = document.getElementById('BTN_HTML_SUMMARY_REV');
-    // const BTN_HTML_DEPARTURE = document.getElementById('BTN_HTML_DEPARTURE');
-    // const BTN_HTML_DEPARTURE_REV = document.getElementById('BTN_HTML_DEPARTURE_REV');
-    // const BTN_HTML_ARRIVAL = document.getElementById('BTN_HTML_ARRIVAL');
-    // const BTN_HTML_ARRIVAL_REV = document.getElementById('BTN_HTML_ARRIVAL_REV');
-    // const BTN_HTML_ENROUTE = document.getElementById('BTN_HTML_ENROUTE');
-    // const BTN_HTML_ENROUTE_REV = document.getElementById('BTN_HTML_ENROUTE_REV');
-
-    // Missing labels
-    // const missing_label = document.getElementById('missing_label');
-
     // Uppercase for all fields with class="UPPERCASE_input"
     document.querySelectorAll('.UPPERCASE_input').forEach(input => {
     input.addEventListener('input', () => {
@@ -6616,7 +6508,7 @@ if ('serviceWorker' in navigator) {
 
     // Initial calls to handle any existing values
     updateEnrouteFields();
-    highlightMissingFields();
+    window.highlightMissingFields();
 
     // Wait for PyScript to be ready
     let pyscriptReady = false;
@@ -6767,493 +6659,259 @@ if ('serviceWorker' in navigator) {
       }
     }, 100);
 
-    // Connect PyScript functions to button clicks
-    new_plan_btn.onclick = async () => {
-      try {
-        // Check if PyScript is ready
-        if (!pyscriptReady) return alert("⚠️ Please wait, SkyWalk is initializing...");
 
-        // Uncheck the airspace toggle
-        const airspaceToggle = document.getElementById('airspace-toggle');
-        if (airspaceToggle) {
-          airspaceToggle.checked = false;
-          // Trigger the change event to ensure the map updates
-          airspaceToggle.dispatchEvent(new Event('change'));
-        }
-        // Ask user for confirmation before clearing
-        if (!confirm("Are you sure you want to clear and create a new flight plan? This will erase all current data.")) {
-          return;
-        }
-        // Create new flightplan
-        await window.create_new_flightplan();
-        // Set datetime
-        DATETIME_CREATION.textContent = window.flight_plan_data['DATETIME_CREATION'];
-        // Store default flight plan data
-        window.flight_plan_data = await window.get_default_data();
-        // Clear plan spinner selection
-        document.getElementById('plan_spinner').value = "";
-        document.getElementById('fic_spinner').value = "";
-        document.getElementById('fic_spinner2').value = "";
-        // Update missing fields
-        highlightMissingFields();
-        highlightDropdownMenus(); // doet niks?
-
-        // Show success message to user
-        alert("✅ All fields have been cleared and reset to their default values!");
-
-      } catch (error) {
-        console.error("⚠️ Error creating new flightplan:", error);
-        alert("⚠️ An error occurred while creating the flight plan. Please try again.");
-      }
-    };
-
-    // Auto-load functionality moved to plan_spinner onChange event
-    document.getElementById('plan_spinner').addEventListener('change', async (e) => {
-      if (e.target.value && pyscriptReady && load_flightplan_js) {
-        try {
-          await load_flightplan_js();
-          console.log("✅ Flightplan loaded successfully");
-          // Update missing fields after loading
-          highlightMissingFields();
-        } catch (error) {
-          console.error("⚠️ Error loading flightplan:", error);
-          alert("⚠️ Error loading flight plan: " + error);
-        }
-      }
-    });
-
-    delete_btn.onclick = async () => {
-      if (pyscriptReady && window.delete_flightplan) {
-        await window.delete_flightplan();
-      }
-    };
-
-    document.getElementById('fic_delete_btn')?.addEventListener('click', async () => {
-      if (pyscriptReady && window.delete_item_from_spinner) {
-        await window.delete_item_from_spinner('fic_spinner', 'ENROUTE');
-      }
-    });
-
-    document.getElementById('fic_delete_btn2')?.addEventListener('click', async () => {
-      if (pyscriptReady && window.delete_item_from_spinner) {
-        await window.delete_item_from_spinner('fic_spinner2', 'ENROUTE');
-      }
-    });
-
-    // Add save button functionality
-    document.getElementById('fic_save_btn')?.addEventListener('click', () => {
-      try {
-          // Save FIC data to JSON files
-          window.save_enroute_to_json('ENROUTE1');
-          window.alert("✅ Flight Information Center (FIC) data saved successfully!");
-      } catch (error) {
-        console.error("⚠️ Error saving Flight Information Center (FIC) data:", error);
-      }
-    });
-
-    // Add save button functionality
-    document.getElementById('fic_save_btn2')?.addEventListener('click', () => {
-        try {
-            // Save FIC data to JSON files
-            window.save_enroute_to_json('ENROUTE2');
-            window.alert("✅ Flight Information Center (FIC) data saved successfully!");
-        } catch (error) {
-          console.error("⚠️ Error saving Flight Information Center (FIC) data:", error);
-        }
-    });
-
-    document.getElementById('BTN_HTML_SUMMARY')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-        window.create_summary_atc();
-      });
-    });
-    document.getElementById('BTN_HTML_SUMMARY_REV')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-          window.create_summary_atc({ reverse_path: true, verbose: false });
-      });
-    });
-
-    document.getElementById('BTN_HTML_DEPARTURE')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-          window.create_departure_atc();
-      });
-    });
-    document.getElementById('BTN_HTML_DEPARTURE_REV')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-          window.create_departure_atc({ reverse_path: true });
-      });
-    });
-
-    document.getElementById('BTN_HTML_ARRIVAL')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-          window.create_arrival_atc();
-      });
-    });
-    document.getElementById('BTN_HTML_ARRIVAL_REV')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-          window.create_arrival_atc({ reverse_path: true });
-      });
-    });
-
-    document.getElementById('BTN_HTML_ENROUTE')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-          window.create_enroute_atc();
-      });
-    });
-
-    document.getElementById('BTN_HTML_EN_REV')?.addEventListener('click', () => {
-      requireSubscription('ATC Communication Scripts', () => {
-          window.create_enroute_atc({ reverse_path: true });
-      });
-    });
-
-    ['DEPARTURE_WEIGHT_CHECKBOX', 'ARRIVAL_WEIGHT_CHECKBOX'].forEach(btnId => {
-      const element = document.getElementById(btnId);
-      if (!element) return;
-      element.addEventListener('click', field => {
-        const id = field?.currentTarget?.id ?? btnId;
-        const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        // Pass the triggering checkbox id to the sync function
-        syncWeightCheckboxesAndFields(id);
-        // Update weight and balance plot
-        WeightBalanceMain(prefix);
-      });
-    });
-
-
-    ['DEPARTURE_ANIMATION_START', 'ARRIVAL_ANIMATION_START'].forEach(btnId => {
-      const el = document.getElementById(btnId);
-      if (!el) return;
-      el.addEventListener('click', e => {
-        // Prefer the event's currentTarget id (safe even if a child element was clicked)
-        const id = e?.currentTarget?.id ?? btnId;
-        const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        // Start animations
-        animations(prefix, "start");
-      });
-    });
-
-    ['DEPARTURE_ANIMATION_STOP', 'ARRIVAL_ANIMATION_STOP'].forEach(btnId => {
-      const el = document.getElementById(btnId);
-      if (!el) return;
-      el.addEventListener('click', e => {
-        // Prefer the event's currentTarget id (safe even if a child element was clicked)
-        const id = e?.currentTarget?.id ?? btnId;
-        const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        // Stop animations
-        animations(prefix, "stop");
-      });
-    });
-
-      // Update the wind envelope directly after changing inputfields
-    ['ARRIVAL_WIND_VARIATION', 'DEPARTURE_WIND_VARIATION', 'ARRIVAL_WIND_GUST', 'DEPARTURE_WIND_GUST', 'DEPARTURE_WIND_STRENGTH', 'DEPARTURE_WIND_DIRECTION', 'ARRIVAL_WIND_STRENGTH', 'ARRIVAL_WIND_DIRECTION'].forEach(id => {
-      document.getElementById(id)?.addEventListener('change', e => {
-        const num = Number(String(e?.target?.value ?? '').trim());
-        if (!Number.isFinite(num)) return;
-        // Get prefix
-        const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        // Update the windEnvelope
-        windEnvelopeMain(prefix);
-      });
-    });
-
-    // Update departure clock and compute distance/time/arrival
-    ['DEPARTURE_CLOCK', 'ARRIVAL_CLOCK'].forEach(id => {
-        document.getElementById(id)?.addEventListener('change', element => {
-            const prefix = id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-            // const timeValue = element.target.value; // "HH:MM" string
-            // let timeValue = element ? element.target.value : null;
-            // if (timeValue === "--:--") {
-            //   timeValue = null;
-            // }
-            // Update only the flight info when departure time is changed
-            if (prefix === 'DEPARTURE') {
-                // Update the flightinfo fields
-                UpdateFlightInfoFields(null, true, true)  // initialize=true, adjustZoom=true
-            }
-        });
-    });
-
-    function actionOnRunwayChange(elementOrEvent) {
-      console.log('> func: updateRunwayGUIfields()')
-      // Determine prefix based on the field's id
-      let element = elementOrEvent?.target || elementOrEvent;
-      let prefix = element.id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-      setRunwaySurface(prefix);
-      windEnvelopeMain(prefix);
-      displayRunwayMain(prefix);
-    }
-
-    // Setup event listeners for RUNWAY fields
-    ['DEPARTURE_RUNWAY_NR', 'ARRIVAL_RUNWAY_NR'].forEach(id => {
-        const field = document.getElementById(id);
-        if (!field) return;
-
-        // Trigger on blur
-        field.addEventListener("blur", actionOnRunwayChange);
-        // Trigger on Enter key
-        field.addEventListener('keydown', fieldEvent => {
-            if (fieldEvent.key === 'Enter') {
-                actionOnRunwayChange(fieldEvent);
-            }
-        });
-    });
-
-    // Generic ICAO validation and loading function
-    function validateAndLoadICAO(elementOrEvent, forceLoad = false) {
-        const element = elementOrEvent?.target || elementOrEvent;
-        if (!element?.id) return false;
-
-        const prefix = element.id.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        const value = String(element.value || '').trim();
-
-        // Return if no icoa name is available
-        if (value === '' && !forceLoad) return true;
-
-        // Show warning if icoa length is incorrect
-        if (value.length > 0 && value.length < 4) {
-            window.alert(`ICAO for ${prefix.toLowerCase()} requires exactly 4 characters.`);
-            window.clear_aerodrome_fields(prefix);
-            document.getElementById(`${prefix}_CITY`).textContent = `⚠️ ${prefix}`;
-            return false;
-        }
-
-        // If the length of ICAO is correct
-        if (value.length === 4) {
-            // later, anywhere:
-            const ICAO = getIcaoInformation(element.value)
-            // Load ICAO data
-            loadProgress.start(3, `ICAO_load_progress_bar`, `ICAO_load_progress_track`);
-
-            if (ICAO) {
-              // Download the country and populate the selectionboxes
-              loadProgress.step();
-              import_country_selected(prefix, ICAO.country, UNZIPK)
-              // Set the selection to the country
-              select = document.getElementById(`${prefix}_COUNTRY`);
-              for (let i = 0; i < select.options.length; i++) {
-                  if (select.options[i].value === ICAO.country) {
-                      select.selectedIndex = i;
-                      break;
-                  }
-              }
-
-              // Download and populate the ICAO information
-              loadProgress.step();
-              populate_aerodrome_fields_from_icao(prefix, ICAO.city_icao)
-              // Set the selection to the country
-              select = document.getElementById(`${prefix}_ICAO_CITY`);
-              for (let i = 0; i < select.options.length; i++) {
-                  console.log(select.options[i].value)
-                  if (select.options[i].value === ICAO.city_icao) {
-                      select.selectedIndex = i;
-                      break;
-                  }
-              }
-            }
-            // Load aerodrome from json
-            loadProgress.step();
-            window.load_aerodrome_from_json(prefix, element.id);
-        }
-
-        loadProgress.done();
-        return true;
-    }
-
-    // Setup event listeners for ICAO fields
-    ['DEPARTURE_ICAO', 'ARRIVAL_ICAO'].forEach(id => {
-        const field = document.getElementById(id);
-        if (!field) return;
-
-        // Trigger on blur
-        field.addEventListener("blur", validateAndLoadICAO);
-        // Trigger on Enter key
-        field.addEventListener('keydown', field => {
-            if (field.key === 'Enter') {
-                validateAndLoadICAO(field);
-            }
-        });
-    });
-
-    // Refactored handlePlaneClick
-    function handlePlaneClick() {
-        console.log("> func: handlePlaneClick()");
-        const element_dep = document.getElementById('DEPARTURE_ICAO');
-        const element_arr = document.getElementById('ARRIVAL_ICAO');
-
-        for (const element of [element_dep, element_arr]) {
-            if (!element) continue;
-
-            // Use the generic function with forceLoad = true to check non-empty fields
-            const value = element.value.trim();
-            if (value !== '') {
-                const isValid = validateAndLoadICAO(element, true);
-
-                if (!isValid) return;
-            }
+    function addTextMissingFields(missing) {
+        // Create one big string with all missing labels that is shown in TAB of ATC
+        missing_label.textContent = missing.length ? 'Missing: ' + missing.join(', ') : 'All fields are OK! Create your ATC now.';
+        if (!missing.length) {
+          missing_label.style.fontSize = '12px';
+          missing_label.style.color = 'green';
+        } else {
+          missing_label.style.fontSize = '';
+          missing_label.style.color = '';
         }
     }
 
+    // ── Flight-plan load progress bar
+    window.loadProgress = (function () {
+        let current = 0;
+        let STEPS = 10;
+        let bar = null;
+        let track = null;
 
-    // Update the aerodrome only when the load buttons/icons are clicked (do NOT trigger on clicking the ICAO text fields)
-    ['DEPARTURE_LOAD_ICAO', 'ARRIVAL_LOAD_ICAO'].forEach(id => {
-      const e = document.getElementById(id);
-      if (!e) return;
-      e.addEventListener('click', ev => {
-        // Prefer the event's currentTarget id (safe even if a child element was clicked)
-        const fieldId = ev?.currentTarget?.id ?? id;
-        const prefix = fieldId.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        const icaoSelected = document.getElementById(`${prefix}_ICAO_CITY`).value;
-
-        // At least 4 chars is required for the icao
-        const element = document.getElementById(`${prefix}_ICAO`);
-        const icao = String(element?.value ?? '').trim();
-
-        // FIX: Check if ICAO is empty
-        if (!icao || icao.length === 0) {
-          alert(`⚠️ Please select or enter the ${prefix.toLowerCase()} ICAO code first.`);
-          return;
+        function set(pct) {
+            if (!bar || !track) return;
+            bar.style.width = Math.min(pct, 100) + '%';
         }
 
-        // Too short — do nothing
-        if (icao.length >= 1 && icao.length < 4) {
-          alert(`⚠️ The ICAO code must be at least 4 characters (${prefix.toLowerCase()})`);
-          return;
-        }
-        // Ask user for confirmation before continuing
-        if (!confirm(`Are you sure you want to load the selected aerodrome for ${prefix.toLowerCase()}? This will overwrite any unsaved changes in the current fields.`)) {
-          return;
-        }
-
-        // Clean the aerodrome fields to avoid data leakage
-        window.clear_aerodrome_fields(prefix);
-        // Populate with default aerodrome data from the zip file
-        populate_aerodrome_fields_from_icao(prefix, icaoSelected, false);
-      });
-    });
-
-    // Update the aerodrome directly after clicking one the icon
-    ['DEPARTURE_USE_CACHED', 'ARRIVAL_USE_CACHED'].forEach(id => {
-      const e = document.getElementById(id);
-      if (!e) return;
-        e.addEventListener('click', e => {
-        // Prefer the event's currentTarget id (safe even if a child element was clicked)
-        const field = e?.currentTarget?.id ?? id;
-        const prefix = field.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        const metarField = '';
-        // Retrieve METAR based on the text input field
-        window.retrieve_metar(prefix, 'info', metarField);
-      });
-    });
-
-
-    // Update the aerodrome directly after clicking one the icon
-    ['DEPARTURE_ANIMATION_METARTEXT', 'ARRIVAL_ANIMATION_METARTEXT'].forEach(id => {
-      const e = document.getElementById(id);
-      if (!e) return;
-        e.addEventListener('click', e => {
-        // Prefer the event's currentTarget id (safe even if a child element was clicked)
-        const field = e?.currentTarget?.id ?? id;
-        const prefix = field.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
-        // Get the METAR from the text field
-        const metarField = document.getElementById(`METAR-FIELD-${prefix}`).value;
-        // Retrieve METAR based on the text input field
-        window.retrieve_metar(prefix, 'info', metarField);
-        // Highlight any missing fields
-        window.highlightMissingFields();
-        window.highlightDropdownMenus();
-      });
-    });
-
-
-    // Update the weight and balance directly after changing the value
-    [
-      'SETTINGS_WEIGHT_FUEL_LITERS', 'SETTINGS_WEIGHT_PILOT', 'SETTINGS_WEIGHT_COPILOT',
-      'SETTINGS_WEIGHT_REAR_RIGHT', 'SETTINGS_WEIGHT_REAR_LEFT', 'SETTINGS_WEIGHT_BAGAGE',
-      'DEPARTURE_WEIGHT_FUEL_LITERS', 'DEPARTURE_WEIGHT_PILOT', 'DEPARTURE_WEIGHT_COPILOT',
-      'DEPARTURE_WEIGHT_REAR_RIGHT', 'DEPARTURE_WEIGHT_REAR_LEFT', 'DEPARTURE_WEIGHT_BAGAGE',
-      'ARRIVAL_WEIGHT_FUEL_LITERS', 'ARRIVAL_WEIGHT_PILOT', 'ARRIVAL_WEIGHT_COPILOT',
-      'ARRIVAL_WEIGHT_REAR_RIGHT', 'ARRIVAL_WEIGHT_REAR_LEFT', 'ARRIVAL_WEIGHT_BAGAGE',
-      'aircraft_fuel_density', 'weight_empty', 'arm_empty', 'arm_pilot', 'arm_copilot',
-      'arm_rl', 'arm_rr', 'arm_bagage', 'arm_fuel',
-      'x1', 'y1', 'x2', 'y2', 'x3', 'y3', 'x4', 'y4', 'x5', 'y5'
-    ].forEach(id => {
-        const field = document.getElementById(id);
-        if (!field) return;
-
-        const handleWeightInput = (element) => {
-            const fieldId = element?.currentTarget?.id ?? id;
-
-            let prefix = 'SETTINGS';
-            if (fieldId.startsWith('DEPARTURE')) prefix = 'DEPARTURE';
-            if (fieldId.startsWith('ARRIVAL')) prefix = 'ARRIVAL';
-
-            const input = element.currentTarget;
-            let rawValue = parseFloat(input.value);
-
-            // Ensure non-negative numeric value
-            if (rawValue < 0 || !Number.isFinite(rawValue)) input.value = 0;
-            // Compute Weight and Balance and update plot
-            window.WeightBalanceMain(prefix);
+        return {
+            start(steps = 10, barId = "flightplan_load_progress_bar", trackId = "flightplan_load_progress_track") {
+                STEPS = Number.isFinite(Number(steps)) && Number(steps) > 0 ? Number(steps) : 10;
+                current = 0;
+                bar = document.getElementById(barId);
+                track = document.getElementById(trackId);
+                if (track) track.style.display = 'block';
+                set(0);
+            },
+            step() {
+                current++;
+                set(Math.round((current / STEPS) * 95)); // cap at 95 until done()
+            },
+            done() {
+                set(100);
+                setTimeout(() => {
+                  // track1 = document.getElementById("DEPARTURE_load_progress_track");
+                  // track2 = document.getElementById("ARRIVAL_load_progress_track");
+                  // track3 = document.getElementById("load_progress_track");
+                  // if (track1) track.style.display = 'none';
+                  // if (track2) track.style.display = 'none';
+                  // if (track3) track.style.display = 'none';
+                  if (track) track.style.display = 'none';
+                  set(0);
+                  current = 0;
+                }, 600);
+            }
         };
-        // Trigger on blur
-        field.addEventListener("blur", handleWeightInput);
-        // Trigger on Enter key
-        field.addEventListener('keydown', e => e.key === 'Enter' && handleWeightInput(e));
-        // Trigger when value is increased/decreased using the button (arrow keys or spinner)
-        field.addEventListener('input', handleWeightInput);
-    });
+    })();
 
+    window.load_flightplan_js = async function () {
+            console.log('> func: load_flightplan_js()');
 
-    function update_aerodrome_weights_js(prefix) {
-        console.log('> func: update_aerodrome_weights_js()');
-        // Access the flight plan data
-        for (const key in window.AIRCRAFT_MATCHING_PAIRS) {
-            const [cat, item] = window.AIRCRAFT_MATCHING_PAIRS[key];
-            if (cat === 'WEIGHT') {
-                const keyTarget = `${key.replace('SETTINGS', prefix)}`;
-                const value = window.flight_plan_data['AIRCRAFT'][cat][item];
-                const element = document.getElementById(keyTarget);
-                if (element) element.value = value;
-                // console.log(`   >Populate GUI field: [${keyTarget}] <- ['AIRCRAFT'][${cat}][${item}]: ${window.flight_plan_data['AIRCRAFT'][cat][item]}`);
+            const planName = document.getElementById('plan_spinner').value;
+            if (!planName) {
+                console.warn('⚠️ No flightplan selected');
+                return;
             }
-        }
-        // Calculate weight and balance
-        window.WeightBalanceMain(prefix);
+
+            loadProgress.start(steps=12, "flightplan_load_progress_bar", "flightplan_load_progress_track");
+            // CLEAR GLOBAL VARIABLES
+            window.waypoints = [];
+            window.LEGINFO   = {};
+            window.RUNWAY    = {};
+            // REMOVE FLASHCARDS
+            window.flashcardClean('DEPARTURE');
+            window.flashcardClean('ARRIVAL');
+            // REMOVE METAR
+            window.remove_metar_widget('DEPARTURE');
+            window.remove_metar_widget('ARRIVAL');
+            // REMOVE WINDENV PLOTS
+            window.cleanWindEnvelopeFields('DEPARTURE', 'empty');
+            window.cleanWindEnvelopeFields('ARRIVAL', 'empty');
+            // REMOVE WB PLTOS
+            window.cleanWeightBalanceFields('DEPARTURE', 'empty');
+            window.cleanWeightBalanceFields('ARRIVAL', 'empty');
+            // CLEANING
+            window.updateFlag('DEPARTURE', 'remove');
+            window.updateFlag('ARRIVAL',   'remove');
+            // SET SPINNERS TO DEFAULT
+            document.getElementById('DEPARTURE_ICAO_CITY').innerHTML = '<option value="">Select ICAO</option>';
+            document.getElementById('ARRIVAL_ICAO_CITY').innerHTML  = '<option value="">Select ICAO</option>';
+            document.getElementById('DEPARTURE_CLOCK').value = "00:00"
+            document.getElementById('ARRIVAL_CLOCK').value = "00:00"
+            loadProgress.step();
+
+            // LOAD FROM LOCAL STORAGE
+            const jsonData = localStorage.getItem(`FLIGHTPLAN_${planName}`);
+            if (!jsonData) {
+                alert(`⚠️ Flightplan '${planName}' not found in cache.`);
+                loadProgress.done();
+                return;
+            }
+
+            try {
+                let fpDict = JSON.parse(jsonData);
+                for (const [key, value] of Object.entries(fpDict)) {
+                    window.flight_plan_data[key] = value;
+                }
+                console.log(`   >✅ Loaded flightplan ${Object.keys(fpDict).length} fields`);
+                loadProgress.step();
+
+                // console.log('HERE')
+                // console.log(fpDict)
+                // console.log(window.flight_plan_data['LEGINFO'])
+
+                // SET GLOBAL VARIABLES
+                window.waypoints = window.flight_plan_data.WAYPOINTS
+                window.LEGINFO = window.flight_plan_data.LEGINFO
+
+
+                // CLEANING RUNWAY FIELDS
+                window.cleanRunwayFields('DEPARTURE', 'empty');
+                window.cleanRunwayFields('ARRIVAL',   'empty');
+                // Remove VFR icon
+                window.updateFlightCatagoryIcon('DEPARTURE', true);
+                window.updateFlightCatagoryIcon('ARRIVAL',   true);
+                loadProgress.step();
+
+                // Update GUI FIELDS
+                update_general_gui_fields_js(fpDict);
+                window.update_aerodrome_gui_fields('DEPARTURE');
+                window.update_aerodrome_gui_fields('ARRIVAL');
+                loadProgress.step();
+
+                // Update Aerodrome images
+                await window.update_aerodrome_image('DEPARTURE');
+                loadProgress.step();
+                await window.update_aerodrome_image('ARRIVAL');
+                loadProgress.step();
+
+                // STORE DATA TO GLOBAL CACHE. This is needed for the aerodrome selection and plotting on the map
+                if (fpDict['DEPARTURE_COUNTRY']) {
+                    await window.import_country_selected('DEPARTURE', fpDict['DEPARTURE_COUNTRY'], window.UNZIPK);
+                    // Update spinner
+                    document.getElementById('DEPARTURE_ICAO_CITY').value = fpDict['DEPARTURE_ICAO_CITY'] || '';
+                }
+                loadProgress.step();
+                if (fpDict['ARRIVAL_COUNTRY']) {
+                    await window.import_country_selected('ARRIVAL', fpDict['ARRIVAL_COUNTRY'], window.UNZIPK);
+                    // Update spinner
+                    document.getElementById('ARRIVAL_ICAO_CITY').value = fpDict['ARRIVAL_ICAO_CITY'] || '';
+                }
+                loadProgress.step();
+
+                // Load Checklist from flightplan because this contains all checks
+                checklist_populate_js();
+
+                // Always load Aircraft from cache when available and overwite in flightplan.
+                // This makes sure the latest aircraft is always used.
+                // Also, the stored one in flightplan can become corrupted somehow.
+                window.aircraft_populate_js(false, true);
+                loadProgress.step();
+
+                // Retrieve METAR
+                await window.retrieve_metar('DEPARTURE', 'silent');
+                loadProgress.step();
+                await window.retrieve_metar('ARRIVAL', 'silent');
+                loadProgress.step();
+
+                // Collect and predict runway number
+                if (fpDict['DEPARTURE_RUNWAYS']) {
+                  const runwayString = (fpDict['DEPARTURE_RUNWAYS'] || []).filter(r => r).join("/") + "/" + (fpDict['DEPARTURE_RUNWAYS'] || []).join("/");
+                  // console.log('HERE')
+                  // console.log(runwayString)
+                  // console.log(fpDict)
+
+                  windDirection = document.getElementById('DEPARTURE_WIND_DIRECTION').value
+                  windStrength = document.getElementById('DEPARTURE_WIND_STRENGTH').value
+                  runway_pred = predictRunway(runwayString, windDirection, windStrength)
+                  document.getElementById('DEPARTURE_RUNWAY_NR').value = runway_pred || '';
+                }
+                if (fpDict['ARRIVAL_RUNWAYS']) {
+                  const runwayString = (fpDict['ARRIVAL_RUNWAYS'] || []).filter(r => r).join("/") + "/" + (fpDict['ARRIVAL_RUNWAYS'] || []).join("/");
+                  windDirection = document.getElementById('ARRIVAL_WIND_DIRECTION').value
+                  windStrength = document.getElementById('ARRIVAL_WIND_STRENGTH').value
+                  runway_pred = predictRunway(runwayString, windDirection, windStrength)
+                  document.getElementById('ARRIVAL_RUNWAY_NR').value = runway_pred || '';
+                }
+
+                // Weight & balance statistics
+                window.WeightBalanceMain('SETTINGS');
+                window.WeightBalanceMain('DEPARTURE');
+                window.WeightBalanceMain('ARRIVAL');
+                // Runway statistics
+                window.displayRunwayMain('DEPARTURE');
+                window.displayRunwayMain('ARRIVAL');
+                // Wind envelope statistics
+                windEnvelopeMain('DEPARTURE');
+                windEnvelopeMain('ARRIVAL');
+
+                // Set time and update info fields
+                // const timeDep = document.getElementById('DEPARTURE_CLOCK').value;
+                window.UpdateFlightInfoFields(null, true, true);
+                loadProgress.step();
+
+                // Done
+                console.log(`   >✅ Flightplan '${planName}' loaded successfully`);
+                loadProgress.done();
+
+            } catch (e) {
+                console.error('   >❗ Error loading flightplan:', e);
+                alert(`❗ Error loading flight plan: ${e.message}`);
+                loadProgress.done();
+            }
+        };
+
+    function update_general_gui_fields_js(flight_plan_dict) {
+        console.log("> func: update_general_gui_fields_js()");
+
+        const fields = [
+            "FLIGHTPLAN",
+            "CALLSIGN",
+            "AIRCRAFT_TYPE",
+            "POB",
+            "FLIGHT_RULES",
+            "DATETIME_CREATION",
+            "DEPARTURE_CLOCK",
+        ];
+        // ARRIVAL_CLOCK wordt automatisch ge-update nadat flightplan is geladen
+
+        fields.forEach(field => {
+            if (flight_plan_dict[field]) {
+                const element = document.getElementById(field);
+                if (!element) return;
+
+                if (field === "DATETIME_CREATION") {
+                    element.textContent = flight_plan_dict[field];
+                } else {
+                    element.value = flight_plan_dict[field];
+                }
+            }
+        });
     }
 
-
-
-    // Add clear cache button handler
-    document.getElementById('clear_cache_btn')?.addEventListener('click', async () => {
-      /**
-      * Clears the browser's cached data and reloads the page.
-      * Shows a confirmation dialog before clearing.
-      * Displays a loading spinner while clearing.
-      *
-      * Steps:
-      * 1. Shows confirmation dialog
-      * 2. If confirmed:
-      *   - Shows loading spinner
-      *   - Calls window.clear_cache()
-      *   - On success: Shows success message and reloads page
-      *   - On error: Shows error message
-      * 3. Always hides spinner when complete
-      *
-      */
-        if (!confirm('This will clear all saved (cached) data. Are you sure?')) return;
-
-        try {
-            if (await window.clear_cache()) {
-                alert('✅ Cache cleared successfully! SkyWalk will now reload.');
-                location.reload();
-            } else { alert('⚠️ Error clearing the cache. Please try again.'); }
-        } catch (error) {
-            alert('⚠️ An error occurred while clearing the cache: ' + error);
-        } finally {
-            spinner.style.display = 'none';
-        }
-    });
+    // Function to check for missing fields and update highlighting
+    function highlightMissingFields() {
+      console.log("> func: highlightMissingFields()");
+        const inputs = getGUIfields();
+        const missing = [];
+        // Loop through and highlight empty fields
+        Object.entries(inputs).forEach(([key, item]) => {
+          // Update the GUI field
+            updateGUIField(item, missing);
+        });
+        // Add missing label when required for ATC fields
+        addTextMissingFields(missing);
+    }
 
 
     function getGUIfields() {
@@ -7888,18 +7546,6 @@ if ('serviceWorker' in navigator) {
     const inputs = getGUIfields();
     let missing = [];
 
-    function addTextMissingFields(missing) {
-        // Create one big string with all missing labels that is shown in TAB of ATC
-        missing_label.textContent = missing.length ? 'Missing: ' + missing.join(', ') : 'All fields are OK! Create your ATC now.';
-        if (!missing.length) {
-          missing_label.style.fontSize = '12px';
-          missing_label.style.color = 'green';
-        } else {
-          missing_label.style.fontSize = '';
-          missing_label.style.color = '';
-        }
-    }
-
     function updateGUIField(item, missing) {
         // Update the GUI field with color and add missing label when required for ATC fields
         if (!item.element.value) {
@@ -7916,7 +7562,6 @@ if ('serviceWorker' in navigator) {
         } else {
             item.element.style.backgroundColor = item.color_filled;
         }
-
     }
 
     // Catch each keystroke and analyze it
@@ -7928,235 +7573,6 @@ if ('serviceWorker' in navigator) {
             addTextMissingFields(missing)
         });
     });
-
-
-    // ── Flight-plan load progress bar
-    window.loadProgress = (function () {
-        let current = 0;
-        let STEPS = 10;
-        let bar = null;
-        let track = null;
-
-        function set(pct) {
-            if (!bar || !track) return;
-            bar.style.width = Math.min(pct, 100) + '%';
-        }
-
-        return {
-            start(steps = 10, barId = "flightplan_load_progress_bar", trackId = "flightplan_load_progress_track") {
-                STEPS = Number.isFinite(Number(steps)) && Number(steps) > 0 ? Number(steps) : 10;
-                current = 0;
-                bar = document.getElementById(barId);
-                track = document.getElementById(trackId);
-                if (track) track.style.display = 'block';
-                set(0);
-            },
-            step() {
-                current++;
-                set(Math.round((current / STEPS) * 95)); // cap at 95 until done()
-            },
-            done() {
-                set(100);
-                setTimeout(() => {
-                  // track1 = document.getElementById("DEPARTURE_load_progress_track");
-                  // track2 = document.getElementById("ARRIVAL_load_progress_track");
-                  // track3 = document.getElementById("load_progress_track");
-                  // if (track1) track.style.display = 'none';
-                  // if (track2) track.style.display = 'none';
-                  // if (track3) track.style.display = 'none';
-                  if (track) track.style.display = 'none';
-                  set(0);
-                  current = 0;
-                }, 600);
-            }
-        };
-    })();
-
-    window.load_flightplan_js = async function () {
-            console.log('> func: load_flightplan_js()');
-
-            const planName = document.getElementById('plan_spinner').value;
-            if (!planName) {
-                console.warn('⚠️ No flightplan selected');
-                return;
-            }
-
-            loadProgress.start(steps=12, "flightplan_load_progress_bar", "flightplan_load_progress_track");
-            // CLEAR GLOBAL VARIABLES
-            window.waypoints = [];
-            window.LEGINFO   = {};
-            window.RUNWAY    = {};
-            // REMOVE FLASHCARDS
-            window.flashcardClean('DEPARTURE');
-            window.flashcardClean('ARRIVAL');
-            // REMOVE METAR
-            window.remove_metar_widget('DEPARTURE');
-            window.remove_metar_widget('ARRIVAL');
-            // REMOVE WINDENV PLOTS
-            window.cleanWindEnvelopeFields('DEPARTURE', 'empty');
-            window.cleanWindEnvelopeFields('ARRIVAL', 'empty');
-            // REMOVE WB PLTOS
-            window.cleanWeightBalanceFields('DEPARTURE', 'empty');
-            window.cleanWeightBalanceFields('ARRIVAL', 'empty');
-            // CLEANING
-            window.updateFlag('DEPARTURE', 'remove');
-            window.updateFlag('ARRIVAL',   'remove');
-            // SET SPINNERS TO DEFAULT
-            document.getElementById('DEPARTURE_ICAO_CITY').innerHTML = '<option value="">Select ICAO</option>';
-            document.getElementById('ARRIVAL_ICAO_CITY').innerHTML  = '<option value="">Select ICAO</option>';
-            document.getElementById('DEPARTURE_CLOCK').value = "00:00"
-            document.getElementById('ARRIVAL_CLOCK').value = "00:00"
-            loadProgress.step();
-
-            // LOAD FROM LOCAL STORAGE
-            const jsonData = localStorage.getItem(`FLIGHTPLAN_${planName}`);
-            if (!jsonData) {
-                alert(`⚠️ Flightplan '${planName}' not found in cache.`);
-                loadProgress.done();
-                return;
-            }
-
-            try {
-                let fpDict = JSON.parse(jsonData);
-                for (const [key, value] of Object.entries(fpDict)) {
-                    window.flight_plan_data[key] = value;
-                }
-                console.log(`   >✅ Loaded flightplan ${Object.keys(fpDict).length} fields`);
-                loadProgress.step();
-
-                // console.log('HERE')
-                // console.log(fpDict)
-                // console.log(window.flight_plan_data['LEGINFO'])
-
-                // SET GLOBAL VARIABLES
-                window.waypoints = window.flight_plan_data.WAYPOINTS
-                window.LEGINFO = window.flight_plan_data.LEGINFO
-
-
-                // CLEANING RUNWAY FIELDS
-                window.cleanRunwayFields('DEPARTURE', 'empty');
-                window.cleanRunwayFields('ARRIVAL',   'empty');
-                // Remove VFR icon
-                window.updateFlightCatagoryIcon('DEPARTURE', true);
-                window.updateFlightCatagoryIcon('ARRIVAL',   true);
-                loadProgress.step();
-
-                // Update GUI FIELDS
-                update_general_gui_fields_js(fpDict);
-                window.update_aerodrome_gui_fields('DEPARTURE');
-                window.update_aerodrome_gui_fields('ARRIVAL');
-                loadProgress.step();
-
-                // Update Aerodrome images
-                await window.update_aerodrome_image('DEPARTURE');
-                loadProgress.step();
-                await window.update_aerodrome_image('ARRIVAL');
-                loadProgress.step();
-
-                // STORE DATA TO GLOBAL CACHE. This is needed for the aerodrome selection and plotting on the map
-                if (fpDict['DEPARTURE_COUNTRY']) {
-                    await window.import_country_selected('DEPARTURE', fpDict['DEPARTURE_COUNTRY'], window.UNZIPK);
-                    // Update spinner
-                    document.getElementById('DEPARTURE_ICAO_CITY').value = fpDict['DEPARTURE_ICAO_CITY'] || '';
-                }
-                loadProgress.step();
-                if (fpDict['ARRIVAL_COUNTRY']) {
-                    await window.import_country_selected('ARRIVAL', fpDict['ARRIVAL_COUNTRY'], window.UNZIPK);
-                    // Update spinner
-                    document.getElementById('ARRIVAL_ICAO_CITY').value = fpDict['ARRIVAL_ICAO_CITY'] || '';
-                }
-                loadProgress.step();
-
-                // Load Checklist from flightplan because this contains all checks
-                checklist_populate_js();
-
-                // Always load Aircraft from cache when available and overwite in flightplan.
-                // This makes sure the latest aircraft is always used.
-                // Also, the stored one in flightplan can become corrupted somehow.
-                window.aircraft_populate_js(false, true);
-                loadProgress.step();
-
-                // Retrieve METAR
-                await window.retrieve_metar('DEPARTURE', 'silent');
-                loadProgress.step();
-                await window.retrieve_metar('ARRIVAL', 'silent');
-                loadProgress.step();
-
-                // Collect and predict runway number
-                if (fpDict['DEPARTURE_RUNWAYS']) {
-                  const runwayString = (fpDict['DEPARTURE_RUNWAYS'] || []).filter(r => r).join("/") + "/" + (fpDict['DEPARTURE_RUNWAYS'] || []).join("/");
-                  // console.log('HERE')
-                  // console.log(runwayString)
-                  // console.log(fpDict)
-
-                  windDirection = document.getElementById('DEPARTURE_WIND_DIRECTION').value
-                  windStrength = document.getElementById('DEPARTURE_WIND_STRENGTH').value
-                  runway_pred = predictRunway(runwayString, windDirection, windStrength)
-                  document.getElementById('DEPARTURE_RUNWAY_NR').value = runway_pred || '';
-                }
-                if (fpDict['ARRIVAL_RUNWAYS']) {
-                  const runwayString = (fpDict['ARRIVAL_RUNWAYS'] || []).filter(r => r).join("/") + "/" + (fpDict['ARRIVAL_RUNWAYS'] || []).join("/");
-                  windDirection = document.getElementById('ARRIVAL_WIND_DIRECTION').value
-                  windStrength = document.getElementById('ARRIVAL_WIND_STRENGTH').value
-                  runway_pred = predictRunway(runwayString, windDirection, windStrength)
-                  document.getElementById('ARRIVAL_RUNWAY_NR').value = runway_pred || '';
-                }
-
-                // Weight & balance statistics
-                window.WeightBalanceMain('SETTINGS');
-                window.WeightBalanceMain('DEPARTURE');
-                window.WeightBalanceMain('ARRIVAL');
-                // Runway statistics
-                window.displayRunwayMain('DEPARTURE');
-                window.displayRunwayMain('ARRIVAL');
-                // Wind envelope statistics
-                windEnvelopeMain('DEPARTURE');
-                windEnvelopeMain('ARRIVAL');
-
-                // Set time and update info fields
-                // const timeDep = document.getElementById('DEPARTURE_CLOCK').value;
-                window.UpdateFlightInfoFields(null, true, true);
-                loadProgress.step();
-
-                // Done
-                console.log(`   >✅ Flightplan '${planName}' loaded successfully`);
-                loadProgress.done();
-
-            } catch (e) {
-                console.error('   >❗ Error loading flightplan:', e);
-                alert(`❗ Error loading flight plan: ${e.message}`);
-                loadProgress.done();
-            }
-        };
-
-    function update_general_gui_fields_js(flight_plan_dict) {
-        console.log("> func: update_general_gui_fields_js()");
-
-        const fields = [
-            "FLIGHTPLAN",
-            "CALLSIGN",
-            "AIRCRAFT_TYPE",
-            "POB",
-            "FLIGHT_RULES",
-            "DATETIME_CREATION",
-            "DEPARTURE_CLOCK",
-        ];
-        // ARRIVAL_CLOCK wordt automatisch ge-update nadat flightplan is geladen
-
-        fields.forEach(field => {
-            if (flight_plan_dict[field]) {
-                const element = document.getElementById(field);
-                if (!element) return;
-
-                if (field === "DATETIME_CREATION") {
-                    element.textContent = flight_plan_dict[field];
-                } else {
-                    element.value = flight_plan_dict[field];
-                }
-            }
-        });
-    }
-
 
     // Update dropdown menu colors based on required fields
     window.highlightDropdownMenus = (function() {
@@ -8336,169 +7752,7 @@ if ('serviceWorker' in navigator) {
         };
     })();
 
-
-
-    // Function to check for missing fields and update highlighting
-    function highlightMissingFields() {
-      console.log("> func: highlightMissingFields()");
-        const inputs = getGUIfields();
-        const missing = [];
-        // Loop through and highlight empty fields
-        Object.entries(inputs).forEach(([key, item]) => {
-          // Update the GUI field
-            updateGUIField(item, missing);
-        });
-        // Add missing label when required for ATC fields
-        addTextMissingFields(missing);
-    }
-
   </script>
 
 </body>
 </html>
-
-
-<script>
-const spinner = document.getElementById("import_aircraft_spinner");
-
-// Populate on first open, so AIRCRAFT_LIST is guaranteed to exist by then
-spinner.addEventListener("mousedown", () => {
-    if (spinner.dataset.populated) return;
-    spinner.dataset.populated = "1";
-    (window.AIRCRAFT_LIST || []).forEach(ac => {
-        const opt = document.createElement("option");
-        opt.value = ac.url;
-        opt.textContent = ac.label;
-        spinner.appendChild(opt);
-    });
-}, { once: false });
-
-document.getElementById("import_and_save_btn").addEventListener("click", async () => {
-    const url = spinner.value;
-    if (!url) return alert("Please select an aircraft first.");
-    const btn = document.getElementById("import_and_save_btn");
-    btn.textContent = "⏳";
-    try {
-        await importCacheEntryFromUrl(url);
-        btn.textContent = "✅";
-        setTimeout(() => btn.textContent = "📥", 2000);
-        updateDropdown('aircraft_spinner', 'AIRCRAFT', false);
-        alert("Aircraft is imported and can now be used.");
-    } catch (err) {
-        btn.textContent = "❌";
-        setTimeout(() => btn.textContent = "📥", 2000);
-        alert(err.message);
-    }
-});
-
-document.getElementById("aircraft_download_btn").addEventListener("click", () => {
-    // Cache key
-    const cacheKey = "AIRCRAFT_" + document.getElementById("aircraft_spinner").value;
-    // Get from local storage
-    const data = localStorage.getItem(cacheKey);
-    if (!data) return alert(`No cached data found for ${cacheKey}`);
-    // Download json file
-    downloadCacheEntry(cacheKey)
-});
-
-</script>
-
-
-
-
-
-<script>
-
-    function initializeAerodromeFields(fname) {
-        // Download the aerodrome data when the country changes
-        document.getElementById(`${fname}_COUNTRY`).addEventListener('change', async function() {
-            const country = this.value;
-            if (country) {
-                document.body.style.cursor = 'wait';
-                document.body.style.overflow = 'hidden';  // Prevent scrolling while loading
-                try {
-                    await window.import_country_selected(fname, country, UNZIPK);
-                } catch (error) {
-                    console.error("⚠️ Error importing aerodrome data:", error);
-                    alert("⚠️ Error loading aerodrome data. Please try again.");
-                } finally {
-                    // spinner.style.display = 'none';
-                    document.body.style.cursor = '';
-                    document.body.style.overflow = '';  // Restore scrolling
-                }
-            }
-        });
-
-        // populate fields when ICAO city is selected. searchwords: icao selection, icao dropbox, icao spinner
-        document.getElementById(`${fname}_ICAO_CITY`).addEventListener('change', async function() {
-            // Get ICAO
-            const city_icao = this.value;
-            // Clear all aerodrome fields first to prevent data leakage
-            await window.clear_aerodrome_fields(fname, false);
-            // Clear all enroute fields first to prevent data leakage
-            if (fname === 'DEPARTURE') {
-                await window.clear_enroute_fields();
-            }
-
-            if (city_icao) {
-                // Call PyScript function to populate fields
-                await window.populate_aerodrome_fields_from_icao(fname, city_icao);
-                // Update missing fields
-                // highlightMissingFields();
-                // highlightDropdownMenus();
-            }
-        });
-
-        // Auto-save aerodrome data when fields change
-        const fields = [
-            `${fname}_COUNTRY`,
-            `${fname}_ICAO_CITY`,
-            `${fname}_CITY`,
-            `${fname}_CTR`,
-            `${fname}_NAME`,
-            `${fname}_ICAO`,
-            `${fname}_POSITION`,
-            `${fname}_RUNWAY_NR`,
-            `${fname}_RUNWAY_LENGTH`,
-            `${fname}_RUNWAY_SLOPE`,
-            `${fname}_RUNWAY_SURFACE`,
-            `${fname}_RUNWAY_CONDITION`,
-            `${fname}_RUNWAY_SLIPPERY`,
-            `${fname}_ELEVATION`,
-            `${fname}_ROUTE_NAME`,
-            `${fname}_ROUTE_ALTITUDE`,
-            `${fname}_CIRCUIT_ALTITUDE`,
-            `${fname}_ATC_TOWER`,
-            `${fname}_ATC_APPROACH`,
-            `${fname}_ATC_ATIS_FREQ`,
-            `${fname}_ATC_GROUND`,
-            `${fname}_ATC_TELEPHONE`,
-            // `${fname}_CLOCK`,
-        ];
-
-        fields.forEach(fieldId => {
-            const element = document.getElementById(fieldId);
-            if (element) {
-                element.addEventListener('change', () => {
-                    if (window.flight_plan_data) {
-                        window.flight_plan_data[fieldId] = element.value;
-                        console.log(`Updated ${fieldId}:`, element.value);
-                    }
-                    if (
-                        fieldId.endsWith('_ROUTE_NAME') ||
-                        fieldId.endsWith('_ROUTE_ALTITUDE') ||
-                        fieldId.endsWith('_CIRCUIT_ALTITUDE')
-                    ) {
-                      // alert('update cloud plot');
-                      createCloudPlot(fname, "show", false)
-                    }
-                });
-            }
-        });
-    }
-
-    // Initialize with DEPARTURE
-    initializeAerodromeFields('DEPARTURE');
-    initializeAerodromeFields('ARRIVAL');
-
-</script>
