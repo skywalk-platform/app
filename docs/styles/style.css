@@ -748,7 +748,7 @@ body.mobile-fullscreen .output-box {
 .tile:hover {
     border-color: #b0b0b0;
     background: #fafafa;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    outline: 3px solid rgba(74, 144, 226, 0.1);
 }
 
 /* 🔧 FIXED: Tile value with proper background */
@@ -802,7 +802,7 @@ body.mobile-fullscreen .output-box {
 .tile-value-dropdown:focus {
     border-color: #4a90e2;
     background: #f5f9ff;
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    outline: 3px solid rgba(74, 144, 226, 0.1);
 }
 
 /* =================== WEIGHT & BALANCE =================== */

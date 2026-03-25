@@ -4712,39 +4712,6 @@ if ('serviceWorker' in navigator) {
 
 
     def is_numeric(value):
-        """
-        Check whether the input string is a numerical value.
-
-        Parameters
-        ----------
-        value : str
-            The input string to be checked.
-
-        Returns
-        -------
-        bool
-            True if the input string is a numerical value, False otherwise.
-
-        Example
-        -------
-        >>> is_numeric("-2.9")
-        >>> True
-        >>> is_numeric("2.33")
-        >>> True
-        >>> is_numeric("22272")
-        >>> True
-        >>> is_numeric("0.003")
-        >>> True
-        >>> is_numeric("-0.003")
-        >>> True
-        >>> is_numeric("abc")
-        >>> False
-        >>> is_numeric("1.2.3")
-        >>> False
-        >>> is_numeric("1B")
-        >>> False
-
-        """
         # Check if the string is empty
         if (isinstance(value, str) and value == ''):
             return False
@@ -6392,7 +6359,6 @@ if ('serviceWorker' in navigator) {
     js.window.import_airspaces = import_airspaces
     js.window.altitude_restriction = altitude_restriction
     js.window.clean_altitude = clean_altitude
-    js.window.altitude_restriction = altitude_restriction
 
     # METAR HELPERS
     js.window.predict_runway_number = predict_runway_number
