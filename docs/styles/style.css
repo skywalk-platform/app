@@ -6,16 +6,17 @@
 html,
 body {
     display: block;
-    /*justify-content: center;*/
     margin: 0;
     padding: 0;
     overflow-x: hidden;
+    overflow-y: auto;
     background-color: white;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    align-items: stretch;
     width: 100%;
-    height: 100vh;
+    min-height: 100dvh; /* Full mobile viewport height */
     height: 100dvh;
+    overscroll-behavior-y: contain; /* prevents bouncing white area on iOS */
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
 }
 
 /* =================== APP =================== */
@@ -23,8 +24,8 @@ body {
 #app {
     width: 100%;
     max-width: 100%;
-    min-height: 100%;
-    background-color: white; /* Border color*/
+    min-height: 100dvh;
+    background-color: white;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
     padding-left: env(safe-area-inset-left);
@@ -33,6 +34,7 @@ body {
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: visible;
+    -webkit-tap-highlight-color: transparent; /* removes iOS input tap highlight */
 }
 
 #app,
@@ -41,6 +43,62 @@ body {
     max-width: 100%;
     min-width: 350px;
     box-sizing: border-box;
+}
+
+/* =================== INPUT FIXES =================== */
+
+input, textarea, select {
+    -webkit-appearance: none; /* remove default iOS input borders/shadows */
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background: transparent;
+}
+
+/* =================== MEDIA QUERIES =================== */
+
+@media (min-width: 768px) {
+    html,
+    body {
+        padding: 0 20px;
+        margin: 0 auto;
+        align-items: center;
+        background-color: #f0f2f6;
+        max-width: 768px;
+    }
+
+    #app {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        margin: 0 auto;
+        min-height: 600px;
+        max-height: 90vh;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+    }
+
+    .tab {
+        position: relative;
+        border-radius: 8px 8px 0 0;
+        top: 0;
+        z-index: 100;
+    }
+}
+
+@media (min-width: 1024px) {
+    #app {
+        max-width: 100%;
+        min-width: 350px;
+        margin: 0 auto;
+    }
+}
+
+@media (hover: none) {
+    .map-controls button {
+        padding: 8px 12px;
+    }
 }
 
 /* =================== TYPOGRAPHY =================== */
@@ -82,52 +140,6 @@ label {
 
 h1 {
     text-align: center;
-}
-
-/* =================== MEDIA QUERIES =================== */
-
-@media (min-width: 768px) {
-    html,
-    body {
-        padding: 0 20px;
-        margin: 0 auto;
-        align-items: center;
-        background-color: #f0f2f6;
-        max-width: 768px;
-    }
-
-    #app {
-        /*max-width: 390px;*/
-        max-width: 100%;
-        width: 100%;
-        height: auto;
-        margin: 0 auto;
-        min-height: 600px;
-        max-height: 90vh;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-    }
-
-    .tab {
-        position: relative;
-        border-radius: 8px 8px 0 0;
-        top: 0;
-        z-index: 100;
-    }
-}
-
-@media (min-width: 1024px) {
-    #app {
-        max-width: 100%;
-        min-width: 350px;
-        margin: 0 auto;
-    }
-}
-@media (hover: none) {
-    .map-controls button {
-        padding: 8px 12px;
-    }
 }
 
 /* =================== BUTTONS & INPUTS =================== */
