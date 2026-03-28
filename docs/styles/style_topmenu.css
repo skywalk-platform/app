@@ -10,9 +10,11 @@
     height: 56px !important;
     padding: 0 16px;                    /* internal spacing */
     margin-bottom: 1px;                /* bottom spacing */
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     background: linear-gradient(0deg, white 0%, gray 100%);
     border-radius: 8px;
     color: #333;
@@ -24,12 +26,16 @@
 /* Tab buttons */
 .tab button {
     flex: 1 1 0;
+    flex-direction: column;   /* emoji on top, text below */
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 4px 8px;
     max-width: 100%;
     background-color: transparent;
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 0 12px;
     transition: 0.3s;
     font-weight: bold;
     border-radius: 8px;
@@ -38,8 +44,6 @@
     min-height: 56px;
     font-size: 12px;
     display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
     color: inherit;
 }
@@ -57,10 +61,13 @@
 
 /* Push page content below the fixed tab */
 .app-container {
-    padding-top: calc(56px + env(safe-area-inset-top)); /* tab height + safe area */
+    padding-top: calc(56px + env(safe-area-inset-top));
     box-sizing: border-box;
 }
-
+/*.app-container {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom));
+    box-sizing: border-box;
+}*/
 /* Tab content (your existing style) */
 .tabcontent {
     display: none;
