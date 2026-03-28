@@ -4,12 +4,12 @@
     top: env(safe-area-inset-top);
     left: 50%;
     transform: translateX(-50%);       /* center horizontally */
-    width: calc(100% - 32px);          /* screen minus margins */
+    width: calc(100% - 26px);          /* screen minus margins */
     max-width: 650px;                   /* app container width on wide screens */
     min-width: 350px;                   /* minimum width on small screens */
     height: 56px !important;
     padding: 0 16px;                    /* internal spacing */
-    margin-bottom: 5px;                /* bottom spacing */
+    margin-bottom: 1px;                /* bottom spacing */
     display: flex;
     justify-content: space-between;
     align-items: center;
