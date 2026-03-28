@@ -60,14 +60,15 @@
     <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">
 
     <!--ICON-->
-    <link rel="shortcut icon" type="image/png" href="./icons/airplane_gray.png">
-    <link rel="icon" type="image/png" sizes="16x16 32x32" href="./icons/airplane_gray.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="./icons/airplane_gray.png">
+    <link rel="shortcut icon" type="image/png" href="./icons/airplane_icon.png">
+    <link rel="icon" type="image/png" sizes="16x16 32x32" href="./icons/airplane_icon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="./icons/airplane_icon.png">
 
     <!--STYLESHEETS-->
     <link rel="stylesheet" href="./styles/style.css">
     <link rel="stylesheet" href="./styles/style_tutorial.css">
     <link rel="stylesheet" href="./styles/style_wb.css">
+    <link rel="stylesheet" href="./styles/style_topmenu.css">
 
     <!--CORE FILES-->
     <link rel="stylesheet" href="https://pyscript.net/releases/2025.8.1/core.css">
@@ -125,13 +126,15 @@
 <div id="app">
 
     <!-- Tab links -->
-    <div class="tab">
-        <button class="tablinks" data-tab="General">📋 Start</button>
-        <button class="tablinks" data-tab="Departure">🛫 Departure</button>
-        <button class="tablinks" data-tab="Arrival">🛬 Arrival</button>
-        <button class="tablinks" data-tab="Enroute">✈️ Enroute</button>
-        <button class="tablinks" data-tab="ATC">🎙️ ATC</button>
-        <button class="tablinks" data-tab="More">☰ More</button>
+    <div class="app-container">
+        <div class="tab">
+            <button class="tablinks" data-tab="General">📋 Start</button>
+            <button class="tablinks" data-tab="Departure">🛫 Departure</button>
+            <button class="tablinks" data-tab="Arrival">🛬 Arrival</button>
+            <button class="tablinks" data-tab="Enroute">✈️ Enroute</button>
+            <button class="tablinks" data-tab="ATC">🎙️ ATC</button>
+            <button class="tablinks" data-tab="More">☰ More</button>
+        </div>
     </div>
 
 	<div id="More" class="tabcontent">
@@ -299,29 +302,6 @@
                 <!-- RIGHT 85% CONTENT -->
                 <div class="flight-card-content">
 
-                    <!--<div class="route-header">
-                        <div class="wind-grid">
-                            <div class="aircraft" style="text-align: left;">
-                                <span id="CALLSIGN_LABEL" class="tile-label" style="text-align: left;">REGISTRATION</span>
-                                <input id="CALLSIGN" type="text" class="tile-value UPPERCASE_input"
-                                       title="Registration of the aircraft"
-                                       style="font-size: 14px; text-align: left">
-
-                            </div>
-
-                            <div class="aircraft" style="text-align: left;">
-                                <span class="tile-label" style="text-align: left;">AIRCRAFT TYPE</span>
-                                <input id="AIRCRAFT_TYPE" type="text"
-                                       class="tile-value UPPERCASE_input"
-                                       title="Aircraft Type (ROBIN, CESSNA)"
-                                       style="font-size: 14px; text-align: left; ">
-                            </div>
-                        </div>
-                    </div>-->
-
-
-
-
                     <div class="wind-grid">
                         <div class="aircraft" style="text-align: left;">
                             <span id="CALLSIGN_LABEL" class="tile-label" style="text-align: left;">REGISTRATION</span>
@@ -338,15 +318,6 @@
                                    style="font-size: 14px; text-align: left; ">
                         </div>
                     </div>
-
-
-
-
-
-
-
-
-
 
                     <div class="divider-general-section" style="background: #f0f0f0"></div>
 
@@ -412,25 +383,14 @@
                         </div>
                     </div>
 
-                    <div class="wind-grid" style="display: flex; ">
-                        <!-- Delete Button -->
-                        <button id="delete_btn" style="display: flex; justify-content: left; align-items: left; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Delete Flight Plan">🗑️</button>
-                        <!--<div style="display: flex; justify-content: flex-end; align-items: center; gap: 0px; margin-top: 0px; padding-bottom: 0px; margin: 0px;">
-                            <button id="new_plan_btn" title="New flight plan" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">✕</button>
-                        </div>-->
-
-                        <!-- Spinner -->
-                        <div class="wind-grid">
-                            <!--<span class="tile-label" style="text-align: left;">FLIGHT PLAN</span>-->
-                            <select id="plan_spinner" class="tile-value-dropdown" onchange="this.value && load_flightplan_js()" style="text-align: left; background: lightgray; font-size: 12px; font-weight: normal;">
-                                <option value="">Select and Load</option>
-                            </select>
-                        </div>
-                        <!-- Save button -->
-                        <!--<button id="save_fields_btn" onclick="window.save_flightplan()" style="display: flex; justify-content: right; align-items: right; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save Flight Plan">💾</button>-->
-                        <!-- Clean Button -->
-                        <!--<button id="new_plan_btn" style="display: flex; justify-content: right; align-items: right; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Start new flight plan (clears current)">✕</button>-->
+                    <div style="display: flex; align-items: center; gap: 6px; width: 100%;">
+                        <!-- Delete button -->
+                        <button id="delete_btn" title="Delete Flight Plan" style="flex: 0 0 30px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: #666; cursor: pointer; font-size: 16px;">🗑️</button>
+                        <!-- Dropdown -->
+                        <select id="plan_spinner" class="tile-value-dropdown" onchange="this.value && load_flightplan_js()" style="flex: 1; width: 100%; min-width: 0; background: lightgray; font-size: 12px;"><option value="">Select and Load</option></select>
                     </div>
+
+
                 </div>
             </div>
         </div>

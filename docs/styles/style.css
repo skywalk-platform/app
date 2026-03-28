@@ -130,66 +130,6 @@ h1 {
     }
 }
 
-/* =================== TABS =================== */
-
-.tab {
-    display: flex;
-    justify-content: space-between;
-    background: linear-gradient(0deg, white 0%, gray 100%);
-    border-radius: 8px;
-    color: #333333;
-    position: sticky;
-    top: env(safe-area-inset-top);
-    overflow: hidden;
-    padding: 0 1px;
-    height: 56px !important;
-    min-height: 56px;
-    flex-shrink: 0;
-    z-index: 1000;
-}
-
-.tab button {
-    flex: 1 1 0;
-    max-width: 100%;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    padding: 0 12px;
-    transition: 0.3s;
-    font-weight: bold;
-    border-radius: 8px;
-    margin: 0 1px;
-    height: 100% !important;
-    min-height: 56px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    color: inherit;
-}
-
-.tab button:hover {
-    background-color: #e8eaed;
-}
-
-.tab button.active {
-    background-color: transparent;
-    box-shadow: inset 0 -4px 0 rgba(255,255,255,0.12);
-    position: relative;
-    z-index: 1;
-}
-
-.tabcontent {
-    display: none;
-    padding: 10px;
-    flex-grow: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-}
-
 /* =================== BUTTONS & INPUTS =================== */
 
 .button-row {
@@ -480,7 +420,7 @@ input[type="number"]:disabled {
     border-radius: 8px;
     padding: 8px 6px;
     border: 2px solid white;
-    margin: 8px 0;
+    margin:1px 0 8px 0;
 }
 
 /* =================== SPINNER =================== */
@@ -790,6 +730,7 @@ body.mobile-fullscreen .output-box {
 }
 
 .tile-value-dropdown {
+    display: flex;
     width: 100%;
     box-sizing: border-box;
     font-size: 14px;
@@ -945,12 +886,12 @@ body.mobile-fullscreen .output-box {
 
 .schedule-label {
     font-size: 11px;
+    text-align: center;
+    font-weight: 500;
     color: #666;
     text-transform: uppercase;
     margin-top: 35px;
     margin-bottom: 5px;
-    font-weight: 500;
-    text-align: center;
 }
 
 .divider-general-section {
@@ -995,12 +936,15 @@ body.mobile-fullscreen .output-box {
 }
 
 .clock-input {
+    height: 48px;
+    line-height: 1; /* prevents extra spacing */
     font-size: 26px;
+    text-align: center;
     font-weight: bold;
     font-family: system-ui, -apple-system, Segoe UI, Roboto;
-    text-align: center;
     background-color: transparent;
-    padding: 12px;
+    /*padding: 12px;*/
+    padding: 0 12px; /* horizontal padding only */
     border-radius: 10px;
     border: transparent;
     box-sizing: border-box;
