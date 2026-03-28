@@ -725,6 +725,50 @@
          </div>
          </div>
 
+         <!-- FIC -->
+
+         <div class="collapsible" data-title="FLIGHT INFORMATION CENTER (FIC)">
+         <div class="collapsible-header" id="DEPARTURE_FIC_MENU"></div>
+         <div class="collapsible-content" id="DEPARTURE_FIC_MENU_BACKGROUND">
+
+             <div class="grid-two-thirds-one-third">
+                 <div class="tile">
+                     <input id="DEPARTURE_FIC_NAME" type="text" class="tile-value REPLACE_INFO" style="font-size: 14px;">
+                     <span class="tile-label">FIC NAME</span>
+                 </div>
+                 <div class="tile">
+                     <input id="DEPARTURE_FIC_FREQUENCY" type="text" class="tile-value">
+                     <span class="tile-label">FREQUENCY (Mhz)</span>
+                 </div>
+             </div>
+
+             <div class="grid-two-thirds-one-third">
+                 <div class="tile">
+                     <input id="DEPARTURE_OVERHEAD" type="text" class="tile-value UPPERCASE_input" style="font-size: 11px;">
+                     <span class="tile-label">OVERHEAD</span>
+                 </div>
+                 <div class="tile">
+                     <input id="DEPARTURE_SQUAWK" type="text" class="tile-value">
+                     <span class="tile-label">SQUAWK</span>
+                 </div>
+             </div>
+
+             <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
+                 <!-- Delete Button -->
+                 <button id="fic_delete_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Delete FIC">🗑️</button>
+                 <!-- Spinner -->
+                 <select id="fic_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                     <option value="">Select and Load</option>
+                 </select>
+                 <!-- Save button -->
+                 <button id="fic_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save FIC">💾</button>
+                 <!-- Clean Button -->
+                 <button id="fic_clearn_btn" onclick="fic_clean('DEPARTURE')" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Create new FIC">🧹</button>
+             </div>
+
+         </div>
+         </div>
+
 
         <!-- METAR Information -->
         <div class="collapsible" data-title="WIND ENVELOPE">
@@ -1249,6 +1293,50 @@
         </div>
 
 
+        <div class="collapsible" data-title="FLIGHT INFORMATION CENTER (FIC)">
+        <div class="collapsible-header" id="ARRIVAL_FIC_MENU"></div>
+        <div class="collapsible-content" id="ARRIVAL_FIC_MENU_BACKGROUND">
+
+            <div class="grid-two-thirds-one-third">
+                <div class="tile">
+                    <input id="ARRIVAL_FIC_NAME" type="text" class="tile-value REPLACE_INFO" style="font-size: 14px;">
+                    <span class="tile-label">FIC NAME</span>
+                </div>
+                <div class="tile">
+                    <input id="ARRIVAL_FIC_FREQUENCY" type="text" class="tile-value">
+                    <span class="tile-label">FREQUENCY (Mhz)</span>
+                </div>
+            </div>
+            <div class="grid-two-thirds-one-third">
+                <div class="tile">
+                    <input id="ARRIVAL_OVERHEAD" type="text" class="tile-value UPPERCASE_input" style="font-size: 11px;">
+                    <span class="tile-label">OVERHEAD</span>
+                </div>
+                <div class="tile">
+                    <input id="ARRIVAL_SQUAWK" type="text" class="tile-value">
+                    <span class="tile-label">SQUAWK</span>
+                </div>
+            </div>
+
+            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
+                <!-- Delete Button -->
+                <button id="fic_delete_btn2" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Delete FIC2">🗑️</button>
+
+                <!-- Spinner -->
+                <select id="fic_spinner2" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                    <option value="">Select and Load</option>
+                </select>
+
+                <!-- Save button -->
+                <button id="fic_save_btn2" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save FIC2">💾</button>
+                <!-- Clean Button -->
+                <button id="fic_clearn_btn2" onclick="fic_clean('ARRIVAL')" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Create new FIC">🧹</button>
+            </div>
+
+        </div>
+        </div>
+
+
         <!-- METAR Information -->
         <div class="collapsible" data-title="WIND ENVELOPE">
         <div class="collapsible-header" id="ARRIVAL_WIND_MENU"></div>
@@ -1543,95 +1631,6 @@
 
     <!-- =============== TAB ENROUTE =============== -->
     <div id="Enroute" class="tabcontent">
-        <label_h1>Enroute Information</label_h1>
-
-        <div class="collapsible" data-title="Flight Information Centre (FIC)">
-        <div class="collapsible-header" id="FICMENU_TOP1"></div>
-        <div class="collapsible-content" id="FICMENU_BACKGROUND1">
-
-            <label_h2>Flight Information Centre (FIC)</label_h2>
-            <div class="grid-two-thirds-one-third">
-                <div class="tile">
-                    <input id="FIC_NAME" type="text" class="tile-value REPLACE_INFO" style="font-size: 14px;">
-                    <span class="tile-label">FIC NAME</span>
-                </div>
-                <div class="tile">
-                    <input id="FIC_FREQUENCY" type="text" class="tile-value">
-                    <span class="tile-label">FREQUENCY (Mhz)</span>
-                </div>
-            </div>
-
-            <div class="grid-two-thirds-one-third">
-                <div class="tile">
-                    <input id="OVERHEAD" type="text" class="tile-value UPPERCASE_input" style="font-size: 11px;">
-                    <span class="tile-label">OVERHEAD</span>
-                </div>
-                <div class="tile">
-                    <input id="SQUAWK" type="text" class="tile-value">
-                    <span class="tile-label">SQUAWK</span>
-                </div>
-            </div>
-
-            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
-                <!-- Delete Button -->
-                <button id="fic_delete_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Delete FIC">🗑️</button>
-                <!-- Spinner -->
-                <select id="fic_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
-                    <option value="">Select and Load</option>
-                </select>
-                <!-- Save button -->
-                <button id="fic_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save FIC">💾</button>
-            </div>
-
-        </div>
-        </div>
-
-
-        <div class="collapsible" data-title="Flight Information Centre (FIC2)">
-        <div class="collapsible-header" id="FICMENU_TOP2"></div>
-        <div class="collapsible-content" id="FICMENU_BACKGROUND2">
-
-            <label_h2>Second Flight Information Centre (FIC)</label_h2>
-
-            <div class="grid-two-thirds-one-third">
-                <div class="tile">
-                    <input id="FIC_NAME2" type="text" class="tile-value REPLACE_INFO" style="font-size: 14px;">
-                    <span class="tile-label">2ND FIC NAME</span>
-                </div>
-                <div class="tile">
-                    <input id="FIC_FREQUENCY2" type="text" class="tile-value">
-                    <span class="tile-label">FREQUENCY (Mhz)</span>
-                </div>
-            </div>
-            <div class="grid-two-thirds-one-third">
-                <div class="tile">
-                    <input id="OVERHEAD2" type="text" class="tile-value UPPERCASE_input" style="font-size: 11px;">
-                    <span class="tile-label">OVERHEAD</span>
-                </div>
-                <div class="tile">
-                    <input id="SQUAWK2" type="text" class="tile-value">
-                    <span class="tile-label">SQUAWK</span>
-                </div>
-            </div>
-
-            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
-                <!-- Delete Button -->
-                <button id="fic_delete_btn2" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Delete FIC2">🗑️</button>
-
-                <!-- Spinner -->
-                <select id="fic_spinner2" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
-                    <option value="">Select and Load</option>
-                </select>
-
-                <!-- Save button -->
-                <button id="fic_save_btn2" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Save FIC2">💾</button>
-            </div>
-
-        </div>
-        </div>
-
-
-
         <!-- =============== TAB MAP =============== -->
         <!--<div id="map-gui-container"></div>
         <script>
@@ -1648,10 +1647,11 @@
         <!-- =============== TAB MAP =============== -->
 
         <label_h1>MAP</label_h1>
+        <div class="border-round-eged">
 
-        <div class="collapsible" data-title="MAP Settings">
+        <!--<div class="collapsible" data-title="MAP Settings">
         <div class="collapsible-header" id="MAP_CONFIG_MENU_TOP"></div>
-        <div class="collapsible-content" id="MAP_CONFIG_MENU_BACKGROUND">
+        <div class="collapsible-content" id="MAP_CONFIG_MENU_BACKGROUND">-->
 
             <div class="wind-grid">
                 <select id="layer-select" class="tile-value-dropdown">
@@ -1717,13 +1717,15 @@
                 <button id="reset-circuit-pattern-btn" class="button-style" onclick="window.resetRoute()">Remove circuit pattern</button>
             </div>
         </div>
-        </div>
+        <!--</div>
+        </div>-->
 
         <!--<div class="divider-general-section" style="background: #ffffff"></div>-->
-
+<!--
         <div class="collapsible" data-title="🗺️ MAP">
         <div class="collapsible-header" id="MAP_MENU_TOP"></div>
-        <div class="collapsible-content" id="MAP_MENU_BACKGROUND">
+        <div class="collapsible-content" id="MAP_MENU_BACKGROUND">-->
+        <div class="border-round-eged">
 
             <div id="map-container" style="height: 500px;">
                 <div id="route-map" style="height: 100%;"></div>
@@ -1755,7 +1757,7 @@
                 </div>
             </div>
 
-        </div>
+        <!--</div>-->
         </div>
 
         <div class="border-round-eged">
@@ -3098,15 +3100,15 @@ if ('serviceWorker' in navigator) {
             'ARRIVAL_WEIGHT_BAGAGE': 0,
 
             # Enroute
-            'FIC_NAME': '',             # FIC name
-            'FIC_FREQUENCY': '',        # FIC frequency
-            'OVERHEAD': '',             # Overhead point
-            'SQUAWK': '',               # Squawk code
-            # Enroute (second FIC/overhead/squawk)
-            'FIC_NAME2': '',            # Second FIC name
-            'FIC_FREQUENCY2': '',       # Second FIC frequency
-            'OVERHEAD2': '',            # Second overhead point
-            'SQUAWK2': '',              # Second squawk code
+            'DEPARTURE_FIC_NAME': '',             # FIC name
+            'DEPARTURE_FIC_FREQUENCY': '',        # FIC frequency
+            'DEPARTURE_OVERHEAD': '',             # Overhead point
+            'DEPARTURE_SQUAWK': '',               # Squawk code
+            # Enroute (FIC towards arrival)
+            'ARRIVAL_FIC_NAME': '',            # Second FIC name
+            'ARRIVAL_FIC_FREQUENCY': '',       # Second FIC frequency
+            'ARRIVAL_OVERHEAD': '',            # Second overhead point
+            'ARRIVAL_SQUAWK': '',              # Second squawk code
 
             'WAYPOINTS': [],            # Waypoint data
             'LEGINFO': {},              # Leg info
@@ -3995,10 +3997,10 @@ if ('serviceWorker' in navigator) {
               f"{fname}_ATC_GROUND": 'freqs.DELIVERY/GROUND',
               f"{fname}_ATC_APPROACH": 'freqs.APPROACH',
               f"{fname}_ATC_TELEPHONE": 'freqs.TELEPHONE',
-              'FIC_NAME': 'freqs.FIC_NAME',
-              'FIC_FREQUENCY': 'freqs.FIC_FREQUENCY',
-              'FIC_NAME2': 'freqs.FIC_NAME_2',
-              'FIC_FREQUENCY2': 'freqs.FIC_FREQUENCY_2',
+              'DEPARTURE_FIC_NAME': 'freqs.FIC_NAME',
+              'DEPARTURE_FIC_FREQUENCY': 'freqs.FIC_FREQUENCY',
+              'ARRIVAL_FIC_NAME': 'freqs.FIC_NAME_2',
+              'ARRIVAL_FIC_FREQUENCY': 'freqs.FIC_FREQUENCY_2',
             }
 
             # FILL THE FREQUENCIES
@@ -4133,9 +4135,9 @@ if ('serviceWorker' in navigator) {
 
         # Get all fields that need updating
         if spinner_name == 'fic_spinner':
-            fields = ['FIC_NAME', 'FIC_FREQUENCY', 'OVERHEAD', 'SQUAWK']
+            fields = ['DEPARTURE_FIC_NAME', 'DEPARTURE_FIC_FREQUENCY', 'DEPARTURE_OVERHEAD', 'DEPARTURE_SQUAWK']
         else:
-            fields = ['FIC_NAME2', 'FIC_FREQUENCY2', 'OVERHEAD2', 'SQUAWK2']
+            fields = ['ARRIVAL_FIC_NAME', 'ARRIVAL_FIC_FREQUENCY', 'ARRIVAL_OVERHEAD', 'ARRIVAL_SQUAWK']
 
         # Update each GUI field from flight_plan_data
         for field in fields:
@@ -4191,14 +4193,14 @@ if ('serviceWorker' in navigator) {
         # Only update these fields based on DEPARTURE
         if fname == 'DEPARTURE':
             field_ids = field_ids + [
-                'FIC_NAME',
-                'FIC_FREQUENCY',
-                'SQUAWK',
-                'OVERHEAD',
-                'FIC_NAME2',
-                'FIC_FREQUENCY2',
-                'SQUAWK2',
-                'OVERHEAD2',
+                'DEPARTURE_FIC_NAME',
+                'DEPARTURE_FIC_FREQUENCY',
+                'DEPARTURE_SQUAWK',
+                'DEPARTURE_OVERHEAD',
+                'ARRIVAL_FIC_NAME',
+                'ARRIVAL_FIC_FREQUENCY',
+                'ARRIVAL_SQUAWK',
+                'ARRIVAL_OVERHEAD',
             ]
 
         updated_count = 0
@@ -4260,19 +4262,19 @@ if ('serviceWorker' in navigator) {
         print("🧹 Clearing all ENROUTE fields...")
 
         # Clear GUI fields
-        js.document.getElementById('FIC_NAME').value = ''
-        js.document.getElementById('FIC_FREQUENCY').value = ''
-        js.document.getElementById('OVERHEAD').value = ''
-        js.document.getElementById('SQUAWK').value = ''
-        js.document.getElementById('FIC_NAME2').value = ''
-        js.document.getElementById('FIC_FREQUENCY2').value = ''
-        js.document.getElementById('OVERHEAD2').value = ''
-        js.document.getElementById('SQUAWK2').value = ''
+        js.document.getElementById('DEPARTURE_FIC_NAME').value = ''
+        js.document.getElementById('DEPARTURE_FIC_FREQUENCY').value = ''
+        js.document.getElementById('DEPARTURE_OVERHEAD').value = ''
+        js.document.getElementById('DEPARTURE_SQUAWK').value = ''
+        js.document.getElementById('ARRIVAL_FIC_NAME').value = ''
+        js.document.getElementById('ARRIVAL_FIC_FREQUENCY').value = ''
+        js.document.getElementById('ARRIVAL_OVERHEAD').value = ''
+        js.document.getElementById('ARRIVAL_SQUAWK').value = ''
 
         # Clear enroute fields
         enroute_keys = [
-            'FIC_NAME', 'FIC_FREQUENCY', 'FIC_NAME2', 'FIC_FREQUENCY2',
-            'OVERHEAD', 'OVERHEAD2', 'SQUAWK', 'SQUAWK2',
+            'DEPARTURE_FIC_NAME', 'DEPARTURE_FIC_FREQUENCY', 'DEPARTURE_OVERHEAD', 'DEPARTURE_SQUAWK',
+            'ARRIVAL_FIC_NAME', 'ARRIVAL_FIC_FREQUENCY', 'ARRIVAL_OVERHEAD', 'ARRIVAL_SQUAWK',
         ]
 
         for key in enroute_keys:
@@ -4843,15 +4845,15 @@ if ('serviceWorker' in navigator) {
 
         # Clear the GUI fields
         if spinner_name == 'fic_spinner':
-            js.document.getElementById('FIC_NAME').value = ''
-            js.document.getElementById('FIC_FREQUENCY').value = ''
-            js.document.getElementById('OVERHEAD').value = ''
-            js.document.getElementById('SQUAWK').value = ''
+            js.document.getElementById('DEPARTURE_FIC_NAME').value = ''
+            js.document.getElementById('DEPARTURE_FIC_FREQUENCY').value = ''
+            js.document.getElementById('DEPARTURE_OVERHEAD').value = ''
+            js.document.getElementById('DEPARTURE_SQUAWK').value = ''
         elif spinner_name == 'fic_spinner2':
-            js.document.getElementById('FIC_NAME2').value = ''
-            js.document.getElementById('FIC_FREQUENCY2').value = ''
-            js.document.getElementById('OVERHEAD2').value = ''
-            js.document.getElementById('SQUAWK2').value = ''
+            js.document.getElementById('ARRIVAL_FIC_NAME').value = ''
+            js.document.getElementById('ARRIVAL_FIC_FREQUENCY').value = ''
+            js.document.getElementById('ARRIVAL_OVERHEAD').value = ''
+            js.document.getElementById('ARRIVAL_SQUAWK').value = ''
         elif spinner_name == 'aircraft_spinner':
             js.window.aircraftClean('silent')
 
@@ -4885,15 +4887,15 @@ if ('serviceWorker' in navigator) {
 
         # Clear relevant fields based on spinner
         if spinner_name == 'fic_spinner':
-            js.document.getElementById('FIC_NAME').value = ''
-            js.document.getElementById('FIC_FREQUENCY').value = ''
-            js.document.getElementById('OVERHEAD').value = ''
-            js.document.getElementById('SQUAWK').value = ''
+            js.document.getElementById('DEPARTURE_FIC_NAME').value = ''
+            js.document.getElementById('DEPARTURE_FIC_FREQUENCY').value = ''
+            js.document.getElementById('DEPARTURE_OVERHEAD').value = ''
+            js.document.getElementById('DEPARTURE_SQUAWK').value = ''
         elif spinner_name == 'fic_spinner2':
-            js.document.getElementById('FIC_NAME2').value = ''
-            js.document.getElementById('FIC_FREQUENCY2').value = ''
-            js.document.getElementById('OVERHEAD2').value = ''
-            js.document.getElementById('SQUAWK2').value = ''
+            js.document.getElementById('ARRIVAL_FIC_NAME').value = ''
+            js.document.getElementById('ARRIVAL_FIC_FREQUENCY').value = ''
+            js.document.getElementById('ARRIVAL_OVERHEAD').value = ''
+            js.document.getElementById('ARRIVAL_SQUAWK').value = ''
 
         print(f"   >📂 Loading Enroute: {user_selection}")
 
@@ -4913,10 +4915,10 @@ if ('serviceWorker' in navigator) {
 
             # Update the keys in enroute_dict in case of fic_spinner2
             if spinner_name == 'fic_spinner2':
-                enroute_dict['FIC_NAME2'] = enroute_dict.pop('FIC_NAME', None)
-                enroute_dict['FIC_FREQUENCY2'] = enroute_dict.pop('FIC_FREQUENCY', None)
-                enroute_dict['OVERHEAD2'] = enroute_dict.pop('OVERHEAD', None)
-                enroute_dict['SQUAWK2'] = enroute_dict.pop('SQUAWK', None)
+                enroute_dict['ARRIVAL_FIC_NAME'] = enroute_dict.pop('DEPARTURE_FIC_NAME', None)
+                enroute_dict['ARRIVAL_FIC_FREQUENCY'] = enroute_dict.pop('DEPARTURE_FIC_FREQUENCY', None)
+                enroute_dict['ARRIVAL_OVERHEAD'] = enroute_dict.pop('DEPARTURE_OVERHEAD', None)
+                enroute_dict['ARRIVAL_SQUAWK'] = enroute_dict.pop('DEPARTURE_SQUAWK', None)
 
             # Fill the flight_plan_data dictionary
             for key, value in enroute_dict.items():
@@ -4927,7 +4929,8 @@ if ('serviceWorker' in navigator) {
             update_enroute_gui_fields(enroute_dict, spinner_name)
             # Update missing fields colors
             js.window.highlightMissingFields()
-
+            js.window.updateFICmenuColor('ARRIVAL');
+            js.window.updateFICmenuColor('DEPARTURE');
 
             print(f"   >✅ Flightplan '{user_selection}' loaded successfully")
         except Exception as e:
@@ -4950,7 +4953,7 @@ if ('serviceWorker' in navigator) {
             store_field(field)
 
         # STORE FIELDS FROM ENROUTE IN FLIGHTPLAN
-        enroute_fields = ["FIC_NAME", "FIC_FREQUENCY", "OVERHEAD", "SQUAWK", "FIC_NAME2", "FIC_FREQUENCY2", "OVERHEAD2", "SQUAWK2"]
+        enroute_fields = ["DEPARTURE_FIC_NAME", "DEPARTURE_FIC_FREQUENCY", "DEPARTURE_OVERHEAD", "DEPARTURE_SQUAWK", "ARRIVAL_FIC_NAME", "ARRIVAL_FIC_FREQUENCY", "ARRIVAL_OVERHEAD", "ARRIVAL_SQUAWK"]
         for field in enroute_fields:
             store_field(field)
 
@@ -5250,7 +5253,7 @@ if ('serviceWorker' in navigator) {
         """Save custom enroute data to localStorage.
 
         Args:
-            prefix (str): 'ENROUTE1', 'ENROUTE2'
+            prefix (str): 'DEPARTURE', 'ARRIVAL'
         """
         print(f'> func: save_enroute_to_json({prefix})')
 
@@ -5258,27 +5261,27 @@ if ('serviceWorker' in navigator) {
         dict_enroute = {}
 
         # Store the FIC to localStorage
-        if prefix == 'ENROUTE1':
+        if prefix == 'DEPARTURE':
             # Create cache key
-            listname = js.document.getElementById('FIC_NAME').value
+            listname = js.document.getElementById('DEPARTURE_FIC_NAME').value
             cache_key = 'ENROUTE_' + listname.upper().strip()
 
             enroute_fields = {
-                'FIC_NAME': js.document.getElementById('FIC_NAME').value,
-                'FIC_FREQUENCY': js.document.getElementById('FIC_FREQUENCY').value,
-                'OVERHEAD': js.document.getElementById('OVERHEAD').value,
-                'SQUAWK': js.document.getElementById('SQUAWK').value,
+                'DEPARTURE_FIC_NAME': js.document.getElementById('DEPARTURE_FIC_NAME').value,
+                'DEPARTURE_FIC_FREQUENCY': js.document.getElementById('DEPARTURE_FIC_FREQUENCY').value,
+                'DEPARTURE_OVERHEAD': js.document.getElementById('DEPARTURE_OVERHEAD').value,
+                'DEPARTURE_SQUAWK': js.document.getElementById('DEPARTURE_SQUAWK').value,
             }
-        elif prefix == 'ENROUTE2':
+        elif prefix == 'ARRIVAL':
             # Create cache key
-            listname = js.document.getElementById('FIC_NAME2').value
+            listname = js.document.getElementById('ARRIVAL_FIC_NAME').value
             cache_key = 'ENROUTE_' + listname.upper().strip()
 
             enroute_fields = {
-                'FIC_NAME': js.document.getElementById('FIC_NAME2').value,
-                'FIC_FREQUENCY': js.document.getElementById('FIC_FREQUENCY2').value,
-                'OVERHEAD': js.document.getElementById('OVERHEAD2').value,
-                'SQUAWK': js.document.getElementById('SQUAWK2').value
+                'DEPARTURE_FIC_NAME': js.document.getElementById('ARRIVAL_FIC_NAME').value,
+                'DEPARTURE_FIC_FREQUENCY': js.document.getElementById('ARRIVAL_FIC_FREQUENCY').value,
+                'DEPARTURE_OVERHEAD': js.document.getElementById('ARRIVAL_OVERHEAD').value,
+                'DEPARTURE_SQUAWK': js.document.getElementById('ARRIVAL_SQUAWK').value
             }
         else:
             print(f'   >Invalid prefix: {prefix}')
@@ -5301,8 +5304,8 @@ if ('serviceWorker' in navigator) {
         # Save to cache
         js.localStorage.setItem(cache_key, json_data)
         # Update the enroute list
-        update_dropdown('fic_spinner', 'enroute', keepSelection=True, elementId2='FIC_NAME')
-        update_dropdown('fic_spinner2', 'enroute', keepSelection=True, elementId2='FIC_NAME2')
+        update_dropdown('fic_spinner', 'enroute', keepSelection=True, elementId2='DEPARTURE_FIC_NAME')
+        update_dropdown('fic_spinner2', 'enroute', keepSelection=True, elementId2='ARRIVAL_FIC_NAME')
         print(f"   >✅ FIC data saved and dropdown updated")
 
 
@@ -5419,14 +5422,14 @@ if ('serviceWorker' in navigator) {
                 'DEPARTURE_ROUTE_ALTITUDE': flight_data.get(f'{DEPARTURE}_ROUTE_ALTITUDE', '') or empty_field,
                 'DEPARTURE_ICAO': flight_data.get(f'{DEPARTURE}_ICAO', '') or empty_field,
 
-                'FIC_NAME': flight_data.get('FIC_NAME', '') or empty_field,
-                'FIC_FREQUENCY': flight_data.get('FIC_FREQUENCY', ''),
-                'FIC_SQUAWK': flight_data.get('SQUAWK', ''),
-                'OVERHEAD': flight_data.get('OVERHEAD', flight_data.get(f'{DEPARTURE}_ROUTE_NAME', '') or empty_field),
+                'DEPARTURE_FIC_NAME': flight_data.get('DEPARTURE_FIC_NAME', '') or empty_field,
+                'DEPARTURE_FIC_FREQUENCY': flight_data.get('DEPARTURE_FIC_FREQUENCY', ''),
+                'DEPARTURE_SQUAWK': flight_data.get('DEPARTURE_SQUAWK', ''),
+                'DEPARTURE_OVERHEAD': flight_data.get('DEPARTURE_OVERHEAD', flight_data.get(f'{DEPARTURE}_ROUTE_NAME', '') or empty_field),
                 'ATC_FREQUENCIES': ATC_FREQUENCIES,
                 'ATC_ATIS_FREQ_DEP': flight_data.get(f'{DEPARTURE}_ATC_ATIS_FREQ', ''),
-                'OVERHEAD2': flight_data.get('OVERHEAD2', ''),
-                'FIC_SQUAWK2': flight_data.get('SQUAWK2', ''),
+                'ARRIVAL_OVERHEAD': flight_data.get('ARRIVAL_OVERHEAD', ''),
+                'ARRIVAL_SQUAWK': flight_data.get('ARRIVAL_SQUAWK', ''),
 
                 'ATC_TOWER': ATC_TOWER_FREQ_DEP,
                 'DELIVERY_OR_RADIO': ATC_TOWER_NAME_DEP if ATC_TOWER_NAME_DEP == 'RADIO' else 'DELIVERY',
@@ -5443,10 +5446,10 @@ if ('serviceWorker' in navigator) {
                 'GRID_COLUMNS': window.ATC_COLUMNS,
             }
             if reverse_path:
-                html_content['FIC_NAME'] = flight_data.get('FIC_NAME2', '') or empty_field
-                html_content['FIC_FREQUENCY'] = flight_data.get('FIC_FREQUENCY2', '')
-                html_content['OVERHEAD'] = flight_data.get('OVERHEAD2', '')
-                html_content['FIC_SQUAWK'] = flight_data.get('SQUAWK2', '')
+                html_content['DEPARTURE_FIC_NAME'] = flight_data.get('ARRIVAL_FIC_NAME', '') or empty_field
+                html_content['DEPARTURE_FIC_FREQUENCY'] = flight_data.get('ARRIVAL_FIC_FREQUENCY', '')
+                html_content['DEPARTURE_OVERHEAD'] = flight_data.get('ARRIVAL_OVERHEAD', '')
+                html_content['DEPARTURE_SQUAWK'] = flight_data.get('ARRIVAL_SQUAWK', '')
 
             fontsizes = get_fontsizes(js.window.ATC_FONTSIZE)
 
@@ -5634,13 +5637,13 @@ if ('serviceWorker' in navigator) {
                 'CALLSIGN': flight_data.get('CALLSIGN', '') or empty_field,
                 'CALLSIGN_SHORT': flight_data.get('CALLSIGN_SHORT', '') or empty_field,
 
-                'FIC_NAME': flight_data.get('FIC_NAME', '') or empty_field,
-                'FIC_FREQUENCY': flight_data.get('FIC_FREQUENCY', ''),
-                'FIC_SQUAWK': flight_data.get('SQUAWK', ''),
-                'FIC_SQUAWK2': flight_data.get('SQUAWK2', ''),
+                'DEPARTURE_FIC_NAME': flight_data.get('DEPARTURE_FIC_NAME', '') or empty_field,
+                'DEPARTURE_FIC_FREQUENCY': flight_data.get('DEPARTURE_FIC_FREQUENCY', ''),
+                'DEPARTURE_SQUAWK': flight_data.get('DEPARTURE_SQUAWK', ''),
+                'ARRIVAL_SQUAWK': flight_data.get('ARRIVAL_SQUAWK', ''),
 
-                'OVERHEAD': flight_data.get('OVERHEAD', flight_data.get(f'{DEPARTURE}_ROUTE_NAME', '') or empty_field),
-                'OVERHEAD2': flight_data.get('OVERHEAD2', '') or empty_field,
+                'DEPARTURE_OVERHEAD': flight_data.get('DEPARTURE_OVERHEAD', flight_data.get(f'{DEPARTURE}_ROUTE_NAME', '') or empty_field),
+                'ARRIVAL_OVERHEAD': flight_data.get('ARRIVAL_OVERHEAD', '') or empty_field,
                 'FLIGHT_RULES': flight_data.get('FLIGHT_RULES', ''),
                 'POB': flight_data.get('POB', '') or empty_field,
 
@@ -5655,10 +5658,10 @@ if ('serviceWorker' in navigator) {
             }
 
             if reverse_path:
-                html_content['FIC_NAME'] = flight_data.get('FIC_NAME2', '') or empty_field
-                html_content['FIC_FREQUENCY'] = flight_data.get('FIC_FREQUENCY2', '')
-                html_content['OVERHEAD'] = flight_data.get('OVERHEAD2', '')
-                html_content['FIC_SQUAWK'] = flight_data.get('SQUAWK2', '')
+                html_content['DEPARTURE_FIC_NAME'] = flight_data.get('ARRIVAL_FIC_NAME', '') or empty_field
+                html_content['DEPARTURE_FIC_FREQUENCY'] = flight_data.get('ARRIVAL_FIC_FREQUENCY', '')
+                html_content['DEPARTURE_OVERHEAD'] = flight_data.get('ARRIVAL_OVERHEAD', '')
+                html_content['DEPARTURE_SQUAWK'] = flight_data.get('ARRIVAL_SQUAWK', '')
 
             fontsizes = get_fontsizes(js.window.ATC_FONTSIZE)
             css_content = {
@@ -5863,10 +5866,10 @@ if ('serviceWorker' in navigator) {
             #html_string += freq_block(data.get('DELIVERY_OR_RADIO_ARR', ''), 'RADIO', arr_city)
 
         html_string += '<hr>'
-        SQUAWK = f": {data.get('SQUAWK', '')}" if data.get('SQUAWK', '') else ''
-        SQUAWK2 = f": {data.get('SQUAWK2', '')}" if data.get('SQUAWK2', '') else ''
-        html_string += freq_block(data.get('FIC_FREQUENCY', '') , data.get('FIC_NAME', '') + SQUAWK, '')
-        html_string += freq_block(data.get('FIC_FREQUENCY2', '') , data.get('FIC_NAME2', '') + SQUAWK2, '')
+        DEPARTURE_SQUAWK = f": {data.get('DEPARTURE_SQUAWK', '')}" if data.get('DEPARTURE_SQUAWK', '') else ''
+        ARRIVAL_SQUAWK = f": {data.get('ARRIVAL_SQUAWK', '')}" if data.get('ARRIVAL_SQUAWK', '') else ''
+        html_string += freq_block(data.get('DEPARTURE_FIC_FREQUENCY', '') , data.get('DEPARTURE_FIC_NAME', '') + DEPARTURE_SQUAWK, '')
+        html_string += freq_block(data.get('ARRIVAL_FIC_FREQUENCY', '') , data.get('ARRIVAL_FIC_NAME', '') + ARRIVAL_SQUAWK, '')
 
         return html_string
 
@@ -6405,12 +6408,14 @@ if ('serviceWorker' in navigator) {
           // Sync checkboxes and fields on startup
            syncWeightCheckboxesAndFields(`ARRIVAL_WEIGHT_CHECKBOX`);
            WeightBalanceMain(targetTab);
+           displayRunwayMain(targetTab)
         }
         // Calculate Weight and Balance and Departure tab
         if (targetTab === 'ARRIVAL') {
           // Sync checkboxes and fields on startup
            syncWeightCheckboxesAndFields(`DEPARTURE_WEIGHT_CHECKBOX`);
            WeightBalanceMain(targetTab);
+           displayRunwayMain(targetTab)
         }
 
         // WHEN THE TAB MAP IS CLICKED, UPDATE THE MAP WITH THE ROUTE AND FILL WINDOW.WAYPOINTS
@@ -7108,9 +7113,8 @@ if ('serviceWorker' in navigator) {
                 required_atc_arrival: false,
                 required_atc_enroute: false,
             },
-
-            'FIC_NAME': {
-                element: document.getElementById('FIC_NAME'),
+            'DEPARTURE_FIC_NAME': {
+                element: document.getElementById('DEPARTURE_FIC_NAME'),
                 name: 'FIC name',
                 color_empty: '#ffeb3b',
                 color_filled: 'transparent',
@@ -7118,8 +7122,8 @@ if ('serviceWorker' in navigator) {
                 required_atc_arrival: false,
                 required_atc_enroute: true,
             },
-            'FIC_FREQUENCY': {
-                element: document.getElementById('FIC_FREQUENCY'),
+            'DEPARTURE_FIC_FREQUENCY': {
+                element: document.getElementById('DEPARTURE_FIC_FREQUENCY'),
                 name: 'FIC frequency',
                 color_empty: '#ffeb3b',
                 color_filled: 'transparent',
@@ -7127,8 +7131,8 @@ if ('serviceWorker' in navigator) {
                 required_atc_arrival: false,
                 required_atc_enroute: true,
             },
-            'OVERHEAD': {
-                element: document.getElementById('OVERHEAD'),
+            'DEPARTURE_OVERHEAD': {
+                element: document.getElementById('DEPARTURE_OVERHEAD'),
                 name: 'Overhead',
                 color_empty: '#ffeb3b',
                 color_filled: 'transparent',
@@ -7136,8 +7140,8 @@ if ('serviceWorker' in navigator) {
                 required_atc_arrival: false,
                 required_atc_enroute: true,
             },
-            'SQUAWK': {
-                element: document.getElementById('SQUAWK'),
+            'DEPARTURE_SQUAWK': {
+                element: document.getElementById('DEPARTURE_SQUAWK'),
                 name: 'Squawk',
                 color_empty: '#ffeb3b',
                 color_filled: 'transparent',
@@ -7409,40 +7413,40 @@ if ('serviceWorker' in navigator) {
                 required_atc_enroute: false,
             },
             //ENROUTE FIELDS
-            'FIC_NAME2': {
-                element: document.getElementById('FIC_NAME2'),
+            'ARRIVAL_FIC_NAME': {
+                element: document.getElementById('ARRIVAL_FIC_NAME'),
                 name: 'FIC2 name',
-                color_empty: '',
+                color_empty: '#ffeb3b',
                 color_filled: 'transparent',
                 required_atc_departure: false,
-                required_atc_arrival: false,
+                required_atc_arrival: true,
                 required_atc_enroute: false,
             },
-            'FIC_FREQUENCY2': {
-                element: document.getElementById('FIC_FREQUENCY2'),
+            'ARRIVAL_FIC_FREQUENCY': {
+                element: document.getElementById('ARRIVAL_FIC_FREQUENCY'),
                 name: 'FIC2 frequency',
-                color_empty: '',
+                color_empty: '#ffeb3b',
                 color_filled: 'transparent',
                 required_atc_departure: false,
-                required_atc_arrival: false,
+                required_atc_arrival: true,
                 required_atc_enroute: false,
             },
-            'OVERHEAD2': {
-                element: document.getElementById('OVERHEAD2'),
+            'ARRIVAL_OVERHEAD': {
+                element: document.getElementById('ARRIVAL_OVERHEAD'),
                 name: 'Overhead (second)',
-                color_empty: '',
+                color_empty: '#ffeb3b',
                 color_filled: 'transparent',
                 required_atc_departure: false,
-                required_atc_arrival: false,
+                required_atc_arrival: true,
                 required_atc_enroute: false,
             },
-            'SQUAWK2': {
-                element: document.getElementById('SQUAWK2'),
+            'ARRIVAL_SQUAWK': {
+                element: document.getElementById('ARRIVAL_SQUAWK'),
                 name: 'Squawk (second)',
-                color_empty: '',
+                color_empty: '#ffeb3b',
                 color_filled: 'transparent',
                 required_atc_departure: false,
-                required_atc_arrival: false,
+                required_atc_arrival: true,
                 required_atc_enroute: false,
             },
         };
@@ -7536,8 +7540,6 @@ if ('serviceWorker' in navigator) {
         const missing = [];
         // Loop through and highlight empty fields
         Object.entries(inputs).forEach(([key, item]) => {
-          // console.log(missing)
-          // console.log(item)
           // Update the GUI field
             updateGUIField(item, missing);
         });
@@ -7579,6 +7581,11 @@ if ('serviceWorker' in navigator) {
         const aerodromeFieldIds = [
             'DEPARTURE_NAME', 'DEPARTURE_POSITION', 'DEPARTURE_ROUTE_NAME', 'DEPARTURE_ROUTE_ALTITUDE',
             'ARRIVAL_NAME', 'ARRIVAL_POSITION', 'ARRIVAL_ROUTE_NAME', 'ARRIVAL_ROUTE_ALTITUDE', 'ARRIVAL_CIRCUIT_ALTITUDE',
+        ];
+
+        const FicFieldIds = [
+            'DEPARTURE_FIC_NAME', 'DEPARTURE_FIC_FREQUENCY', 'DEPARTURE_OVERHEAD', 'DEPARTURE_SQUAWK',
+            'ARRIVAL_FIC_NAME', 'ARRIVAL_FIC_FREQUENCY', 'ARRIVAL_OVERHEAD', 'ARRIVAL_SQUAWK',
         ];
 
         const contactFieldIds = [
@@ -7632,22 +7639,52 @@ if ('serviceWorker' in navigator) {
             elementAerodrome.textContent = allFilled ? "✅ AERODROME" : "⚠️ AERODROME";
         };
 
+        const updateFICmenuColor = (prefix) => {
+            const element = document.getElementById(`${prefix}_FIC_MENU`);
+            if (!element) {
+                console.warn(`Missing ${prefix}_FIC_MENU element.`);
+                return;
+            }
+
+            const getVal = (id) => document.getElementById(id)?.value ?? '';
+            const element1 = getVal(`${prefix}_FIC_NAME`);
+            const element2 = getVal(`${prefix}_FIC_FREQUENCY`);
+            const element3 = getVal(`${prefix}_OVERHEAD`);
+            const element4 = getVal(`${prefix}_SQUAWK`);
+
+            let allFilled;
+            if (prefix === 'DEPARTURE' || prefix === 'ARRIVAL') {
+                allFilled = element1 !== '' && element2 !== '' && element3 !== '' && element4 !== '';
+            } else {
+                allFilled = false;
+            }
+
+            let TopMenuColor = window.DEFAULTCOLOR
+            if (prefix === "DEPARTURE") {
+              metarObject = window.METAR_DEPARTURE;
+            } else {
+              metarObject = window.METAR_ARRIVAL;
+            }
+            if (metarObject) TopMenuColor = metarObject.color;
+
+            element.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
+            element.textContent = allFilled ? "✅ FLIGHT INFORMATION CENTER (FIC)" : "⚠️ FLIGHT INFORMATION CENTER (FIC)";
+        };
+        window.updateFICmenuColor = updateFICmenuColor;
+
+
         const updateContactColor = (prefix) => {
-            const elementContact = document.getElementById(`${prefix}_CONTACT_MENU`);
-            if (!elementContact) {
+            const element = document.getElementById(`${prefix}_CONTACT_MENU`);
+            if (!element) {
                 console.warn(`Missing CONTACT_MENU element for ${prefix}`);
                 return;
             }
 
-            const elementCTR = document.getElementById(`${prefix}_CTR`);
-            const elementTower = document.getElementById(`${prefix}_ATC_TOWER`);
-            const elementGround = document.getElementById(`${prefix}_ATC_GROUND`);
-            const elementATIS = document.getElementById(`${prefix}_ATC_ATIS_FREQ`);
-
-            const towerVal = elementTower?.value ?? '';
-            const groundVal = elementGround?.value ?? '';
-            const atisVal = elementATIS?.value ?? '';
-            const ctrValue = elementCTR?.value ?? '';
+            const getVal = (id) => document.getElementById(id)?.value ?? '';
+            const towerVal = getVal(`${prefix}_ATC_TOWER`);
+            const ctrValue = getVal(`${prefix}_CTR`);
+            const groundVal = getVal(`${prefix}_ATC_GROUND`);
+            const atisVal = getVal(`${prefix}_ATC_ATIS_FREQ`);
 
             let allFilled;
             if ((prefix === 'DEPARTURE' || prefix === 'ARRIVAL') && ctrValue === 'CTR') {
@@ -7666,24 +7703,22 @@ if ('serviceWorker' in navigator) {
             }
             if (metarObject) TopMenuColor = metarObject.color;
 
-            elementContact.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
-            elementContact.textContent = allFilled ? "✅ CONTACT" : "⚠️ CONTACT";
+            element.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
+            element.textContent = allFilled ? "✅ CONTACT" : "⚠️ CONTACT";
         };
 
         const updateMetarColor = (prefix) => {
-            const elementContact = document.getElementById(`${prefix}_METARMENU_TOP`);
-            if (!elementContact) {
+            const element = document.getElementById(`${prefix}_METARMENU_TOP`);
+            if (!element) {
                 console.warn(`Missing _METARMENU_TOP element for ${prefix}`);
                 return;
             }
 
-            const element1 = document.getElementById(`${prefix}_WIND_DIRECTION`);
-            const element2 = document.getElementById(`${prefix}_WIND_STRENGTH`);
+            const getVal = (id) => document.getElementById(id)?.value ?? '';
+            const windDirection = getVal(`${prefix}_WIND_DIRECTION`);
+            const windStrength = getVal(`${prefix}_WIND_STRENGTH`);
 
-            const windDirection = element1?.value ?? '';
-            const windStrength = element2?.value ?? '';
             const allFilled = windDirection !== '' && windStrength !== '';
-
             let TopMenuColor = window.DEFAULTCOLOR;
             let metarObject;
             if (prefix === "DEPARTURE") {
@@ -7695,8 +7730,8 @@ if ('serviceWorker' in navigator) {
               TopMenuColor = metarObject.color;
             }
 
-            elementContact.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
-
+            element.style.backgroundColor = allFilled ? TopMenuColor : window.EMPTYCOLOR;
+            element.textContent = allFilled ? "✅ METAR" : "⚠️ METAR";
         };
 
         const handleAerodromeEvent = (e) => {
@@ -7709,6 +7744,12 @@ if ('serviceWorker' in navigator) {
             const targetId = e.target.id;
             const prefix = targetId.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
             updateContactColor(prefix);
+        };
+
+        const handleFicEvent = (e) => {
+            const targetId = e.target.id;
+            const prefix = targetId.startsWith('DEPARTURE') ? 'DEPARTURE' : 'ARRIVAL';
+            updateFICmenuColor(prefix);
         };
 
         const handleMetarEvent = (e) => {
@@ -7736,6 +7777,15 @@ if ('serviceWorker' in navigator) {
         });
 
         // Attach listeners for contact fields
+        FicFieldIds.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.addEventListener('input', handleFicEvent);
+            el.addEventListener('keydown', handleFicEvent);
+            el.addEventListener('change', handleFicEvent);
+        });
+
+        // Attach listeners for contact fields
         metarFieldIds.forEach(id => {
             const el = document.getElementById(id);
             if (!el) return;
@@ -7750,10 +7800,24 @@ if ('serviceWorker' in navigator) {
             prefixes.forEach(p => {
                 highlightDropdownMenu(p);
                 updateContactColor(p);
+                updateFICmenuColor(p);
                 updateMetarColor(p);
             });
         };
     })();
+
+    function fic_clean(prefix) {
+      document.getElementById(`${prefix}_FIC_NAME`).value = '';
+      document.getElementById(`${prefix}_FIC_FREQUENCY`).value = '';
+      document.getElementById(`${prefix}_OVERHEAD`).value = '';
+      document.getElementById(`${prefix}_SQUAWK`).value = '';
+      // Clean spinner
+      const spinnerId = prefix === 'DEPARTURE' ? 'fic_spinner' : 'fic_spinner2';
+      document.getElementById(spinnerId).value = '';
+      // Highlight missing fields
+      highlightMissingFields();
+      updateFICmenuColor(prefix);
+    }
 
   </script>
 

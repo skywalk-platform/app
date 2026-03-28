@@ -52,7 +52,7 @@
                     <script>
                     if ({{ CTR_REGION_BOOL_DEPARTURE }}) {
                         document.write(`
-                        
+
                         <div style="display: grid; grid-template-columns: 1fr 4fr;">
                             <p class="pilot_general"><strong>PILOT:</strong></p>
                             <p class="pilot_general">{{ DEPARTURE_NAME }} {{ DELIVERY_OR_RADIO }}, <strong class="pilot_text">{{ CALLSIGN }}</strong>.</p>
@@ -86,7 +86,7 @@
                             <div class="info-box" style="border: 0px solid grey;"><p> <strong class="pilot_text">{{ DEPARTURE_RUNWAY }}</strong> </p> </div>
                         </div>
                         <hr>
-    
+
                         <div style="display: grid; grid-template-columns: 1fr 4fr;">
                             <p class="tower_text"><strong>TOWER:</strong></p>
                             <p class="tower_text">For taxi, contact Tower at {{ ATC_TOWER }}</p>
@@ -150,7 +150,7 @@
                 </div>
             </div>
 
-                    
+
             <div class="departure">
                 <div class="pilot">
                     <p class="title_departure">3. READY FOR DEPARTURE</p>
@@ -166,12 +166,12 @@
                             <p class="tower_text"><strong>TOWER:</strong></p>
                             <p class="tower_text">{{ CALLSIGN_SHORT }}, Roger, Line up and wait, Runway {{ DEPARTURE_RUNWAY }}</p>
                         </div>
-    
+
                         <div style="display: grid; grid-template-columns: 1fr 4fr;">
                             <p class="pilot_general"><strong>PILOT:</strong></p>
                             <p class="pilot_general">LINE UP and WAIT, RUNWAY <strong class="pilot_text">{{ DEPARTURE_RUNWAY }}, {{ CALLSIGN_SHORT }}</strong></p>
                         </div>
-    
+
                         <div style="display: grid; grid-template-columns: 1fr 4fr;">
                             <p class="tower_text"><strong>TOWER:</strong></p>
                             <p class="tower_text">{{ CALLSIGN_SHORT }}, Cleared for take-off</p>
@@ -240,15 +240,15 @@
 
             <div class="startup">
                 <div class="pilot">
-                    <p class="title" style="background-color: #ec7d15;">5. ENROUTE - {{ FIC_NAME }} - {{ FIC_FREQUENCY }}</p>
+                    <p class="title" style="background-color: #ec7d15;">5. ENROUTE - {{ DEPARTURE_FIC_NAME }} - {{ FIC_FREQUENCY }}</p>
 
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong>PILOT:</strong></p>
-                        <p class="pilot_general">{{ FIC_NAME }}, <strong class="pilot_text">{{ CALLSIGN }}</strong>,<br> <strong class="pilot_text"> {{ OVERHEAD }}.</strong> <br> </p>
+                        <p class="pilot_general">{{ DEPARTURE_FIC_NAME }}, <strong class="pilot_text">{{ CALLSIGN }}</strong>,<br> <strong class="pilot_text"> {{ DEPARTURE_OVERHEAD }}.</strong> <br> </p>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="tower_text"><strong>TOWER:</strong></p>
-                        <p class="tower_text">{{ CALLSIGN_SHORT }}, {{ FIC_NAME }}, Go Ahead.</p>
+                        <p class="tower_text">{{ CALLSIGN_SHORT }}, {{ DEPARTURE_FIC_NAME }}, Go Ahead.</p>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong>PILOT:</strong></p>
@@ -299,7 +299,7 @@
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong>PILOT:</strong></p>
                         <p class="pilot_general"><strong class="pilot_text">{{ AIRCRAFT_TYPE }}</strong>, APPROACHING <strong class="pilot_text">{{ ARRIVAL_ROUTE_NAME }}</strong>
-                        <br>AT <strong class="pilot_text">{{ ARRIVAL_ROUTE_ALTITUDE }} feet,</strong> {{ FLIGHT_RULES }}, <strong class="pilot_text">{{ POB }} POB</strong>, 
+                        <br>AT <strong class="pilot_text">{{ ARRIVAL_ROUTE_ALTITUDE }} feet,</strong> {{ FLIGHT_RULES }}, <strong class="pilot_text">{{ POB }} POB</strong>,
                         <!--<br><br>INFORMATION <strong class="pilot_text"> [ .   .   .   .   .   . ]</strong> RECEIVED,-->
                         {{ TEXT_INFORMATION_RECEIVED }}
                         <br><br>FOR LANDING, {{ REQUEST_INFORMATION }}, <strong class="pilot_text">{{ CALLSIGN_SHORT }}</strong></p>
@@ -322,12 +322,12 @@
 
                 </div>
             </div>
-            
-            
+
+
             <div class="radio-check">
                 <div class="frequencies">
                     <p class="title_freq">FREQUENCIES</p>
-                    
+
                     {{ ATC_FREQUENCIES }}
 
                 </div>
@@ -362,7 +362,7 @@
             </div>
 
 
-        
+
         </div>
     <br><br>
     <button onclick="window.print();">Print this page</button>
@@ -378,6 +378,6 @@
 </center>
 <hr>
 
-    
+
 </body>
 </html>

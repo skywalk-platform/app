@@ -22,15 +22,15 @@
 
             <div class="startup">
                 <div class="pilot">
-                    <p class="title">1. {{ FIC_NAME }} - {{ FIC_FREQUENCY }}</p>
+                    <p class="title">1. {{ DEPARTURE_FIC_NAME }} - {{ FIC_FREQUENCY }}</p>
 
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong>PILOT :</strong></p>
-                        <p class="pilot_general">{{ FIC_NAME }}, <strong class="pilot_text">{{ CALLSIGN }}</strong>,<br> <strong class="pilot_text"> {{ OVERHEAD }}.</strong> <br> </p>
+                        <p class="pilot_general">{{ DEPARTURE_FIC_NAME }}, <strong class="pilot_text">{{ CALLSIGN }}</strong>,<br> <strong class="pilot_text"> {{ DEPARTURE_OVERHEAD }}.</strong> <br> </p>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="tower_text"><strong>TOWER:</strong></p>
-                        <p class="tower_text">{{ CALLSIGN_SHORT }}, {{ FIC_NAME }}, Go Ahead.</p>
+                        <p class="tower_text">{{ CALLSIGN_SHORT }}, {{ DEPARTURE_FIC_NAME }}, Go Ahead.</p>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong>PILOT :</strong></p>
@@ -99,11 +99,11 @@
                         <p class="pilot_general"><strong></strong></p>
                         <p class="pilot_general">
                             <br>
-                            <strong class="pilot_text">OVERHEAD:</strong>
+                            <strong class="pilot_text">DEPARTURE_OVERHEAD:</strong>
                             <br><br>
                         </p>
                     </div>
-                    
+
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong></strong></p>
                         <p class="pilot_general"><strong class="pilot_text">REQUEST CTR CROSSING:</strong></p>
@@ -123,8 +123,8 @@
                     <div style="display: grid; repeat(3, 1fr);text-align: center;">
                         <p class="pilot_general"> <strong class="pilot_text">{{ CALLSIGN_SHORT }}</strong> </p>
                     </div>
-                    
-                    
+
+
                     <div style="display: grid; grid-template-columns: 1fr 3fr;">
                         <p class="tower_text"><strong>Readback:</strong></p>
                     </div>
@@ -156,14 +156,14 @@
 
 
 
-            
+
             <div class="change-flightplans">
                 <div class="pilot">
                     <p class="title_other">DIVERTING</p>
 
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong>PILOT :</strong></p>
-                        <p class="pilot_general">{{ FIC_NAME }}, <strong class="pilot_text">{{ CALLSIGN }}</strong></p>
+                        <p class="pilot_general">{{ DEPARTURE_FIC_NAME }}, <strong class="pilot_text">{{ CALLSIGN }}</strong></p>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="tower_text"><strong>TOWER:</strong></p>
@@ -178,7 +178,7 @@
                     <div style="display: grid; grid-template-columns: 1fr 4fr;">
                         <p class="pilot_general"><strong> </strong></p>
                         <div class="pilot_general" style="display: grid; grid-template-columns: repeat(2, 1fr); border: 0px solid grey; text-align: center;">
-                            <p class="subtitle">OVERHEAD</p>
+                            <p class="subtitle">DEPARTURE_OVERHEAD</p>
                             <p class="subtitle">AT (feet)</p>
                         </div>
                         <br><br>
@@ -205,7 +205,7 @@
             <div class="radio-check">
                 <div class="frequencies">
                     <p class="title_freq">FREQUENCIES</p>
-                    
+
                     {{ ATC_FREQUENCIES }}
 
                 </div>
@@ -224,7 +224,7 @@
 
 
 
-        
+
         </div>
     <br><br>
     <button onclick="window.print();">Print this page</button>
@@ -240,6 +240,6 @@
 </center>
 <hr>
 
-    
+
 </body>
 </html>
