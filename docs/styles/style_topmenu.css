@@ -1,22 +1,22 @@
 /* Fixed top bar */
 .tab {
     position: fixed;
-    top: 0;                               /* remove env(safe-area-inset-top) */
+    top: env(safe-area-inset-top);
     left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 25px);
-    max-width: 650px;
-    min-width: 350px;
+    transform: translateX(-50%);       /* center horizontally */
+    width: calc(100% - 25px);          /* screen minus margins left-right spacing */
+    max-width: 650px;                   /* app container width on wide screens */
+    min-width: 350px;                   /* minimum width on small screens */
     height: 56px !important;
-    padding: 0 16px;
-    margin-bottom: 0;                     /* remove extra spacing */
+    padding: 0 16px;                    /* internal spacing */
+    margin-bottom: 1px;                /* bottom spacing */
 
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    background: linear-gradient(0deg, transparent 0%, gray 100%); /* make top transparent */
-    border-radius: 8px 8px 0 0;           /* only top corners rounded */
+    background: linear-gradient(0deg, white 0%, gray 100%);
+    border-radius: 8px;
     color: #333;
     z-index: 1000;
     overflow: hidden;

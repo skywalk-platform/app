@@ -251,7 +251,7 @@ input[type="number"]:disabled {
 
 /* =================== LOGO & IMAGE CONTAINERS =================== */
 
-/*.logo-container {
+.logo-container {
     position: relative;
     text-align: center;
     margin: 0px;
@@ -260,8 +260,9 @@ input[type="number"]:disabled {
     overflow: visible;
     min-height: 80px;
     padding-bottom: 0px;
-}*/
-/*.logo-container img {
+}
+
+.logo-container img {
     max-width: 100%;
     height: auto;
     display: block;
@@ -271,28 +272,7 @@ input[type="number"]:disabled {
     max-height: calc(100vh - 220px);
     border-radius: 10px;
     z-index: 0;
-}*/
-.logo-container {
-    position: relative;
-    text-align: center;
-    margin: 0;                       /* remove extra spacing */
-    border-radius: 0;
-    overflow: visible;
-    min-height: auto;                /* let it shrink naturally */
-    padding: 0;                      /* no extra padding */
 }
-.logo-container img {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    cursor: pointer;
-    transition: transform 0.2s;
-    max-height: calc(100vh - 220px);
-    border-radius: 10px;             /* optional, keeps slight rounding */
-    z-index: 0;
-}
-
 
 .logo-container img:hover {
     transform: scale(1.05);
@@ -447,21 +427,15 @@ input[type="number"]:disabled {
     margin: 8px 0;
 }
 
-/*.border-round-eged-logo {
+.border-round-eged-logo {
     background-color: transparent;
     border-color: transparent;
     border-radius: 8px;
     padding: 8px 6px;
     border: 2px solid white;
     margin:1px 0 8px 0;
-}*/
-.border-round-eged-logo {
-    background-color: transparent;   /* no white background */
-    border: none;                    /* remove the white border */
-    border-radius: 0;                /* no extra rounding needed */
-    padding: 0;                      /* remove top/bottom padding */
-    margin: 0;                       /* remove extra spacing above/below */
 }
+
 /* =================== SPINNER =================== */
 
 .spinner-overlay {
