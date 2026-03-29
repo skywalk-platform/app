@@ -143,12 +143,13 @@
         <button class="tablinks" data-tab="Checklist" style="cursor: pointer;">📋 Checklist</button>
         <button class="tablinks" data-tab="Aircrafts" style="cursor: pointer;">🛠️ Aircrafts</button>
         <button class="tablinks" data-tab="Countries" style="cursor: pointer;">🌍 Select Countries</button>
-        <div class="button-row"> <button id="Tutorial" type="button" onclick="window.SkyWalkTutorial.show()" title="Tutorial"> 📘 Tutorial </button> </div>
        	<button class="tablinks" data-tab="Config" style="cursor: pointer;">⚙️ Config</button>
 
         <!--CHECK FOR UPDATES-->
-        <button id="updateBtn" onclick="updateApp()">Check for updates</button>
         <div class="divider-general-section" style="background: #f0f0f0;"></div>
+
+        <div class="button-row"> <button id="Tutorial" type="button" onclick="window.SkyWalkTutorial.show()" title="Tutorial"> 📘 Tutorial </button> </div>
+        <button id="updateBtn" onclick="updateApp()">Check for SkyWalk updates</button>
         <button class="tablinks" data-tab="Subscriptions" style="cursor: pointer;">💳 Subscriptions</button>
 
 
@@ -832,7 +833,7 @@
 
                 <div class="wb-center">
                     <div class="tile-wb">
-                        <input class="input-wb" type="numeric" id="DEPARTURE_WEIGHT_FUEL_LITERS" value="0">
+                        <input class="input-wb" type="numeric" id="DEPARTURE_WEIGHT_FUEL_LITERS" value="">
                         <span class="label-wb">Fuel (liters)</span>
                     </div>
                 </div>
@@ -1398,7 +1399,7 @@
 
                <div class="wb-center">
                    <div class="tile-wb">
-                       <input class="input-wb" type="numeric" id="ARRIVAL_WEIGHT_FUEL_LITERS" value="0">
+                       <input class="input-wb" type="numeric" id="ARRIVAL_WEIGHT_FUEL_LITERS" value="">
                        <span class="label-wb">Fuel (liters)</span>
                    </div>
                </div>
@@ -7555,14 +7556,14 @@ if ('serviceWorker' in navigator) {
             : `
             <div style="color:#155724; background:#d4edda; padding:6px 10px; border-radius:6px;">
                 ✅ <strong>All fields completed</strong><br>
-                <small>Your flight plan details are processed with the most actual information and ready for your review.</small>
+                <small>Your flight plan details are processed with the most actual information and are ready for your review.</small>
             </div>
             `;
         if (!missing.length) {
           missing_label.style.fontSize = '14px';
           missing_label.style.color = 'green';
         } else {
-          missing_label.style.fontSize = '10px';
+          missing_label.style.fontSize = '11px';
           missing_label.style.color = 'darkorange';
         }
     }
