@@ -128,7 +128,7 @@
     <!-- Tab links -->
     <div class="app-container">
         <div class="tab">
-            <button class="tablinks" data-tab="General">📋<br>New/ Load</button>
+            <button class="tablinks" data-tab="General">📋<br>New/load</button>
             <button class="tablinks" data-tab="Departure">🛫<br>Departure</button>
             <button class="tablinks" data-tab="Arrival">🛬<br>Arrival</button>
             <button class="tablinks" data-tab="Enroute">✈️<br>Enroute</button>
@@ -5008,6 +5008,10 @@ if ('serviceWorker' in navigator) {
         """Save current flightplan data to localStorage"""
         print(f"> func: save_flightplan()")
 
+        # Save aerodrome info
+        save_aerodrome_to_json('DEPARTURE', 'silent')
+        save_aerodrome_to_json('ARRIVAL', 'silent')
+
         # STORE FIELDS FROM GENERAL IN FLIGHTPLAN
         js.window.flight_plan_data["CALLSIGN_SHORT"] = js.window.create_callsign_short(js.document.getElementById('CALLSIGN').value);
         general_fields = ["FLIGHTPLAN", "POB", "FLIGHT_RULES", "AIRCRAFT_TYPE", "CALLSIGN", "DEPARTURE_CLOCK", "ARRIVAL_CLOCK"]
@@ -6452,9 +6456,9 @@ if ('serviceWorker' in navigator) {
         console.log(`>Tab switch from: ${currentTab}, to ${targetTab}`)
 
         // SAVE ON TAB CHANGE SWITCHING TO ATC. THIS IS NEEDED BECAUSE THE DATA IS GATHERED FROM FLIGHTPLAN DICT.
-        // if (pyscriptReady) {
-        //   window.save_flightplan(true, false);
-        // }
+        if (pyscriptReady) {
+          window.save_flightplan(true, false);
+        }
         // if (targetTab === 'ATC') {
         //   window.save_flightplan(true, false);
         // }
