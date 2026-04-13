@@ -110,6 +110,7 @@
     <script src="./scripts/checklist.js" defer></script>
     <script src="./scripts/tutorial.js" defer></script>
     <script src="./scripts/aircraft.js" defer></script>
+    <script src="./scripts/various.js" defer></script>
 
     <script src="./scripts/clickevents.js" defer></script>
 
@@ -1934,17 +1935,38 @@
         </div>
 
 
-        <label_h1>CLEAR CACHE</label_h1>
+        <label_h1>CACHE</label_h1>
+
+        <div class="border-round-eged">
+            <div id="cache_overview" style="font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; background: #111; color: #eee; padding: 10px; border-radius: 6px;">
+                Press to see the saved cache..
+            </div>
+            <div class="button-row" style="margin-top: 20px;">
+                <button onclick="renderSkywalkCache()" style="cursor: pointer;">Show saved cache</button>
+            </div>
+        </div>
+
+        <div class="border-round-eged">
+            <div class="button-row">
+                <input id="clear_specific_input" type="text" placeholder="e.g. SKYWALK_EHRD" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ccc;">
+
+                <button id="clear_specific_btn" style="margin-top: 10px; background-color:  darkorange; color: white; cursor: pointer;">
+                    Clear Matching Cache
+                </button>
+            </div>
+        </div>
+
+
         <div class="border-round-eged">
             <div class="disclaimer" style="margin-bottom: 20px;">
                 Warning: This will permanently delete all saved flightplans and aerodrome images from your local browser storage. The reason for using this is when you want to start fresh or when you suspect that your flightplans or images are corrupted or the ATC page does not show or update. This action cannot be undone.
             </div>
-
             <div class="button-row" style="margin-top: 20px;">
                 <button id="clear_cache_btn" style="background-color: #ff4444; color: white; cursor: pointer;">Clear Cache</button>
             </div>
-
         </div>
+
+
     </div>
 
 
@@ -4051,6 +4073,8 @@ if ('serviceWorker' in navigator) {
         rwy_ids, rwy_list = retrieve_runways(row_dict)
         #print('HERE4')
         #print(row_dict)
+        #print(rwy_list)
+        #print(rwy_ids)
         #print(row_dict['runways'])
 
 
@@ -4062,7 +4086,7 @@ if ('serviceWorker' in navigator) {
         js.window.flight_plan_data[f"{fname}_CITY"] = str(row_dict['city']).upper()
         js.window.flight_plan_data[f"{fname}_RUNWAYS"] = rwy_list
         js.window.flight_plan_data[f"{fname}_RUNWAY_PROPERTIES"] = row_dict['runways']
-        js.window.flight_plan_data[f"{fname}_RUNWAY_NR"] = clean_string(rwy_ids)
+        js.window.flight_plan_data[f"{fname}_RUNWAY_NR"] = ''
         js.window.flight_plan_data[f"{fname}_ELEVATION"] = str(row_dict['elevation_aerodrome']).split('.')[0]
         js.window.flight_plan_data[f"{fname}_NAME"] = row_dict['name']
         js.window.flight_plan_data[f"{fname}_METAR"] = ''
@@ -4604,44 +4628,6 @@ if ('serviceWorker' in navigator) {
         return row_dict
 
     # ================================================
-    # WIND ENVELOPE HELPERS
-    # ================================================
-
-    def compute_wind_envelope(fname):
-        """Compute the wind envelope based on the METAR data and runway number.
-
-        The wind envelope can be used to visually see whether the crosswind/headwind remains within the limits
-        with variable winds. To compute this, the wind strenghts is kept constant but the wind direction is varied
-        from 0-360 degrees. If the red line (the present wind conditions) crosses the the blue line
-        (the maximum wind limits), it indicates that certain wind angles can push the aircraft outside the maximum
-        crosswind/headwind limits.
-
-        The wind envelope is computed with the following parameters:
-        - runway_number: The runway number.
-        - max_headwind: The maximum headwind limit.
-        - max_crosswind: The maximum crosswind limit.
-
-        From the METAR data, the following parameters are used:
-        - wind direction: The wind direction.
-        - wind strength: The wind strength.
-        - wind gust: The wind gust.
-        - wind variation: The wind variation.
-
-        """
-        logger.info(f"func: compute_wind_envelope() - {fname}")
-
-        # Get the METAR data and runway number
-        METAR_DATA = js.window.flight_plan_data.get(f"{fname}_METAR_ICAO", {})
-        RUNWAY = js.window.flight_plan_data.get(f"{fname}_RUNWAY_NR", "")
-        # Check if the runway and METAR data are set, otherwise show a popup and return
-        if RUNWAY == "" or METAR_DATA == {}:
-            logger.warning(f"Set the runway.")
-            print("Set Runway", "Please set the runway.")
-            return
-
-        js.window.flight_plan_data[f"{fname}_METAR"] = METAR_DATA
-
-    # ================================================
     # RUNWAY HELPERS
     # ================================================
 
@@ -4670,135 +4656,6 @@ if ('serviceWorker' in navigator) {
 
         # Return
         return runways
-
-    def predict_runway_number(fname, wind_direction='', wind_strength=''):
-        """Compute the expected runway based on wind information for a given aerodrome."""
-        print(f'> func: predict_runway_number({fname})')
-        # Defaults
-        expect_runway = ''
-        runwayField = js.document.getElementById(fname + "_RUNWAY_NR")
-        runwaysGUI = runwayField.value.strip()
-
-        # Get information from GUI when wind fields are not forced
-        if wind_direction == '' or wind_strength == '':
-            wind_direction = js.document.getElementById(fname + "_WIND_DIRECTION").value
-            wind_strength = js.document.getElementById(fname + "_WIND_STRENGTH").value
-            if is_numeric(wind_direction): wind_direction = int(wind_direction)
-            if is_numeric(wind_strength): wind_strength = int(wind_strength)
-
-        # Get all runways for the aerodrome. We need to copy the list to avoid modifying the original data
-        try:
-            runways = js.window.flight_plan_data[f"{fname}_RUNWAYS"].copy()
-        except Exception:
-            return
-
-        # Add more runways if provided
-        if runwaysGUI is not None and runwaysGUI.strip() != '':
-            rwys_clean = re.findall(r'\d+', runwaysGUI)
-            runways.extend(rwys_clean)
-            runways = list(set(runways))
-        print(f'   >All available runways: {runways}')
-
-        # Compute the expected runway number
-        if (len(runways) > 0) and (wind_direction is not None) and is_numeric(wind_direction):
-            results = list(map(lambda x: runway_headwind(wind_direction, wind_strength, x), runways))
-            if np.any(results):
-                expect_runway = runways[np.where(results)[0][0]]
-        else:
-            # js.window.messages = f'No wind direction: {wind_direction} or wind strength: {wind_strength} or runways: {runways}.'
-            print(f'   >No wind direction {wind_direction} or wind_strength {wind_strength} or runways {runways} found')
-
-        # Update the GUI input field
-        if (expect_runway != '' and expect_runway is not None):
-            # Set new runway
-            runwayField.value = expect_runway
-            js.window.setRunwaySurface(fname)
-            js.window.displayRunwayMain(fname)
-
-        # Return
-        print(f'   >Predicted runway: {expect_runway}')
-        return expect_runway
-
-    def runway_headwind(wind_direction, wind_strength, runway_direction):
-        """Compute whether the input runway number has headwind.
-
-        Parameters
-        ----------
-        wind_direction : int[0-360]
-            The wind direction in degrees.
-        wind_strength : float
-            The strenght of the wind.
-        runway_direction : String or integer
-            The runway direction in degrees but in 2 decimals '24' or '06' etc.
-        """
-        if (wind_direction is None) or not is_numeric(wind_direction) or (wind_strength is None) or (runway_direction is None):
-            return None
-
-        runway_direction = js.window.correctRunwayNumber(runway_direction)
-        if not isinstance(runway_direction, (int, float)):
-            return None
-
-        cos_result = js.window.headwindCalc(wind_direction, wind_strength, runway_direction)
-
-        if cos_result > 0:
-            return True
-        else:
-            return False
-
-    # ================================================
-    # WIND HELPERS
-    # ================================================
-
-    def variable_wind_range(wind_vrb):
-        # Input looks like: '190-350' or '340-40'
-        if isinstance(wind_vrb, list): wind_vrb = wind_vrb[0]
-        if wind_vrb == '' or wind_vrb is None:
-            return None
-        total_range = None
-        # Split
-        wind_vrb = np.array(wind_vrb.split('-'))
-        # Check numeric
-        wind_vrb = wind_vrb[np.array(list(map(is_numeric, wind_vrb)))]
-        # Continue
-        if len(wind_vrb) > 0:
-            # Make int
-            wind_vrb = list(map(int, wind_vrb))
-            # Always make a list of 2
-            if len(wind_vrb) >= 2:
-                start, end = wind_vrb[0], wind_vrb[-1]
-            else:
-                start, end = wind_vrb[0], wind_vrb[0]
-
-            # Compute range
-            if start <= end:
-                total_range = np.array(list(range(start, end + 1, 10)))
-            else:
-                total_range = np.array(list(range(start, 360, 10)) + list(range(0, end + 1, 10)))
-        # Total range
-        return total_range
-
-
-    def is_numeric(value):
-        # Check if the string is empty
-        if (isinstance(value, str) and value == ''):
-            return False
-        if isinstance(value, (float, int)):
-            return True
-        if value is None:
-            return False
-        if isinstance(value, str):
-            value = value.strip()
-
-        # Allow negative numbers (starting with '-' at the beginning)
-        if value[0] == '-':
-            value = value[1:]
-
-        # Allow decimal points in the string
-        parts = value.split('.')
-        if len(parts) <= 2 and all(part.isnumeric() for part in parts):
-            return True
-
-        return False
 
     # ================================================
     # FLIGHTPLAN HELPERS
@@ -5427,30 +5284,6 @@ if ('serviceWorker' in navigator) {
         print(f"   >✅ FIC data saved and dropdown updated")
 
 
-    def print_local_storage():
-        # Get localStorage info
-
-        print(f"   >💾 Saved to localStorage: {storage_key}")
-        print(f"   Storage Type: Browser localStorage")
-        print(f"   Storage Location: Browser's IndexedDB/localStorage database")
-        print(f"   Key: {storage_key}")
-        print(f"   Size: {len(json_data)} bytes")
-
-        # Print browser-specific path hints
-        print(f"   Browser localStorage is typically stored at:")
-        if sys.platform == 'win32':
-            print(f"   - Chrome: %LOCALAPPDATA%\\Google\\Chrome\\User Data\\Default\\Local Storage")
-            print(f"   - Firefox: %APPDATA%\\Mozilla\\Firefox\\Profiles\\<profile>\\storage\\default")
-            print(f"   - Edge: %LOCALAPPDATA%\\Microsoft\\Edge\\User Data\\Default\\Local Storage")
-        elif sys.platform == 'darwin':
-            print(f"   - Chrome: ~/Library/Application Support/Google/Chrome/Default/Local Storage")
-            print(f"   - Firefox: ~/Library/Application Support/Firefox/Profiles/<profile>/storage/default")
-            print(f"   - Safari: ~/Library/Safari/LocalStorage")
-        else:
-            print(f"   - Chrome: ~/.config/google-chrome/Default/Local Storage")
-            print(f"   - Firefox: ~/.mozilla/firefox/<profile>/storage/default")
-
-
     # ================================================
     # ATC HELPERS
     # ================================================
@@ -5840,9 +5673,9 @@ if ('serviceWorker' in navigator) {
         """
 
         template_name = os.path.basename(template_source)
-        template_key = f"template_{template_name}"
+        cacheKey = f"SKYWALK_{template_name}"
 
-        cached = js.localStorage.getItem(template_key)
+        cached = js.localStorage.getItem(cacheKey)
         if cached:
             print("✅ Loaded from cache")
             return cached
@@ -5861,8 +5694,8 @@ if ('serviceWorker' in navigator) {
                 with open(template_source, "r", encoding="utf-8") as f:
                     content = f.read()
 
-            js.localStorage.setItem(template_key, content)
-            print(f"✅ Template cached under key '{template_key}'")
+            js.localStorage.setItem(cacheKey, content)
+            print(f"✅ Template cached under key '{cacheKey}'")
             return content
 
         except Exception as e:
@@ -5871,13 +5704,13 @@ if ('serviceWorker' in navigator) {
 
     async def load_template_from_url(template_name):
         """Fetch from URL, store in localStorage, and return text content."""
-        template_key = f"template_{template_name}"
+        cacheKey = f"SKYWALK_{template_name}"
 
         base_url = js.window.URL_HTML_TEMPLATES
         url = os.path.join(base_url, template_name)
 
         # 1. Try cache
-        cached = js.localStorage.getItem(template_key)
+        cached = js.localStorage.getItem(cacheKey)
         if cached:
             print("✅ Loaded HTML template ATC from cache")
             return cached
@@ -5889,8 +5722,8 @@ if ('serviceWorker' in navigator) {
             response = await js.fetch(url)
             if response.ok:
                 content = await response.text()
-                js.localStorage.setItem(template_key, content)
-                print(f"✅ Template cached under key '{template_key}'")
+                js.localStorage.setItem(cacheKey, content)
+                print(f"✅ Template cached under key '{cacheKey}'")
                 return content
             else:
                 print(f"❌ Fetch failed: {response.status}")
@@ -6473,8 +6306,6 @@ if ('serviceWorker' in navigator) {
     js.window.clean_altitude = clean_altitude
 
     # METAR HELPERS
-    js.window.predict_runway_number = predict_runway_number
-    js.window.compute_wind_envelope = compute_wind_envelope
     js.window.get_top_metar_stations = get_top_metar_stations
     js.window.remove_metar_widget = remove_metar_widget
 
@@ -6908,22 +6739,10 @@ if ('serviceWorker' in navigator) {
 
                 // Collect and predict runway number
                 if (fpDict['DEPARTURE_RUNWAYS']) {
-                  const runwayString = (fpDict['DEPARTURE_RUNWAYS'] || []).filter(r => r).join("/") + "/" + (fpDict['DEPARTURE_RUNWAYS'] || []).join("/");
-                  // console.log('HERE')
-                  // console.log(runwayString)
-                  // console.log(fpDict)
-
-                  windDirection = document.getElementById('DEPARTURE_WIND_DIRECTION').value
-                  windStrength = document.getElementById('DEPARTURE_WIND_STRENGTH').value
-                  runway_pred = predictRunway(runwayString, windDirection, windStrength)
-                  document.getElementById('DEPARTURE_RUNWAY_NR').value = runway_pred || '';
+                  window.predictRunway('DEPARTURE');
                 }
                 if (fpDict['ARRIVAL_RUNWAYS']) {
-                  const runwayString = (fpDict['ARRIVAL_RUNWAYS'] || []).filter(r => r).join("/") + "/" + (fpDict['ARRIVAL_RUNWAYS'] || []).join("/");
-                  windDirection = document.getElementById('ARRIVAL_WIND_DIRECTION').value
-                  windStrength = document.getElementById('ARRIVAL_WIND_STRENGTH').value
-                  runway_pred = predictRunway(runwayString, windDirection, windStrength)
-                  document.getElementById('ARRIVAL_RUNWAY_NR').value = runway_pred || '';
+                  window.predictRunway('ARRIVAL');
                 }
 
                 // Weight & balance statistics
@@ -6940,9 +6759,10 @@ if ('serviceWorker' in navigator) {
                 // Set time and update info fields
                 // const timeDep = document.getElementById('DEPARTURE_CLOCK').value;
                 window.UpdateFlightInfoFields(null, true, true);
-
                 // Enable/disable ICAO fields
                 window.enableDisableICAOFields();
+                // Highlight missing fields
+                window.highlightMissingFields()
                 loadProgress.step();
 
                 // Done
