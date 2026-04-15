@@ -1,0 +1,141 @@
+/* Flight Pages Overlay Styles */
+#flight-pages-overlay {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.9);
+z-index: 9999;
+display: flex;
+justify-content: center;
+align-items: center;
+opacity: 0;
+transition: opacity 0.3s ease;
+pointer-events: none;
+}
+
+#flight-pages-overlay.flight-pages-visible {
+opacity: 1;
+pointer-events: auto;
+}
+
+#flight-pages-modal {
+width: 90%;
+max-width: 800px;
+background-color: #222;
+border: 4px solid #444;
+border-radius: 15px;
+padding: 30px;
+display: flex;
+flex-direction: column;
+align-items: center;
+text-align: center;
+color: white;
+}
+
+#flight-pages-content {
+width: 100%;
+}
+
+.flight-page-heading {
+font-size: 8rem;
+font-weight: bold;
+margin: 0;
+line-height: 1;
+color: #fff;
+}
+
+.flight-page-track {
+font-size: 3rem;
+color: #aaa;
+margin-bottom: 20px;
+}
+
+.flight-page-timer {
+font-size: 10rem;
+font-family: 'Courier New', Courier, monospace;
+font-weight: bold;
+margin: 20px 0;
+color: #00ff00;
+}
+
+.flight-page-distance {
+font-size: 3rem;
+color: #ddd;
+margin-bottom: 40px;
+}
+
+.flight-page-controls {
+display: flex;
+gap: 20px;
+justify-content: center;
+margin-bottom: 50px;
+}
+
+.fp-ctrl-btn {
+font-size: 1.5rem;
+padding: 15px 30px;
+border-radius: 10px;
+border: none;
+cursor: pointer;
+background-color: #444;
+color: white;
+transition: background 0.2s;
+}
+
+.fp-ctrl-btn:active {
+transform: scale(0.95);
+}
+
+#fp-btn-start { background-color: #28a745; }
+#fp-btn-pause { background-color: #ffc107; color: black; }
+#fp-btn-reset { background-color: #dc3545; }
+
+#flight-pages-footer {
+width: 100%;
+border-top: 2px solid #444;
+padding-top: 20px;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+#flight-pages-nav {
+display: flex;
+align-items: center;
+gap: 30px;
+margin-bottom: 20px;
+}
+
+.fp-nav-btn {
+font-size: 1.5rem;
+padding: 10px 20px;
+background: none;
+border: 2px solid #666;
+color: white;
+border-radius: 5px;
+cursor: pointer;
+}
+
+.fp-nav-btn:disabled {
+opacity: 0.3;
+cursor: not-allowed;
+}
+
+#fp-leg-counter {
+font-size: 1.5rem;
+}
+
+#flight-pages-close-container {
+width: 100%;
+}
+
+.fp-close-btn {
+background: none;
+border: none;
+color: #ff4d4d;
+font-size: 1.2rem;
+cursor: pointer;
+text-decoration: underline;
+}

@@ -69,6 +69,7 @@
     <link rel="stylesheet" href="./styles/style_tutorial.css">
     <link rel="stylesheet" href="./styles/style_wb.css">
     <link rel="stylesheet" href="./styles/style_topmenu.css">
+    <link rel="stylesheet" href="./styles/style_navlog.css">
 
     <!--CORE FILES-->
     <link rel="stylesheet" href="https://pyscript.net/releases/2025.8.1/core.css">
@@ -112,7 +113,7 @@
     <script src="./scripts/aircraft.js" defer></script>
     <script src="./scripts/various.js" defer></script>
     <script src="./scripts/navlog.js" defer></script>
-
+    <script src="./scripts/navlogtimer.js"></script>
     <script src="./scripts/clickevents.js" defer></script>
 
     <!--login.js must be after config.js-->
@@ -1794,25 +1795,24 @@
 
         </div>
 
-        
         <div class="divider-general-section" style="background: #f5f5f5;"></div>
-        
+
         <div class="border-round-eged">
             <div class="wind-grid">
-                <div class="tile" style="border: none;">
-                    <input id="ATC_LEGINFO_MIN_DISTANCE" type="number" class="tile-value" min="0" step="0.1" value="5">
+                <div class="tile">
+                    <input id="NAVLOG_MIN_DISTANCE" type="number" class="tile-value" min="0" step="0.1" value="5">
                     <span class="tile-label">Min Leg Distance (NM)</span>
                 </div>
-                <div class="tile" style="border: none; display: flex; align-items: end;">
-                    <button id="BTN_ATC_LEGINFO_TABLE" style="width: 100%;">Generate Enroute Leg Table</button>
-                </div>
-                <div class="tile" style="border: none; display: flex; align-items: end;">
-                    <button id="BTN_ATC_LEGINFO_PRINT" style="width: 100%;">Print Leg Table</button>
-                </div>
+                <button id="BTN_NAVLOG_TABLE" class="button-style">Generate NAVLOG Table</button>
             </div>
-            <div id="ATC_LEGINFO_TABLE_CONTAINER" style="margin-top: 10px;"></div>
         </div>
 
+        <div class="border-round-eged">
+            <div id="NAVLOG_TABLE_CONTAINER" style="margin-top: 10px;"></div>
+            <button id="BTN_NAVLOG_PRINT" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">🖨</button>
+        </div>
+
+        <button id="BTN_FLIGHT_PAGES" class="button-style">Start NAVLOG</button>
 
         <div class="border-round-eged">
             <div class="disclaimer">
@@ -1834,9 +1834,7 @@
             </div>
         </div>-->
 
-
        <label_h1>Air Traffic Control (ATC)</label_h1>
-
 
        <div style="border: 1px solid lightgrey; border-radius: 10px; padding: 10px;">
 
