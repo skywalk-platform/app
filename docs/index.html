@@ -1812,7 +1812,10 @@
             <button id="BTN_NAVLOG_PRINT" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 4px 8px 0; flex: 0 0 auto; cursor: pointer; float: right;">🖨</button>
         </div>
 
-        <button id="BTN_FLIGHT_PAGES" class="button-style">Start NAVLOG</button>
+        <div class="button-row" style="justify-content: center; align-items: center;">
+            <button id="BTN_FLIGHT_PAGES" class="button-style">Start NAVLOG</button>
+            <input type="checkbox" id="COMPAS_CHECKBOX" checked style="font-size: 10px;"> <span style="font-size: 12px;">Enable GPS compass</span>
+        </div>
 
         <div class="border-round-eged">
             <div class="disclaimer">
@@ -3742,78 +3745,6 @@ if ('serviceWorker' in navigator) {
     # ================================================
     # METAR HELPERS
     # ================================================
-
-    def get_top_metar_stations(fname, n=5, return_df=False):
-        # Retrieve all metar stations for the country
-        print(f'>func: get_top_metar_stations({fname}, {n})')
-
-        icao = js.window.flight_plan_data[f'{fname}_ICAO']
-        lat = js.window.flight_plan_data[f'{fname}_LATLON'][0]
-        lon = js.window.flight_plan_data[f'{fname}_LATLON'][1]
-
-        print(f'   >icao: {icao}, lat: {lat}, lon: {lon}')
-
-        # Import METAR station data
-        df_stations = get_metar_stations(todf=True)
-        # print(df_stations)
-
-        if n is None or n > df_stations.shape[0]:
-            n = df_stations.shape[0]
-
-        # If icao is in df_stations
-        # if icao in df_stations['icao'].values:
-        #    print(f'   >Found {icao} in METAR stations')
-        #    return [icao]
-
-        # Return all or selection
-        if (lat is not None) and (lon is not None):
-            # Compute haversine distance
-            df_stations['distance_to_target'] = haversine_distances(lat, lon, df_stations['lat'].values, df_stations['lon'].values)
-            # df_stations['distance_to_target'] = df_stations.apply(lambda row: compute.haversine(row['lat'], row['lon'], lat, lon), axis=1)
-            # Sort on closest METAR stations
-            df_stations.sort_values(by='distance_to_target', inplace=True)
-        else:
-            df_stations['distance_to_target'] = None
-
-        # Filter on top distance metar stations
-        icao_stations = list(df_stations['icao'].values[0:int(n)])
-        # name_stations = list(df_stations['name'].values[0:int(n)])
-
-        # print(df_stations)
-        # print(icao_stations)
-        # print(name_stations)
-
-        # Return
-        if return_df:
-            return df_stations
-        else:
-            return icao_stations
-
-
-    def get_metar_stations(fname=None, todf=True):
-        if fname == 'DEPARTURE':
-            AERODROME_DATA = window.AERODROME_DEPARTURE_DATA.copy()
-        elif fname == 'ARRIVAL':
-            AERODROME_DATA = window.AERODROME_ARRIVAL_DATA.copy()
-        else:
-            AERODROME_DATA = window.AERODROME_DATA.copy()
-
-        if todf:
-            icao_with_metar = [
-            {"icao": item["icao"], "lat": item["lat"], "lon": item["lon"], "country": item["country"], "name": item["name"]}
-                for item in AERODROME_DATA
-                if item.get("metar_station") is True
-            ]
-            icao_with_metar = pd.DataFrame(icao_with_metar)
-        else:
-            icao_with_metar = {
-                item["icao"]: {"lat": item["lat"], "lon": item["lon"], "country": item["country"], "name": item["name"]}
-                for item in AERODROME_DATA
-                if item.get("metar_station") is True
-            }
-
-        # Return
-        return icao_with_metar
 
     def remove_metar_widget(fname):
         """Remove METAR widget for the specified aerodrome if it exists"""
@@ -6286,7 +6217,6 @@ if ('serviceWorker' in navigator) {
     js.window.load_aerodrome_from_json = load_aerodrome_from_json
 
     js.window.clear_cache = clear_cache
-    js.window.get_top_metar_stations = get_top_metar_stations
     js.window.update_dropdown = update_dropdown
 
     # CHECKLIST
@@ -6337,7 +6267,6 @@ if ('serviceWorker' in navigator) {
     js.window.clean_altitude = clean_altitude
 
     # METAR HELPERS
-    js.window.get_top_metar_stations = get_top_metar_stations
     js.window.remove_metar_widget = remove_metar_widget
 
   </script>
