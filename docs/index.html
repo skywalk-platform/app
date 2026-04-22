@@ -113,7 +113,7 @@
     <script src="./scripts/aircraft.js" defer></script>
     <script src="./scripts/various.js" defer></script>
     <script src="./scripts/navlog.js" defer></script>
-    <script src="./scripts/navlogtimer.js"></script>
+    <script src="./scripts/navlogGUI.js"></script>
     <script src="./scripts/clickevents.js" defer></script>
 
     <!--login.js must be after config.js-->
@@ -1815,7 +1815,7 @@
 
         <div class="border-round-eged">
 
-            <div class="wind-grid_3">
+            <div class="wind-grid">
                 <div class="tile">
                     <input id="NAVLOG_MIN_DISTANCE" type="number" class="tile-value" min="0" step="1" value="0">
                     <span class="tile-label">Minimum Leg Distance to show (NM)</span>
@@ -1823,11 +1823,15 @@
 
                 <label style="display:flex;align-items:center;gap:4px;">
                     <input type="checkbox" id="COMPAS_CHECKBOX" unchecked>
-                    <span style="font-size:12px;">Enable GPS Compass</span>
+                    <span style="font-size:12px;">GPS Compass</span>
                 </label>
                 <label style="display:flex;align-items:center;gap:4px;">
                     <input type="checkbox" id="HAPTICFEEDBACK_CHECKBOX" unchecked>
-                    <span style="font-size:12px;">Enable Haptic Feedback</span>
+                    <span style="font-size:12px;">Haptic Feedback</span>
+                </label>
+                <label style="display:flex;align-items:center;gap:4px;">
+                    <input type="checkbox" id="AUTONEXTLEG_CHECKBOX" unchecked>
+                    <span style="font-size:12px;">Start Next LEG Automatically</span>
                 </label>
             </div>
 
