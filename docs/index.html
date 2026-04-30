@@ -1704,7 +1704,8 @@
         <div class="collapsible-content" id="ENROUTE_MAPSETTINGS_BACKGROUND">
 
             <div class="info">
-                Step 1. Select the map layers so the legs can be drawn more accurately.
+                <label_h1>STEP 1: SELECT MAP LAYERS</label_h1>
+                Select the map layers so the legs can be drawn more accurately.
             </div>
 
             <div class="wind-grid">
@@ -1755,7 +1756,8 @@
         <div class="collapsible-content" id="ENROUTE_CIRCUIT_BACKGROUND">
 
             <div class="info">
-                Step 2. Add the circuit by choosing North/ South and the pattern-type. Note that the runway direction is automatically set.
+                <label_h1>STEP 2: ADD CIRCUIT PATTERN</label_h1>
+                Add the circuit by choosing North/ South and the pattern-type. Note that the runway direction is automatically set.
             </div>
 
             <div class="button-row">
@@ -1772,7 +1774,7 @@
                 </select>
 
                 <!--Add circuit pattern-->
-                <button id="add-circuit-pattern-btn" class="button-style" onclick="window.initCircuitPatterns()">Update circuit pattern</button>
+                <button id="add-circuit-pattern-btn" class="button-style" onclick="window.initCircuitPatterns()">Add Pattern</button>
                 <!-- Clean Button -->
                 <button id="reset-circuit-pattern-btn" onclick="resetRoute()" title="Remove circuit pattern" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🧹</button>
             </div>
@@ -1783,7 +1785,8 @@
 
         <div class="border-round-eged">
             <div class="info">
-                Step 3. Create waypoints by clicking on the pink line. Remove the waypoints with a right-click or long-click (mobile devices).
+                <label_h1>STEP 3: CREATE WAYPOINTS</label_h1>
+                Create waypoints by clicking on the pink line. Remove the waypoints with a right-click or long-click (mobile devices).
             </div>
 
             <div id="map-container" style="height:700px; position:relative;">
@@ -1823,7 +1826,8 @@
 
         <div class="border-round-eged">
             <div class="info">
-                Step 4. Update the navigation table with [Update/reset navigation table] based on the choosen circuit and waypoints on the map. Update the empty LEG name and altitude fields and press save.
+                <label_h1>STEP 4: UPDATE NAVIGATION TABLE</label_h1>
+                Update the navigation table with [Update/reset navigation table] based on the choosen circuit and waypoints on the map. Update the empty LEG name and altitude fields and press save.
             </div>
 
             <div id="NAVLOG_TABLE"
@@ -1838,7 +1842,8 @@
 
         <div class="border-round-eged">
             <div class="info">
-                Step 5. Set the checkboxes as desired before starting the NAVLOG.
+                <label_h1>STEP 5: START NAVIGATION</label_h1>
+                Set the checkboxes as desired before starting the NAVLOG.
             </div>
 
             <div class="navlog-grid">
@@ -1863,23 +1868,16 @@
         </div>
 
         <div class="wind-grid">
-            <button id="BTN_NAVLOG_START" class="button-style">Start NAVLOG</button>
+            <button id="BTN_NAVLOG_START" class="button-style" style="background-color: orange;">
+              Start NAVLOG
+            </button>
         </div>
 
     </div>
 
 
     <!-- =============== TAB ATC =============== -->
-
-
     <div id="ATC" class="tabcontent">
-
-        <!--<label_h1>Required Fields</label_h1>
-        <div style="border: 1px solid lightgrey; border-radius: 10px; padding: 10px;">
-            <div id="bottom-container">
-                <div class="warning" id="missing_label">Missing: Flight plan name, CALLSIGN, Aircraft Type</div>
-            </div>
-        </div>-->
 
        <label_h1>Air Traffic Control (ATC)</label_h1>
 
@@ -2189,6 +2187,25 @@
         </div>
 
 
+        <!-- IMPORT -->
+        <div class="collapsible" data-title="Import Registered Aircrafts">
+        <div class="collapsible-header"></div>
+        <div class="collapsible-content">
+            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
+                <!--Add spacing -->
+                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
+                <!--Selection spinner-->
+                <select id="import_aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
+                    <option value="">Select and Load</option>
+                </select>
+                <!--Save button-->
+                <button id="import_and_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Import and save selected data">📥</button>
+                <!--Add spacing -->
+                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
+            </div>
+        </div>
+        </div>
+
         <div class="border-round-eged">
             <div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
                 <input id="aircraft_field" type="text" class="tile-value UPPERCASE_input" placeholder="New Registration Name" style="background-color:transparent; font-size: 18px; padding: 0.5px;">
@@ -2215,28 +2232,6 @@
                 </button>
             </div>
 
-        </div>
-
-        <!-- IMPORT -->
-        <div class="collapsible" data-title="Import Registered Aircrafts">
-        <div class="collapsible-header"></div>
-        <div class="collapsible-content">
-            <!--<div class="wind-grid" style="display: flex; align-items: center; gap: 1px;">
-                <input type="text" class="tile-value UPPERCASE_input" placeholder="Import" style="background-color:transparent; font-size: 18px; padding: 0.5px;" disabled>
-            </div>-->
-            <div class="wind-grid" style="display: flex; align-items: center; gap: 8px;">
-                <!--Add spacing -->
-                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
-                <!--Selection spinner-->
-                <select id="import_aircraft_spinner" class="tile-value-dropdown" style="flex: 1; font-size: 12px; font-weight: normal;">
-                    <option value="">Select and Load</option>
-                </select>
-                <!--Save button-->
-                <button id="import_and_save_btn" style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: #666; cursor: pointer; width: 30px; height: 30px;" title="Import and save selected data">📥</button>
-                <!--Add spacing -->
-                <button style="display: flex; justify-content: center; align-items: center; background-color: transparent; border: none; color: transparent; width: 30px; height: 30px;"></button>
-            </div>
-        </div>
         </div>
 
         <!-- PERSONAL SPECIFICATIONS -->
@@ -6675,7 +6670,6 @@ if ('serviceWorker' in navigator) {
                 // SET GLOBAL VARIABLES
                 window.waypoints = window.flight_plan_data.WAYPOINTS
                 window.LEGINFO = window.flight_plan_data.LEGINFO
-
 
                 // CLEANING RUNWAY FIELDS
                 window.cleanRunwayFields('DEPARTURE', 'empty');
