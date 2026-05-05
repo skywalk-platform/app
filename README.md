@@ -12,7 +12,7 @@ SkyWalk is a comprehensive flight planning platform designed for general aviatio
 
 ## 🚀 Quick Start
 
-**Access the application:** [https://skywalk-aviation.github.io/app/](https://skywalk-aviation.github.io/app/)
+**Access the application:** [https://skywalkflight.com](https://skywalkflight.com)
 
 **Read the documentation:** [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
 
