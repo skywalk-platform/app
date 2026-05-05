@@ -8,11 +8,20 @@
 
 SkyWalk is a comprehensive flight planning platform designed for general aviation pilots. It provides real-time runway performance calculations, weight & balance analysis, METAR integration, and aerodrome information management to help pilots make informed go/no-go decisions.
 
+<a href="https://erdogant.substack.com/p/skywalk">
+    <img src="https://github.com/skywalk-aviation/docs/blob/main/docs/figs/composed5.jpg"
+         width="450"
+         style="float:left; margin-right:15px; margin-bottom:10px;" />
+</a>
+
+<br clear="both" />
+
+
 ---
 
 ## 🚀 Quick Start
 
-**Access the application:** [https://skywalk-aviation.github.io/app/](https://skywalk-aviation.github.io/app/)
+**Access the application:** [https://skywalkflight.com](https://skywalkflight.com)
 
 **Read the documentation:** [https://skywalk-platform.github.io/docs/](https://skywalk-platform.github.io/docs/)
 
