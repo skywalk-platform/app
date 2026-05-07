@@ -1751,6 +1751,17 @@
                 </div>
             </div>
 
+            <div class="wind-grid" style="display:flex;align-items:center;gap:8px;margin-top:6px;">
+                <label style="margin-right:5px;" title="Only airports and METAR stations within this distance of any waypoint will be loaded.">
+                    🗺️ Max distance from route for airports &amp; METAR (km):
+                </label>
+                <input type="number" id="route-filter-radius"
+                    value="100" min="10" max="2000" step="10"
+                    style="width:70px;"
+                    title="Airports and METAR stations further than this distance from all waypoints are hidden"
+                    onchange="window.applyRouteDistanceFilter()">
+            </div>
+
         </div>
         </div>
 
@@ -1830,25 +1841,55 @@
         </div>
 
 
-        <div class="border-round-eged">
+
+        <div class="collapsible" data-title="NAVIGATION TABLE">
+        <div class="collapsible-header" id="NAVIGATION_MENU"></div>
+        <div class="collapsible-content" id="NAVIGATION_BACKGROUND">
             <div class="info">
                 <label_h1>STEP 4: UPDATE NAVIGATION TABLE</label_h1>
-                Update the navigation table with [Update/reset navigation table] based on the choosen circuit and waypoints on the map. Update the empty LEG name and altitude fields and press save.
+                Update the Leg name and altitude for the waypoints and press save.
             </div>
 
             <div id="NAVLOG_TABLE"
                 style="margin-top:12px;padding:10px;border-radius:8px;font-size:14px;text-align:center;display:none;">
             </div>
             <div class="wind-grid">
-                <button id="BTN_NAVLOG_UPDATE" onclick="buildNavlogTable('complete', 'info')" class="button-style">Update/ Reset navigation table</button>
+                <button id="BTN_NAVLOG_UPDATE" onclick="buildNavlogTable('complete', 'info')" class="button-style">Update navlog table</button>
                 <button onclick="saveLegInfo()" class="button-style">Save table</button>
             </div>
+        </div>
+        </div>
+
+        <!-- ── ROUTE CLOUD CROSS-SECTION ── -->
+        <div class="collapsible" data-title="CLOUD PLOT">
+        <div class="collapsible-header" id="ENROUTE_CLOUDPLOT_MENU"></div>
+        <div class="collapsible-content" id="ENROUTE_CLOUDPLOT_BACKGROUND">
+
+            <div class="info">
+                <label_h1>STEP 5: ROUTE CLOUD CROSS-SECTION</label_h1>
+            </div>
+
+            <!-- Panels are injected here by plotCloudsForRoute() -->
+            <div id="ROUTE_CLOUD_CONTAINER" style="display:none;"></div>
+
+            <div class="wind-grid" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <!--<button class="button-style" onclick="window.plotCloudsForRoute()" title="Generate cloud cross-section for all route waypoints">
+                    ☁️ Generate Route Cloud View
+                </button>-->
+                <!--<button class="button-style" onclick="window.toggleMetarLayer(true)" title="Update METAR weather information for all waypoints en the route">
+                    🌦️ Retrieve METAR info
+                </button>-->
+                <button onclick="document.getElementById('ROUTE_CLOUD_CONTAINER').style.display='none';"
+                    class="button-style"
+                    title="Hide">✕</button>
+            </div>
+        </div>
         </div>
 
 
         <div class="border-round-eged">
             <div class="info">
-                <label_h1>STEP 5: START NAVIGATION</label_h1>
+                <label_h1>STEP 6: START NAVIGATION</label_h1>
                 Set the checkboxes as desired before starting the NAVLOG.
             </div>
 
@@ -3311,118 +3352,6 @@ if ('serviceWorker' in navigator) {
     # GENERIC FUNCTIONS
     # ================================================
 
-    def update_dropdown(elementId, cacheName, keepSelection=True, elementId2=None):
-        """Update the dropdown with cached info.
-
-        Parameters
-        ----------
-        elementId : str
-            The ID of the HTML element to be updated.
-        cacheName : str
-            The name of the cache from which the data will be fetched.
-        keepSelection : bool, optional
-            Whether to keep the current selection in the dropdown (default is True).
-        elementId2 : str, optional
-            An alternative ID to use if `keepSelection` is True and the current
-            selection is empty.
-        """
-        print(f"> func: update_dropdown()")
-
-        # Get all keys from localStorage
-        storage_length = js.localStorage.length
-        cName = cacheName.upper() + '_'
-        cached_names = set()
-
-        for i in range(storage_length):
-            key = js.localStorage.key(i)
-            if key and key.upper().startswith(cName):
-                cached_names.add(str(key).replace(cName, ''))
-
-        # Convert to list and sort alphabetically
-        cached_names = sorted(list(cached_names))
-
-        # Update dropdown
-        select = js.document.getElementById(elementId)
-        user_selection = select.value
-
-        # Set user_selection with the value elementId2 name if user selection is empty
-        if keepSelection and elementId2 is not None:
-            user_selection = js.document.getElementById(elementId2).value
-
-        if select:
-            # Clear existing options except the first placeholder
-            select.innerHTML = f'<option value="">Select and Load</option>'
-
-            # Add each detected item as an option
-            for name in cached_names:
-                option = js.document.createElement('option')
-                option.value = name
-                option.textContent = name
-                select.appendChild(option)
-
-            # Set to user selection:
-            if keepSelection:
-                select.value = user_selection
-
-            print(f"   >✅ Updated {elementId} with {len(cached_names)} {cacheName.lower()}s")
-        else:
-            print(f"   >⚠️ Dropdown {elementId} not found for {cacheName.lower()}.")
-
-
-    async def load_spinner_selection(elementId, cacheName):
-        """Load selected from localStorage, then store directly into flight_plan_data."""
-        print(f'> func: load_spinner_selection({elementId})')
-
-        # Get the user selection from the spinner element
-        user_selection = js.document.getElementById(elementId).value
-
-        if not user_selection or user_selection == "":
-            print("   >⚠️ No {cacheName} selected")
-            return
-
-        print(f"   >📂 Loading {cacheName}: {user_selection}")
-
-        # Load from cache (localStorage)
-        storage_key = f"{cacheName}_{user_selection}"
-        json_data = js.localStorage.getItem(storage_key)
-
-        if not json_data:
-            print(f"   >⚠️ {cacheName} not found: {user_selection}")
-            js.window.alert(f"⚠️ {cacheName} '{user_selection}' was not found.")
-            return
-
-        # Parse JSON
-        try:
-            data_dict = json.loads(json_data)
-            print(f"   >✅ Loaded {cacheName}: {len(data_dict)} fields for {elementId}")
-
-            # Do stuff for the spinner
-            if elementId == 'checklist_spinner':
-                js.window.flight_plan_data['CHECKLIST'] = data_dict
-                js.document.getElementById('checklist_field').value = user_selection
-                js.window.checklist_populate_js()
-            elif elementId == 'aircraft_spinner':
-                js.window.flight_plan_data['AIRCRAFT'] = data_dict
-                js.document.getElementById('aircraft_field').value = user_selection
-                js.window.aircraft_populate_js();
-                js.window.update_aerodrome_weights_js("DEPARTURE");
-                js.window.update_aerodrome_weights_js("ARRIVAL");
-                # Compute Fuel per leg
-                js.window.WeightBalanceMain('SETTINGS');
-                js.window.WeightBalanceMain('DEPARTURE');
-                js.window.WeightBalanceMain('ARRIVAL');
-                # Compute Runway stats
-                js.window.displayRunwayMain('DEPARTURE');
-                js.window.displayRunwayMain('ARRIVAL');
-                # Highlight any missing fields
-                js.window.highlightMissingFields();
-                # Update poh Table
-                js.window.LoadPOHData()
-
-            print(f"   >✅ [elementId] '{user_selection}' loaded successfully")
-        except Exception as e:
-            print(f"   >⚠️ Error loading spinner {user_selection}: {e}")
-            js.window.alert(f"❗ Error loading spinner {user_selection}: {e}")
 
 
     # ================================================
@@ -3854,62 +3783,6 @@ if ('serviceWorker' in navigator) {
             # js.document.getElementById('loading-spinner').style.display = 'none'
             raise
 
-
-    # ================================================
-    # METAR HELPERS
-    # ================================================
-
-    def remove_metar_widget(fname):
-        """Remove METAR widget for the specified aerodrome if it exists"""
-        print(f"> func: remove_metar_widget({fname})")
-
-        # Clear the METAR container
-        widget_id = f"{fname}-WidgetContainer"
-        widget = js.document.getElementById(widget_id)
-        # Clear the container instead of removing it
-        if widget:
-            widget.innerHTML = ''
-            print(f"   >🧹 Cleared METAR widget for {fname}")
-
-        datetime_field = js.document.getElementById(f'DATETIME-METAR-{fname}')
-        # button = js.document.getElementById(f'BTN-METAR-{fname}')
-        metarField = js.document.getElementById(f'METAR-FIELD-{fname}')
-        metarText = js.document.getElementById(f'METAR-TEXT-{fname}')
-
-        windDirectionField = js.document.getElementById(fname + '_WIND_DIRECTION');
-        windSpeedField = js.document.getElementById(fname + '_WIND_STRENGTH');
-        windGustField = js.document.getElementById(fname + '_WIND_GUST');
-        windVariationField = js.document.getElementById(fname + '_WIND_VARIATION');
-        # windHeadwindField = js.document.getElementById(fname + '_WIND_HEADWIND');
-        # windCrosswindField = js.document.getElementById(fname + '_WIND_CROSSWIND');
-        tempField = js.document.getElementById(fname + '_TEMPERATURE');
-        QNHField = js.document.getElementById(fname + '_QNH');
-
-        # button.style.backgroundColor = '#006280';
-        datetime_field.style.backgroundColor = 'transparent';
-        metarField.style.backgroundColor = 'transparent';
-        metarText.style.backgroundColor = 'transparent';
-
-        metarText.value = ' '
-        datetime_field.value = ''
-        metarField.value = ''
-        windDirectionField.value = '';
-        windSpeedField.value = '';
-        windGustField.value = '';
-        windVariationField.value = '';
-        tempField.value = '';
-        QNHField.value = '';
-        # windHeadwindField.value = '';
-        # windCrosswindField.value = '';
-
-        js.window.createWindTextbox(f'{fname.upper()}_WIND_HEADWIND', '-', 'DISABLED');
-        js.window.createWindTextbox(f'{fname.upper()}_WIND_CROSSWIND', '-', 'DISABLED');
-
-        # Clear datetime
-        js.window.flight_plan_data[f'{fname.upper()}_METAR'] = ''
-        js.window.flight_plan_data[f'{fname.upper()}_METAR_ICAO'] = ''
-        print(f"🧹 Cleared METAR datetime for {fname}")
-
     # ================================================
     # AIRSPACE HELPERS
     # ================================================
@@ -4079,14 +3952,16 @@ if ('serviceWorker' in navigator) {
             df = js.window.AERODROME_ARRIVAL_DATA
 
         # Get data for specific ICAO
-        row_dict = get_icao_data(df, city_icao)
+        row_dict = js.window.get_icao_data(df, city_icao).to_py()
+        # print('HERE5')
+        # print(row_dict)
 
         if not row_dict:
             print(f"   >⚠️ No data found for {city_icao}")
             return
 
         # Get runway data
-        rwy_ids, rwy_list = retrieve_runways(row_dict)
+        rwy_ids, rwy_list = js.window.retrieve_runways(row_dict)
         #print('HERE4')
         #print(row_dict)
         #print(rwy_list)
@@ -4122,7 +3997,7 @@ if ('serviceWorker' in navigator) {
         if fname == 'DEPARTURE':
             # Handle FREQ_TOWER_RADIO
             FREQ_TOWER_RADIO = row_dict['freqs.TOWER'] if CTR_BOOL else row_dict['freqs.RADIO']
-            js.window.flight_plan_data["DEPARTURE_ATC_TOWER"] = clean_string(FREQ_TOWER_RADIO)
+            js.window.flight_plan_data["DEPARTURE_ATC_TOWER"] = window.clean_string(FREQ_TOWER_RADIO)
 
             # MAPPING OF THE FREQUENCIES
             field_mapping = {
@@ -4139,12 +4014,12 @@ if ('serviceWorker' in navigator) {
             # FILL THE FREQUENCIES
             for key, colname in field_mapping.items():
               freq_raw = row_dict[colname]
-              freq_clean = clean_string(freq_raw)
+              freq_clean = window.clean_string(freq_raw)
               js.window.flight_plan_data[key] = freq_clean
               print(f"  {key}: {js.window.flight_plan_data[key]}")
 
         # Remove METAR widget
-        remove_metar_widget(fname)
+        js.window.remove_metar_widget(fname)
         # Cleanly initialize runway plot
         js.window.cleanRunwayFields(fname, 'empty')
         # remove wind envelope plot
@@ -4160,7 +4035,7 @@ if ('serviceWorker' in navigator) {
         js.window.UpdateFlightInfoFields(time_dep, True, True)
 
         # Update images for aerodrome
-        await update_aerodrome_image(fname)
+        await js.window.update_aerodrome_image(fname)
         # Retrieve METAR (never block aerodrome loading on METAR fetch errors)
         try:
             await js.window.retrieve_metar(fname)
@@ -4194,20 +4069,6 @@ if ('serviceWorker' in navigator) {
     # GUI HELPERS
     # ================================================
 
-    def clean_string(value):
-        # Convert to string and strip brackets/quotes
-        freq_str = str(value).strip().strip('[]').replace("'", "").replace('"', '')
-        # Split, clean, and filter empty items
-        parts = [f.strip() for f in freq_str.split(',') if f.strip()]
-        # Return
-        return ', '.join(parts)
-
-    def create_callsign_short(CALLSIGN):
-        # Create short callsign automatically
-        CALLSIGN_SHORT = ''
-        if CALLSIGN is not None and CALLSIGN != '':
-            CALLSIGN_SHORT = CALLSIGN[0] + CALLSIGN[-2:]
-        return CALLSIGN_SHORT
 
     def TEXT_INFORMATION_RECEIVED():
         """Return text confirming information received"""
@@ -4394,41 +4255,6 @@ if ('serviceWorker' in navigator) {
         print(f"   >✅ Updated {updated_count} GUI fields")
 
 
-    # async def clear_enroute_fields():
-        #"""Clear all ENROUTE GUI fields and flight_plan_data"""
-        # print('----> clear_enroute_fields()')
-        # print("🧹 Clearing all ENROUTE fields...")
-
-        # Clear GUI fields
-        # Clean the navlog table
-        # el = js.document.getElementById('NAVLOG_TABLE');
-        # el.innerHTML = "";
-        # el.style.display = "none";
-
-        # Clean the navlog circuit information text
-        # el = js.document.getElementById('MAP_INFOFIELD');
-        # el.innerHTML = "";
-        # el.style.display = "none";
-
-        # js.document.getElementById('DEPARTURE_FIC_NAME').value = ''
-        # js.document.getElementById('DEPARTURE_FIC_FREQUENCY').value = ''
-        # js.document.getElementById('DEPARTURE_OVERHEAD').value = ''
-        # js.document.getElementById('DEPARTURE_SQUAWK').value = ''
-        # js.document.getElementById('ARRIVAL_FIC_NAME').value = ''
-        # js.document.getElementById('ARRIVAL_FIC_FREQUENCY').value = ''
-        # js.document.getElementById('ARRIVAL_OVERHEAD').value = ''
-        # js.document.getElementById('ARRIVAL_SQUAWK').value = ''
-
-        # Clear enroute fields
-        # enroute_keys = [
-        #    'DEPARTURE_FIC_NAME', 'DEPARTURE_FIC_FREQUENCY', 'DEPARTURE_OVERHEAD', 'DEPARTURE_SQUAWK',
-        #    'ARRIVAL_FIC_NAME', 'ARRIVAL_FIC_FREQUENCY', 'ARRIVAL_OVERHEAD', 'ARRIVAL_SQUAWK',
-        #]
-
-        # for key in enroute_keys:
-        #    js.window.flight_plan_data[key] = ''
-
-
     async def clear_aerodrome_fields(fname, clearAircraftFields=True):
         """Clear all aerodrome GUI fields and flight_plan_data"""
         print(f'> func: clear_aerodrome_fields({fname})')
@@ -4560,7 +4386,7 @@ if ('serviceWorker' in navigator) {
         # Clear flashcard
         js.window.flashcardClean(fname)
         # Remove METAR widget
-        remove_metar_widget(fname)
+        js.window.remove_metar_widget(fname)
         # Remove wind envelope
         js.window.cleanWindEnvelopeFields(fname, 'empty')
         # Clean Weigth&Balance
@@ -4588,113 +4414,7 @@ if ('serviceWorker' in navigator) {
         # select.innerHTML = '<option value="">Select ICAO</option>'
 
 
-    # ================================================
-    # IMAGE HELPERS
-    # ================================================
 
-    async def update_aerodrome_image(fname):
-        """Update image from DEPARTURE_IMAGE or ARRIVAL_IMAGE or use default"""
-        print(f"> func: update_aerodrome_image({fname})")
-
-        # Update flag
-        window.updateFlag(fname)
-
-        # Get the image URL from flight_plan_data
-        # 1. from GitHub
-        # 2. from wikipedia
-        # 3. from default
-        image_url1 = os.path.join(js.window.URL_AERODROMES_IMAGES, js.window.flight_plan_data[f'{fname}_ICAO']) + '.png' if js.window.flight_plan_data[f'{fname}_ICAO'] != '' else None
-        image_url2 = js.window.flight_plan_data.get(f'{fname}_IMAGE')
-
-        for image_url in [image_url1, image_url2]:
-            if await cache_and_display_image(image_url, f'{fname}_image_cache'):
-                print(f"  📋 {fname}_IMAGE from flight_plan_data: {image_url}")
-                return
-
-        # Set the default image when all other fails
-        js.document.getElementById(f'{fname}_image_cache').src = js.window.IMG_DEFAULT_AIRFIELD
-
-
-    async def cache_and_display_image(url, img_element_id):
-        """Cache and display an image using browser cache API"""
-        # If the URL is invalid or missing, return without displaying an image
-        if not url or str(url) == 'None' or str(url) == '' or str(url) == 'nan' or not str(url).startswith('http'):
-            return False
-
-        try:
-            cache = await js.caches.open("skywalk-cache-v1")
-
-            # Try loading from cache
-            response = await cache.match(url)
-
-            if not response:
-                print(f"  📥 Image not cached, downloading: {url}")
-                response = await js.fetch(url)
-                # Guard against invalid/undefined fetch responses in Pyodide
-                if not response or not hasattr(response, "ok"):
-                    print(f"  ❌ Invalid fetch response for image: {url}")
-                    return False
-
-                if response.ok:
-                    await cache.put(url, response.clone())
-                else:
-                    status = response.status if hasattr(response, "status") else "unknown"
-                    print(f"  ❌ Failed to fetch image: {status}")
-                    return False
-            else:
-                print(f"  📦 Loaded from cache: {url}")
-
-            # Convert response to blob and display
-            blob = await response.blob()
-            object_url = js.URL.createObjectURL(blob)
-            js.document.getElementById(img_element_id).src = object_url
-            print(f"  ✅ Image displayed: {img_element_id}")
-            return True
-
-        except Exception as e:
-            print(f"  ❌ Error caching/displaying image: {e}")
-            return False
-
-
-    def get_icao_data(df, city_icao, colname='city_icao'):
-        """Load custom icao from disk and update"""
-        row_dict = {}
-        for df_row in df:
-            if df_row.get('city_icao') == city_icao:
-                row_dict = df_row
-                break
-        # Return
-        return row_dict
-
-    # ================================================
-    # RUNWAY HELPERS
-    # ================================================
-
-    def retrieve_runways(row_dict):
-        """Retrieve the runways from ICAO"""
-        # row_dict = get_icao_data(df, city_icao)
-        rwy_ids, rwy_list = [], []
-
-        # Get all INFORMATION for the selected ICAO
-        if row_dict:
-            runways = row_dict.get("runways", [])
-            if isinstance(runways, str): runways = ast.literal_eval(runways)
-            rwy_ids = [r["id"] for r in runways if isinstance(r, dict) and "id" in r]
-            rwy_list = options_runway_number(runways)
-
-        # Return
-        return rwy_ids, rwy_list
-
-
-    def options_runway_number(data):
-        """Retrieve all available runways based on aerodrome ICAO."""
-        runways = []
-        if data is not None:
-            runways = [str(num) for rwy in data for num in rwy.get("number", [])]
-            runways = list(filter(lambda x: x != '', runways))
-
-        # Return
-        return runways
 
     # ================================================
     # FLIGHTPLAN HELPERS
@@ -4784,7 +4504,7 @@ if ('serviceWorker' in navigator) {
         js.document.getElementById('plan_spinner').value = ""
 
         # Update the flightplan list
-        update_dropdown('plan_spinner', cacheName='FLIGHTPLAN', keepSelection=False, elementId2='FLIGHTPLAN')
+        js.window.update_dropdown('plan_spinner', 'FLIGHTPLAN', False, 'FLIGHTPLAN')
 
         """Create new flightplan with current timestamp"""
         await clear_general_fields()
@@ -4855,14 +4575,14 @@ if ('serviceWorker' in navigator) {
 
         # Update the spinner-dropdown list
         if spinner_name == 'fic_spinner' or spinner_name == 'fic_spinner2':
-            update_dropdown('fic_spinner', cacheName='enroute', keepSelection=False)
-            update_dropdown('fic_spinner2', cacheName='enroute', keepSelection=False)
+            js.window.update_dropdown('fic_spinner', 'enroute', False)
+            js.window.update_dropdown('fic_spinner2', 'enroute', False)
         elif spinner_name == 'checklist_spinner':
-            update_dropdown(spinner_name, cacheName=cacheName, keepSelection=False)
+            js.window.update_dropdown(spinner_name, cacheName, False)
             # Set the default checklist
             checklist_clean(verbose='silent')
         else:
-            update_dropdown(spinner_name, cacheName=cacheName, keepSelection=False)
+            js.window.update_dropdown(spinner_name, cacheName, False)
 
 
     async def load_enroute_fic(spinner_name):
@@ -5046,9 +4766,9 @@ if ('serviceWorker' in navigator) {
                 # print_local_storage()
 
                 # Update the list of saved flightplans
-                update_dropdown('plan_spinner', 'FLIGHTPLAN', keepSelection=True, elementId2='FLIGHTPLAN')
-                update_dropdown('fic_spinner', 'enroute', keepSelection=True)
-                update_dropdown('fic_spinner2', 'enroute', keepSelection=True)
+                js.window.update_dropdown('plan_spinner', 'FLIGHTPLAN', True, 'FLIGHTPLAN')
+                js.window.update_dropdown('fic_spinner', 'enroute', True)
+                js.window.update_dropdown('fic_spinner2', 'enroute', True)
 
                 print("   >---------------DATA SAVED-------------------")
                 if verbose:
@@ -5153,7 +4873,7 @@ if ('serviceWorker' in navigator) {
         # Update GUI fields
         update_aerodrome_gui_fields(fname, updateAircraftFields=False)
         # Update aerodrome image
-        await update_aerodrome_image(fname)
+        await js.window.update_aerodrome_image(fname)
 
         # Update spinners
         if fname_dict[f'{fname}_COUNTRY'] != '':
@@ -5165,7 +4885,7 @@ if ('serviceWorker' in navigator) {
             element.value = fname_dict[f'{fname}_ICAO_CITY']
 
         # Remove METAR widget
-        remove_metar_widget(fname)
+        js.window.remove_metar_widget(fname)
         # Remove wind envelope
         js.window.cleanWindEnvelopeFields(fname, 'empty')
         # Clean Weigth&Balance
@@ -5334,8 +5054,8 @@ if ('serviceWorker' in navigator) {
         # Save to cache
         js.localStorage.setItem(cache_key, json_data)
         # Update the enroute list
-        update_dropdown('fic_spinner', 'enroute', keepSelection=True, elementId2='DEPARTURE_FIC_NAME')
-        update_dropdown('fic_spinner2', 'enroute', keepSelection=True, elementId2='ARRIVAL_FIC_NAME')
+        js.window.update_dropdown('fic_spinner', 'enroute', True, 'DEPARTURE_FIC_NAME')
+        js.window.update_dropdown('fic_spinner2', 'enroute', True, 'ARRIVAL_FIC_NAME')
         print(f"   >✅ FIC data saved and dropdown updated")
 
 
@@ -6310,7 +6030,6 @@ if ('serviceWorker' in navigator) {
     js.window.load_aerodrome_from_json = load_aerodrome_from_json
 
     js.window.clear_cache = clear_cache
-    js.window.update_dropdown = update_dropdown
 
     # CHECKLIST
     js.window.checklist_clean = checklist_clean
@@ -6322,9 +6041,6 @@ if ('serviceWorker' in navigator) {
     # AIRCRAFT
     js.window.get_default_aircraft = get_default_aircraft
 
-    # GENERAL
-    js.window.load_spinner_selection = load_spinner_selection
-
     # ATC
     js.window.create_summary_atc = create_proxy(create_summary_atc)
     js.window.create_departure_atc = create_proxy(create_departure_atc)
@@ -6332,7 +6048,6 @@ if ('serviceWorker' in navigator) {
     js.window.create_enroute_atc = create_proxy(create_enroute_atc)
 
     # HELPERS
-    js.window.create_callsign_short = create_proxy(create_callsign_short)
     js.window.import_country_selected = create_proxy(import_country_selected)
     js.window.generate_summary_html = create_proxy(generate_summary_html)
     js.window.get_fontsizes = create_proxy(get_fontsizes)
@@ -6344,12 +6059,11 @@ if ('serviceWorker' in navigator) {
     js.window.populate_aerodrome_fields_from_icao = create_proxy(populate_aerodrome_fields_from_icao)
     js.window.update_aerodrome_gui_fields = update_aerodrome_gui_fields
     js.window.update_enroute_gui_fields = update_enroute_gui_fields
-    js.window.update_aerodrome_image = update_aerodrome_image
+    #js.window.update_aerodrome_image = update_aerodrome_image
 
     # CLEAR FIELDS
     js.window.clear_aerodrome_fields = clear_aerodrome_fields
-    #js.window.clear_enroute_fields = clear_enroute_fields
-    js.window.cache_and_display_image = cache_and_display_image
+    #js.window.cache_and_display_image = cache_and_display_image
 
     # DATA FUNCTIONS
     js.window.get_default_data = get_default_data
@@ -6358,9 +6072,6 @@ if ('serviceWorker' in navigator) {
     js.window.import_airspaces = import_airspaces
     js.window.altitude_restriction = altitude_restriction
     js.window.clean_altitude = clean_altitude
-
-    # METAR HELPERS
-    js.window.remove_metar_widget = remove_metar_widget
 
   </script>
 
@@ -6565,11 +6276,11 @@ if ('serviceWorker' in navigator) {
         restoreSettingsFromCache();
 
         // Populate the plan_spinner with FLIGHTPLAN_ keys on startup
-        update_dropdown('plan_spinner', 'FLIGHTPLAN', keepSelection=false);
-        update_dropdown('fic_spinner', cacheName='enroute', keepSelection=false);
-        update_dropdown('fic_spinner2', cacheName='enroute', keepSelection=false);
-        update_dropdown('checklist_spinner', 'CHECKLIST', keepSelection=false, elementId2='checklist_field');
-        update_dropdown('aircraft_spinner', 'AIRCRAFT', keepSelection=false, elementId2='aircraft_field');
+        update_dropdown('plan_spinner', 'FLIGHTPLAN', false);
+        update_dropdown('fic_spinner', 'enroute', false);
+        update_dropdown('fic_spinner2', 'enroute', false);
+        update_dropdown('checklist_spinner', 'CHECKLIST', false, 'checklist_field');
+        update_dropdown('aircraft_spinner', 'AIRCRAFT', false, 'aircraft_field');
         // SET SPINNERS TO DEFAULT
         document.getElementById('DEPARTURE_COUNTRY').innerHTML = '<option value="">Select Country</option>';
         document.getElementById('ARRIVAL_COUNTRY').innerHTML  = '<option value="">Select Country</option>';
@@ -6598,7 +6309,7 @@ if ('serviceWorker' in navigator) {
         flashcardClean('ARRIVAL')
 
         // Run the animation for the skywalk logo
-        animateCloud('SKYWALK_LOGO', process = "start", density=8, speed=0.3, direction='right', color='dark');
+        // animateCloud('SKYWALK_LOGO', process = "start", density=8, speed=0.3, direction='right', color='dark');
         // animateRain('SKYWALK_LOGO', process = "start", intensity = "light");
         // animateSnow('SKYWALK_LOGO', process ='start', intensity = "medium", speed = 0.3);
         // animateFog('SKYWALK_LOGO', process = "start", intensity = "light");
