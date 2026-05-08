@@ -1699,15 +1699,15 @@
             </div>
         </div>
 
-        <div id="MAP_INFOFIELD"
-            style="margin-top:12px;padding:10px;border-radius:8px;font-size:14px;text-align:center;display:none;">
-        </div>
-
 
         <!-- MAP SETTINGS PANEL -->
         <div class="collapsible" data-title="MAP-SETTINGS">
         <div class="collapsible-header" id="ENROUTE_MAPSETTINGS_MENU"></div>
         <div class="collapsible-content" id="ENROUTE_MAPSETTINGS_BACKGROUND">
+
+            <div class="wind-grid">
+                <div id="ENROUTE_MAPSETTINGS_MESSAGE"></div>
+            </div>
 
             <div class="info">
                 <label_h1>STEP 1: SELECT MAP LAYERS</label_h1>
@@ -1736,64 +1736,20 @@
 
             <div class="divider-general-section" style="background:#ffffff"></div>
 
-            <div class="wind-grid" style="display:flex;align-items:center;gap:8px;">
-                <label><input type="checkbox" id="metar-toggle"> METAR Stations</label>
-
-                <button id="refresh-metar-btn"
-                    onclick="window.refreshMetarData()"
-                    style="display:flex;justify-content:center;align-items:center;background:transparent;border:none;color:#666;cursor:pointer;width:30px;height:30px;"
-                    title="Update METAR data">🔄
-                </button>
-
-                <div style="display:flex;align-items:center;margin-top:5px;">
-                    <label style="margin-right:5px;">Show only relevant airspaces at altitude (ft):</label>
-                    <input type="number" id="airspace-altitude" value="1500" min="150" max="10000" step="150" style="width:80px;">
+            <div class="wind-grid">
+                <div class="tile">
+                    <input type="number" id="airspace-altitude"
+                        value="1500" min="150" max="10000" step="150">
+                    <span class="tile-label">Filter airspaces for altitude (ft)</span>
                 </div>
-            </div>
 
-            <div class="wind-grid" style="display:flex;align-items:center;gap:8px;margin-top:6px;">
-                <label style="margin-right:5px;" title="Only airports and METAR stations within this distance of any waypoint will be loaded.">
-                    🗺️ Max distance from route for airports &amp; METAR (km):
-                </label>
-                <input type="number" id="route-filter-radius"
-                    value="100" min="10" max="2000" step="10"
-                    style="width:70px;"
-                    title="Airports and METAR stations further than this distance from all waypoints are hidden"
-                    onchange="window.applyRouteDistanceFilter()">
-            </div>
-
-        </div>
-        </div>
-
-
-
-        <!-- MAP SETTINGS PANEL -->
-        <div class="collapsible" data-title="CIRCUIT">
-        <div class="collapsible-header" id="ENROUTE_CIRCUIT_MENU"></div>
-        <div class="collapsible-content" id="ENROUTE_CIRCUIT_BACKGROUND">
-
-            <div class="info">
-                <label_h1>STEP 2: ADD CIRCUIT PATTERN</label_h1>
-                Add the circuit by choosing North/ South and the pattern-type. Note that the runway direction is automatically set.
-            </div>
-
-            <div class="button-row">
-                <select id="ARRIVAL_CIRCUIT_DIRECTION" class="tile-value-dropdown" style="flex:1;font-size:12px;font-weight:normal;">
-                    <option value="north">North</option>
-                    <option value="south">South</option>
-                </select>
-
-                <select id="ARRIVAL_CIRCUIT_SIZE" class="tile-value-dropdown" style="flex:1;font-size:12px;font-weight:normal;">
-                    <option value="direct">Direct</option>
-                    <option value="standard" selected>Standard circuit pattern</option>
-                    <option value="circuit">Training circuit pattern</option>
-                    <option value="wide">Wide pattern</option>
-                </select>
-
-                <!--Add circuit pattern-->
-                <button id="add-circuit-pattern-btn" class="button-style" onclick="window.initCircuitPatterns()">Add Pattern</button>
-                <!-- Clean Button -->
-                <button id="reset-circuit-pattern-btn" onclick="resetRoute()" title="Remove circuit pattern" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🧹</button>
+                <div class="tile">
+                    <input type="number" id="route-filter-radius"
+                        onchange="window.applyRouteDistanceFilter()"
+                        value="100" min="10" max="2000" step="10"
+                        title="Airports and METAR stations further than this distance from all waypoints are hidden">
+                    <span class="tile-label">Maximum distance (km) route <-> airports</span>
+                </div>
             </div>
 
         </div>
@@ -1802,7 +1758,7 @@
 
         <div class="border-round-eged">
             <div class="info">
-                <label_h1>STEP 3: CREATE WAYPOINTS</label_h1>
+                <label_h1>STEP 2: CREATE WAYPOINTS</label_h1>
                 Create waypoints by clicking on the pink line. Remove the waypoints with a right-click or long-click (mobile devices).
             </div>
 
@@ -1841,13 +1797,105 @@
         </div>
 
 
+        <!-- MAP SETTINGS PANEL -->
+        <div class="collapsible" data-title="CIRCUIT">
+        <div class="collapsible-header" id="ENROUTE_CIRCUIT_MENU"></div>
+        <div class="collapsible-content" id="ENROUTE_CIRCUIT_BACKGROUND">
+
+            <div class="wind-grid">
+                <div id="ENROUTE_CIRCUIT_MESSAGE"></div>
+            </div>
+
+            <div class="info">
+                <label_h1>STEP 3: UPDATE CIRCUIT PATTERN</label_h1>
+                Add the circuit by choosing North/ South and the pattern-type. Note that the runway direction is automatically set.
+            </div>
+
+            <div class="button-row">
+                <select id="ARRIVAL_CIRCUIT_DIRECTION" class="tile-value-dropdown" style="flex:1;font-size:12px;font-weight:normal;">
+                    <option value="north">North</option>
+                    <option value="south">South</option>
+                </select>
+
+                <select id="ARRIVAL_CIRCUIT_SIZE" class="tile-value-dropdown" style="flex:1;font-size:12px;font-weight:normal;">
+                    <option value="direct">Direct</option>
+                    <option value="standard" selected>Standard circuit pattern</option>
+                    <option value="circuit">Training circuit pattern</option>
+                    <option value="wide">Wide pattern</option>
+                </select>
+            </div>
+
+            <div class="button-row">
+                <!--Add circuit pattern-->
+                <button id="add-circuit-pattern-btn" class="button-style" onclick="window.initCircuitPatterns()">Add Pattern</button>
+                <!-- Clean Button -->
+                <button id="reset-circuit-pattern-btn" onclick="resetRoute()" title="Remove circuit pattern" style="background-color: transparent; border: none; color: #666; width: 30px; min-width: 24px; height: 24px; padding: 0; margin: 8px 0 8px 4px; flex: 0 0 auto; cursor: pointer;">🧹</button>
+            </div>
+
+        </div>
+        </div>
+
+
+        <!-- MAP SETTINGS PANEL -->
+        <div class="collapsible" data-title="METAR">
+        <div class="collapsible-header" id="ENROUTE_METAR_MENU"></div>
+        <div class="collapsible-content" id="ENROUTE_METAR_BACKGROUND">
+
+            <div class="wind-grid">
+                <div id="ENROUTE_METAR_MESSAGE"></div>
+            </div>
+
+            <div class="info">
+                <label_h1>STEP 4: UPDATE METAR REPORTS</label_h1>
+            </div>
+
+            <div class="wind-grid">
+                <div class="tile" style="display:flex;justify-content:center;align-items:center;">
+
+                    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;">
+                        <input type="checkbox" id="metar-toggle">
+                        <span class="tile-label">METAR stations</span>
+
+                        <button id="refresh-metar-btn"
+                            type="button"
+                            onclick="event.stopPropagation(); window.refreshMetarData();"
+                            style="
+                                display:flex;
+                                justify-content:center;
+                                align-items:center;
+                                background:transparent;
+                                border:none;
+                                color:#666;
+                                cursor:pointer;
+                                width:20px;
+                                height:20px;
+                                padding:0;
+                                font-size:14px;
+                            "
+                            title="Update METAR data">
+                            🔄
+                        </button>
+
+                    </label>
+
+                </div>
+            </div>
+
+        </div>
+        </div>
+
 
         <div class="collapsible" data-title="NAVIGATION TABLE">
         <div class="collapsible-header" id="NAVIGATION_MENU"></div>
         <div class="collapsible-content" id="NAVIGATION_BACKGROUND">
+
+            <div class="wind-grid">
+                <div id="NAVIGATION_MESSAGE"></div>
+            </div>
+
             <div class="info">
-                <label_h1>STEP 4: UPDATE NAVIGATION TABLE</label_h1>
-                Update the Leg name and altitude for the waypoints and press save.
+                <label_h1>STEP 5: UPDATE NAVIGATION TABLE</label_h1>
+                Update the leg name and altitude for the waypoints.
             </div>
 
             <div id="NAVLOG_TABLE"
@@ -1865,35 +1913,66 @@
         <div class="collapsible-header" id="ENROUTE_CLOUDPLOT_MENU"></div>
         <div class="collapsible-content" id="ENROUTE_CLOUDPLOT_BACKGROUND">
 
+            <div class="wind-grid">
+                <div id="ENROUTE_CLOUDPLOT_MESSAGE"></div>
+            </div>
+
             <div class="info">
-                <label_h1>STEP 5: ROUTE CLOUD CROSS-SECTION</label_h1>
+                <label_h1>STEP 6: ROUTE CLOUD CROSS-SECTION</label_h1>
             </div>
 
             <!-- Panels are injected here by plotCloudsForRoute() -->
             <div id="ROUTE_CLOUD_CONTAINER" style="display:none;"></div>
 
-            <div class="wind-grid" style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                <!--<button class="button-style" onclick="window.plotCloudsForRoute()" title="Generate cloud cross-section for all route waypoints">
-                    ☁️ Generate Route Cloud View
-                </button>-->
-                <!--<button class="button-style" onclick="window.toggleMetarLayer(true)" title="Update METAR weather information for all waypoints en the route">
-                    🌦️ Retrieve METAR info
-                </button>-->
-                <button onclick="document.getElementById('ROUTE_CLOUD_CONTAINER').style.display='none';"
-                    class="button-style"
-                    title="Hide">✕</button>
+            <div class="wind-grid">
+                <button onclick="saveLegInfo()" class="button-style">Create Cloudplot</button>
+                <button onclick="document.getElementById('ROUTE_CLOUD_CONTAINER').style.display='none';"class="button-style" title="Hide">✕</button>
             </div>
+
         </div>
         </div>
 
 
         <div class="border-round-eged">
+            <div class="wind-grid">
+                <div id="ENROUTE_NAVLOG_MESSAGE"></div>
+            </div>
+
             <div class="info">
-                <label_h1>STEP 6: START NAVIGATION</label_h1>
+                <label_h1>STEP 7: START NAVIGATION</label_h1>
                 Set the checkboxes as desired before starting the NAVLOG.
             </div>
 
-            <div class="navlog-grid">
+
+
+            <div class="wind-grid">
+                <div class="tile">
+                    <input id="NAVLOG_MIN_DISTANCE" type="number" class="tile-value" min="0" step="1" value="0">
+                    <span class="tile-label">Minimum Leg Distance (NM)</span>
+                </div>
+
+                <div class="tile">
+                    <input type="checkbox" id="COMPAS_CHECKBOX" checked>
+                    <span class="tile-label">GPS Compass</span>
+                </div>
+
+                <!--<div class="tile">
+                    <input type="checkbox" id="HAPTICFEEDBACK_CHECKBOX" checked>
+                    <span class="tile-label">Haptic Feedback</span>
+                </div>-->
+
+                <div class="tile">
+                    <input type="checkbox" id="AUTONEXTLEG_CHECKBOX" checked>
+                    <span class="tile-label">Auto‑Start Next Leg</span>
+                </div>
+
+            </div>
+
+
+
+
+
+            <!--<div class="navlog-grid">
                 <div class="tile">
                     <input id="NAVLOG_MIN_DISTANCE" type="number" class="tile-value" min="0" step="1" value="0">
                     <span class="tile-label">Minimum Leg Distance (NM)</span>
@@ -1911,7 +1990,7 @@
                     <input type="checkbox" id="AUTONEXTLEG_CHECKBOX">
                     <span>Auto‑Start Next Leg</span>
                 </label>
-            </div>
+            </div>-->
         </div>
 
         <div class="wind-grid">
@@ -2810,10 +2889,6 @@
                     Example: 0.7 describes: Minimum distance for take-off is 70% of the runway length.
                 </div>
             </div>
-
-            <!--<button id="landing_load_defaults" onclick="load_performance_defaults('landing')" style="border: 2px solid #f5f5f5; color: #333333; padding: 8px 12px; border-radius: 8px; cursor: pointer;">
-                Load Example Landing Settings
-            </button>-->
 
         </div>
         </div>
