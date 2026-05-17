@@ -578,11 +578,13 @@
 
         <div class="border-round-eged" id="DEPARTURE_SELECT_AERODROME_BORDER_1">
             <div class="wind-grid">
-                <select id="DEPARTURE_COUNTRY" class="tile-value-dropdown" style="font-weight: normal;">
+                <select id="DEPARTURE_COUNTRY" class="tile-value-dropdown" style="font-weight: normal;"
+                        onchange="this.value && window.importCountry('DEPARTURE', this.value)">
                     <option value="">Select Country</option>
                     <!-- ICAO City options will be populated dynamically IN importCountry()-->
                 </select>
-                <select id="DEPARTURE_ICAO_CITY" class="tile-value-dropdown" style="font-weight: normal;">
+                <select id="DEPARTURE_ICAO_CITY" class="tile-value-dropdown" style="font-weight: normal;"
+                        onchange="this.value && window.populate_aerodrome_fields_from_icao('DEPARTURE', this.value)">
                     <option value="">Select ICAO</option>
                     <!-- ICAO City options will be populated dynamically IN populate_aerodrome_fields_from_icao()-->
                 </select>
@@ -1151,11 +1153,13 @@
 
         <div class="border-round-eged" id="ARRIVAL_SELECT_AERODROME_BORDER_1">
             <div class="wind-grid">
-                <select id="ARRIVAL_COUNTRY" class="tile-value-dropdown" style="font-weight: normal;">
+                <select id="ARRIVAL_COUNTRY" class="tile-value-dropdown" style="font-weight: normal;"
+                        onchange="this.value && window.importCountry('ARRIVAL', this.value)">
                     <option value="">Select Country</option>
                     <!-- ICAO City options will be populated dynamically IN importCountry()-->
                 </select>
-                <select id="ARRIVAL_ICAO_CITY" class="tile-value-dropdown" style="font-weight: normal;">
+                <select id="ARRIVAL_ICAO_CITY" class="tile-value-dropdown" style="font-weight: normal;"
+                        onchange="this.value && window.populate_aerodrome_fields_from_icao('ARRIVAL', this.value)">
                     <option value="">Select ICAO</option>
                     <!-- ICAO City options will be populated dynamically IN populate_aerodrome_fields_from_icao()-->
                 </select>
